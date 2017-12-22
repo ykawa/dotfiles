@@ -1,6 +1,8 @@
 defutf8 on
 defencoding utf8
 encoding utf8 utf8
+autodetach on
+altscreen on
 
 startup_message off
 vbell off
@@ -15,8 +17,8 @@ hardstatus alwayslastline "%{= cd} %-w%{= wk} %n %t* %{-}%+w"
 shell $SHELL
 
 # Resize window
-bind e eval 'command -c resize' 'echo "Resize window"'
-bind ^e eval 'command -c resize' 'echo "Resize window"'
+bind r  eval 'command -c resize' 'echo "Resize window"'
+bind ^r eval 'command -c resize' 'echo "Resize window"'
 bind -c resize h eval 'command -c resize' 'resize -h -1'
 bind -c resize l eval 'command -c resize' 'resize -h +1'
 bind -c resize j eval 'command -c resize' 'resize -v +1'
@@ -25,4 +27,20 @@ bind -c resize ^h eval 'command -c resize' 'resize -h -1'
 bind -c resize ^l eval 'command -c resize' 'resize -h +1'
 bind -c resize ^j eval 'command -c resize' 'resize -v +1'
 bind -c resize ^k eval 'command -c resize' 'resize -v -1'
+
+bindkey -k k5 prev
+bindkey -k k6 next
+layout autosave on
+layout new one
+
+screen
+screen
+
+only
+select 1
+split
+resize -v +8
+focus
+select 0
+focus
 
