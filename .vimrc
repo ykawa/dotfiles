@@ -39,6 +39,8 @@ set wrapscan
 set hlsearch
 set shellslash
 
+set scrolloff=10
+
 set encoding=utf-8
 set fileformats=unix,dos,mac
 syntax enable
@@ -50,6 +52,7 @@ nnoremap k gk
 nnoremap <S-l> $
 nnoremap <S-h> ^
 nnoremap == gg=G''
-"nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+nnoremap n nzz
+nnoremap N Nzz
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 
