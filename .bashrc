@@ -10,7 +10,7 @@ esac
 
 HISTCONTROL=ignoreboth
 shopt -s histappend
-HISTSIZE=1000
+HISTSIZE=2000
 HISTFILESIZE=2000
 export PROMPT_COMMAND='history -a; history -r'
 
@@ -51,4 +51,8 @@ fi
 stty werase undef
 bind "\C-w":unix-filename-rubout
 
+rs () {
+  eval `resize`
+}
+rs
 
