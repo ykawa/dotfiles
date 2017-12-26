@@ -31,12 +31,20 @@ bind -c resize ^k eval 'command -c resize' 'resize -v -1'
 bindkey -k k5 prev
 bindkey -k k6 next
 
-screen
-screen
-select 1
+screen 0
+screen 1
 split
-focus
+
+focus down
 select 0
-resize -v -17
-focus
+title 'console'
+resize -v  9
+# fire the WINCH signal
+resize -v -1
+
+focus up
+select 1
+title 'workspace'
+# fire the WINCH signal
+resize -v +1
 

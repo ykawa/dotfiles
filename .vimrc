@@ -1,39 +1,31 @@
+set encoding=utf-8
+scriptencoding utf-8
+
 filetype off
 
 " dein.vim
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if &runtimepath !~# '/dein.vim'
-	if !isdirectory(s:dein_repo_dir)
-		execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-	endif
-	execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
 endif
 
 if dein#load_state(s:dein_dir)
-	call dein#begin(s:dein_dir)
-	let g:rc_dir = expand('~/.vim/dein')
-	let s:toml = g:rc_dir . '/dein.toml'
-	let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-	call dein#load_toml(s:toml, {'lazy': 0})
-	call dein#load_toml(s:lazy_toml, {'lazy': 1})
-	call dein#end()
-	call dein#save_state()
+  call dein#begin(s:dein_dir)
+
+  let g:rc_dir    = expand('~/dotfiles')
+  let s:toml      = g:rc_dir . '/dein.toml'
+  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+
+  call dein#load_toml(s:toml,      {'lazy': 0})
+  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+
+  call dein#end()
+  call dein#save_state()
 endif
-
-" プラグイン削除はこれを.vimrcで読んで
-"call map(dein#check_clean(), "delete(v:val, 'rf')")
-" ↓これを実行
-": call dein#recache_runtimepath()
-
-" plugin installation check
-if dein#check_install()
-	call dein#install()
-endif
-
-
-set background=dark
-colorscheme koehler
 
 set mouse-=a
 
@@ -57,7 +49,7 @@ set noerrorbells
 set belloff=all
 set laststatus=2
 set display=lastline
-set cmdheight=2
+set cmdheight=1
 set wildmode=list:longest
 
 set list
@@ -78,14 +70,14 @@ set shellslash
 
 set scrolloff=15
 
-set encoding=utf-8
 set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
+"set completeopt+=noinsert
+set completeopt=longest,menu,menuone
+
 "" 補完の際の大文字小文字の区別しない
 set infercase
-" 行末1文字までカーソルを移動できるようにする
-set virtualedit=onemore
 " 新しく開く代わりにすでに開いてあるバッファを開く
 set switchbuf=useopen
 
@@ -93,8 +85,6 @@ set switchbuf=useopen
 inoremap jj <Esc>
 " vを二回で行末まで選択
 vnoremap v $h
-
-syntax enable
 
 nnoremap j gj
 nnoremap k gk
@@ -106,11 +96,12 @@ nnoremap N Nzz
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 
 filetype plugin indent on
+syntax enable
 
-" for deoplete.vim
-"let g:deoplete#enable_at_startup = 1
-set completeopt+=noinsert
+if dein#check_install()
+  call dein#install()
+endif
 
-" rubocop
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': ['ruby'] }
-
+"" rubocop
+"let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': ['ruby'] }
+"let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'

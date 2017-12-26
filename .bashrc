@@ -51,8 +51,13 @@ fi
 stty werase undef
 bind "\C-w":unix-filename-rubout
 
-rs () {
-  eval `resize`
-}
-rs
+if [ builtin command -v resize >/dev/null ]; then
+  rs () {
+    eval `resize`
+  }
+else
+  rs () {
+    kill -s WINCH $$
+  }
+fi
 

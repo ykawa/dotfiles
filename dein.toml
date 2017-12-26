@@ -1,0 +1,33 @@
+# -- 起動時に読む
+
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]] # 非同期処理
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]] # ES6のハイライト
+repo = 'othree/yajs.vim'
+
+[[plugins]] # インデントを見やすく
+repo = 'Yggdroot/indentLine'
+
+[[plugins]] # j,kによる移動を爆速に
+repo = 'rhysd/accelerated-jk'
+
+[[plugins]]
+repo = 'neovim/python-client'
+
+[[plugins]]
+repo = 'altercation/vim-colors-solarized'
+hook_add = '''
+let g:solarized_termcolors = 16
+let g:solarized_termtrans  =  1
+set background=dark
+colorscheme solarized
+'''
+
