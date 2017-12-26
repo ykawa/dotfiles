@@ -51,7 +51,7 @@ fi
 stty werase undef
 bind "\C-w":unix-filename-rubout
 
-if [ builtin command -v resize >/dev/null ]; then
+if builtin command -v resize >/dev/null; then
   rs () {
     eval `resize`
   }
