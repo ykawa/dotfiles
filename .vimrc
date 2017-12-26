@@ -49,11 +49,11 @@ set noerrorbells
 set belloff=all
 set laststatus=2
 set display=lastline
-set cmdheight=1
+set cmdheight=2
 set wildmode=list:longest
 
 set list
-set listchars=tab:\▸\ ,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+set listchars=tab:\¦\ ,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 " インデントをshiftwidthの倍数に丸める
 set shiftround
 set tabstop=2
