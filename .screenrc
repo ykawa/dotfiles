@@ -2,19 +2,21 @@ defutf8 on
 defencoding utf8
 encoding utf8 utf8
 autodetach on
-altscreen on
+altscreen off
 
 startup_message off
 vbell off
 
 defscrollback 10000
 termcapinfo xterm* ti@:te@
+term xterm-256color
 
 defbce on
 
 hardstatus alwayslastline "%{= cd} %-w%{= wk} %n %t* %{-}%+w"
 
-shell $SHELL
+
+shell -$SHELL
 
 # Resize window
 bind  r eval 'command -c resize' 'echo "Resize window"'
@@ -37,14 +39,7 @@ split
 
 focus down
 select 0
-title 'console'
-resize -v  9
-# fire the WINCH signal
-resize -v -1
-
+resize -v 6
 focus up
 select 1
-title 'workspace'
-# fire the WINCH signal
-resize -v +1
 
