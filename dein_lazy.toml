@@ -22,11 +22,10 @@ hook_source = '''
   let g:deoplete#file#enable_buffer_path = 1
   let g:deoplete#max_list = 10000
   inoremap <expr><tab> pumvisible() ? "\<C-n>" :
-    \ neosnippet#expandable_or_jumpable() ?
-    \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
+  \ neosnippet#expandable_or_jumpable() ?
+  \ "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
 '''
 depends = ['context_filetype.vim', 'nvim-yarp', 'vim-hug-neovim-rpc']
-on_ft = ['ruby', 'perl', 'python']
 on_i = 1
 
 #[[plugins]] # スニペット
@@ -47,7 +46,6 @@ hook_source = '''
   let g:neosnippet#expand_word_boundary = 1
   " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
   let g:neosnippet#snippets_directory = '~/.vim/snippets'
-
   if has('conceal')
     set conceallevel=2 concealcursor=niv
   endif
@@ -56,15 +54,11 @@ hook_source = '''
 
 [[plugins]] # メソッドの定義元にジャンプ
 repo = 'szw/vim-tags'
-on_ft = ['ruby', 'perl', 'python']
+on_ft = ['ruby', 'perl', 'python', 'c']
 
 [[plugins]] # Rubyのend補完
 repo = 'tpope/vim-endwise'
 on_i = 1
-
-[[plugins]] # ローカル変数ハイライト
-repo = 'todesking/ruby_hl_lvar.vim'
-#on_ft = ['ruby']
 
 # Rubyの自動補完
 [[plugins]]
