@@ -102,6 +102,3 @@ if dein#check_install()
   call dein#install()
 endif
 
-"" rubocop
-"let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': ['ruby'] }
-"let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
