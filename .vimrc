@@ -22,15 +22,12 @@ if dein#load_state(s:dein_dir)
 
   call dein#load_toml(s:toml,      {'lazy': 0})
   call dein#load_toml(s:lazy_toml, {'lazy': 1})
-
   call dein#end()
   call dein#save_state()
 endif
 
 set mouse-=a
-
 set ambiwidth=double
-set fenc=utf-8
 set nobackup
 set noswapfile
 set autoread
@@ -43,7 +40,6 @@ set nowritebackup
 
 set number
 set virtualedit+=block
-set smartindent
 set autoindent
 set noerrorbells
 set belloff=all
@@ -56,6 +52,7 @@ set list
 set listchars=tab:\¦\ ,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 " インデントをshiftwidthの倍数に丸める
 set shiftround
+set smartindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
@@ -68,8 +65,7 @@ set wrapscan
 set hlsearch
 set shellslash
 
-set scrolloff=15
-
+set scrolloff=20
 set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
@@ -101,4 +97,6 @@ syntax enable
 if dein#check_install()
   call dein#install()
 endif
+
+set tags+=.git/tags,.svn/tags,tags
 

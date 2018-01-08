@@ -13,7 +13,7 @@ term xterm-256color
 
 defbce on
 
-hardstatus alwayslastline "%{= cd} %-w%{= wk} %n %t* %{-}%+w"
+hardstatus alwayslastline "%{= wg} %-w%{=bu dr}%n %t%{-}%+w %= %{=b kw} %Y/%m/%d %0c"
 
 
 shell -$SHELL
@@ -39,7 +39,13 @@ split
 
 focus down
 select 0
-resize -v 6
+title 'console'
+resize -v 8
+
 focus up
 select 1
+title 'workspace'
+# fire the WINCH signal
+sleep 1
+resize -v +1
 

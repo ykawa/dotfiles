@@ -22,12 +22,12 @@ repo = 'rhysd/accelerated-jk'
 [[plugins]]
 repo = 'neovim/python-client'
 
-[[plugins]]
-repo = 'altercation/vim-colors-solarized'
-hook_add = '''
-  let g:solarized_termcolors = 16
-  let g:solarized_termtrans  =  1
-  set background=dark
-  colorscheme solarized
-'''
+#[[plugins]]
+#repo = 'altercation/vim-colors-solarized'
+#hook_add = '''
+#  let g:solarized_termcolors = 16
+#  let g:solarized_termtrans  =  1
+#  set background=dark
+#  colorscheme solarized
+#'''
 

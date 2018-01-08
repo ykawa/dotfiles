@@ -54,9 +54,9 @@ hook_source = '''
 
 [[plugins]] # メソッドの定義元にジャンプ
 repo = 'szw/vim-tags'
-on_ft = ['ruby', 'perl', 'python', 'c']
+on_ft = ['ruby', 'perl', 'python', 'c', 'sh']
 
-[[plugins]] # Rubyのend補完
+[[plugins]] # 対応するend/endfunction/endifを補完
 repo = 'tpope/vim-endwise'
 on_i = 1
 
