@@ -100,3 +100,5 @@ endif
 
 set tags+=.git/tags,.svn/tags,tags
 
+colorscheme elflord
+
