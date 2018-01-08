@@ -1,4 +1,3 @@
-# vim8でdeopleteを使うのに必要
 [[plugins]]
 repo = 'roxma/nvim-yarp'
 
@@ -8,9 +7,9 @@ repo = 'roxma/vim-hug-neovim-rpc'
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
 
-# コードの自動補完
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
+depends = ['context_filetype.vim', 'nvim-yarp', 'vim-hug-neovim-rpc']
 hook_source = '''
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#auto_complete_delay = 0
@@ -21,18 +20,14 @@ hook_source = '''
   let g:deoplete#enable_smart_case = 1
   let g:deoplete#file#enable_buffer_path = 1
   let g:deoplete#max_list = 10000
+
   inoremap <expr><tab> pumvisible() ? "\<C-n>" :
   \ neosnippet#expandable_or_jumpable() ?
   \ "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
 '''
-depends = ['context_filetype.vim', 'nvim-yarp', 'vim-hug-neovim-rpc']
 on_i = 1
 
-#[[plugins]] # スニペット
-#repo = 'Shougo/neosnippet-snippets'
-#on_i = 1
-
-[[plugins]] # スニペット
+[[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
 on_event = 'InsertCharPre'
@@ -41,36 +36,53 @@ hook_source = '''
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
   smap <C-k> <Plug>(neosnippet_expand_or_jump)
   xmap <C-k> <Plug>(neosnippet_expand_target)
-  let g:neosnippet#enable_snipmate_compatibility = 1
+
+  smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+  \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
   let g:neosnippet#enable_completed_snippet = 1
   let g:neosnippet#expand_word_boundary = 1
-  " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
-  let g:neosnippet#snippets_directory = '~/.vim/snippets'
+  let g:neosnippet#snippets_directory = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
   if has('conceal')
     set conceallevel=2 concealcursor=niv
   endif
 '''
 
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+depends = ['neomru.vim', 'neoyank.vim']
+on_event = 'BufRead'
+hook_add = '''
+  nmap <silent> <C-r><C-t> :<C-u>Denite filetype<CR>
+  nmap <silent> <C-r><C-p> :<C-u>Denite file_rec<CR>
+  nmap <silent> <C-r><C-l> :<C-u>Denite line<CR>
+  nmap <silent> <C-r><C-g> :<C-u>Denite grep<CR>
+  nmap <silent> <C-r><C-]> :<C-u>DeniteCursorWord grep<CR>
+  nmap <silent> <C-r><C-u> :<C-u>Denite file_mru<CR>
+  nmap <silent> <C-r><C-y> :<C-u>Denite neoyank<CR>
+  nmap <silent> <C-r><C-r> :<C-u>Denite -resume<CR>
+  nmap <silent> <C-r>; :<C-u>Denite -resume -immediately -select=+1<CR>
+  nmap <silent> <C-r>- :<C-u>Denite -resume -immediately -select=-1<CR>
+'''
 
 [[plugins]] # メソッドの定義元にジャンプ
 repo = 'szw/vim-tags'
 on_ft = ['ruby', 'perl', 'python', 'c', 'sh']
 
-[[plugins]] # 対応するend/endfunction/endifを補完
-repo = 'tpope/vim-endwise'
-on_i = 1
-
-# Rubyの自動補完
 [[plugins]]
 repo = 'Shougo/deoplete-rct'
 on_ft = ['ruby']
 
-# Rubyの自動補完
 [[plugins]]
 repo = 'fishbullet/deoplete-ruby'
 on_ft = ['ruby']
 
-# Rubyの自動補完
 [[plugins]]
 repo = 'osyo-manga/vim-monster'
 on_ft = ['ruby']
