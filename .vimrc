@@ -102,3 +102,5 @@ set tags+=.git/tags,.svn/tags,tags
 
 colorscheme elflord
 
+autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
+
