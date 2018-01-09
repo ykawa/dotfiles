@@ -14,25 +14,38 @@ repo = 'othree/yajs.vim'
 repo = 'Yggdroot/indentLine'
 
 [[plugins]]
+repo = 'vim-airline/vim-airline'
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
+depends = ['vim-airline']
+hook_add='''
+  let g:airline_theme = 'papercolor'
+  "let g:airline_theme = 'solarized'
+  "let g:airline_solarized_bg='dark'
+  let g:airline#extensions#tabline#enabled = 1
+'''
+
+[[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-nnoremap <silent><C-e> :NERDTreeToggle<CR>
+  nnoremap <silent><C-e> :NERDTreeToggle<CR>
 '''
 
 [[plugins]]
 repo = 'soramugi/auto-ctags.vim'
 hook_add = '''
-let g:auto_ctags = 1
-let g:auto_ctags_directory_list = ['.git', '.svn']
-let g:auto_ctags_filetype_mode = 0
+  let g:auto_ctags = 1
+  let g:auto_ctags_directory_list = ['.git', '.svn']
+  let g:auto_ctags_filetype_mode = 0
 '''
 
 # SEE: https://qiita.com/uplus_e10/items/2a75fbe3d80063eb9c18
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 hook_add = '''
-  nnoremap <silent><F11> :QuickRun<CR>
   let g:quickrun_no_default_key_mappings = 1
+  nnoremap <silent><F11> :QuickRun<CR>
   nnoremap \r :cclose<CR>:write<CR>:QuickRun -mode n<CR>
   xnoremap \r :<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>
   nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
