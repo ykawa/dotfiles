@@ -89,7 +89,7 @@ nnoremap <S-h> ^
 nnoremap == gg=G''
 nnoremap n nzz
 nnoremap N Nzz
-nmap <Esc><Esc> :nohlsearch<CR><Esc>
+nmap // :nohlsearch<CR><Esc>
 
 filetype plugin indent on
 syntax enable
