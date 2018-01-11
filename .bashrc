@@ -54,13 +54,6 @@ if [ -d $HOME/.rbenv/bin ]; then
   eval "$(rbenv init -)"
 fi
 
-
-if [ -d $HOME/.pyenv ]; then
-  export PYENV_ROOT=$HOME/.pyenv
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-fi
-
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
     export WORKON_HOME=$HOME/.virtualenvs
     . /usr/local/bin/virtualenvwrapper.sh
