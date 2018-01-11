@@ -46,7 +46,7 @@ set belloff=all
 set laststatus=2
 set display=lastline
 set cmdheight=2
-set wildmode=list:longest
+set wildmode=list:full
 
 set list
 set listchars=tab:\¦\ ,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
