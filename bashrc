@@ -9,6 +9,17 @@ HISTSIZE=2000
 HISTFILESIZE=2000
 export PROMPT_COMMAND='history -a; history -r'
 
+
+PS1_HOST=${HOSTNAME}
+HOST_LEN=${#HOSTNAME}
+if [ ${HOST_LEN} -gt 8 ]; then
+  PS1_HOST="${HOSTNAME:0:4}${HOSTNAME:$HOST_LEN-4:4}"
+fi
+SHORTHOST=$PS1_HOST
+export PS1="\u@$SHORTHOST:\W "
+unset PS1_HOST
+unset SHORTHOST
+
 shopt -s checkwinsize
 
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -55,8 +66,10 @@ if [ -d $HOME/.rbenv/bin ]; then
 fi
 
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-    export WORKON_HOME=$HOME/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-    . /usr/local/bin/virtualenvwrapper.sh
+  export WORKON_HOME=$HOME/.virtualenvs
+  export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+  . /usr/local/bin/virtualenvwrapper.sh
 fi
 
+# send WINCH signal
+kill -s WINCH $$

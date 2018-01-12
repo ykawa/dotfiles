@@ -88,8 +88,8 @@ repo = 'lighttiger2505/gtags.vim'
 hook_add = '''
   let g:Gtags_Auto_Map = 1
   let g:Gtags_OpenQuickfixWindow = 1
-  nmap <silent> K :<C-u>exe("Gtags ".expand('<cword>'))<CR>
-  nmap <silent> R :<C-u>exe("Gtags -r ".expand('<cword>'))<CR>
+  nnoremap <silent><C-k><C-k> :<C-u>exe("Gtags   ".expand('<cword>'))<CR>
+  nnoremap <silent><C-k><C-r> :<C-u>exe("Gtags -r".expand('<cword>'))<CR>
 '''
 
 # gitの変更箇所を表示します
@@ -101,8 +101,9 @@ repo = 'airblade/vim-gitgutter'
 repo = 'thinca/vim-quickrun'
 hook_add = '''
 let g:quickrun_no_default_key_mappings = 1
-nnoremap <silent><F11> :QuickRun<CR>
-nnoremap \r :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+"nnoremap <silent> <F11> :QuickRun<CR>
+nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+nnoremap \r             :cclose<CR>:write<CR>:QuickRun -mode n<CR>
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 let g:quickrun_config = {
   \ "_": {
