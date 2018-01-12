@@ -39,6 +39,7 @@ set showmatch matchtime=1
 set nowritebackup
 
 set number
+set nowrap
 set virtualedit+=block
 set autoindent
 set noerrorbells
@@ -69,7 +70,6 @@ set scrolloff=20
 set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
-"set completeopt+=noinsert
 set completeopt=longest,menu,menuone
 
 "" 補完の際の大文字小文字の区別しない
@@ -89,7 +89,7 @@ nnoremap <S-h> ^
 nnoremap == gg=G''
 nnoremap n nzz
 nnoremap N Nzz
-nmap // :nohlsearch<CR><Esc>
+nmap <C-l> <C-l>:nohlsearch<CR><Esc>
 
 filetype plugin indent on
 syntax enable
@@ -98,7 +98,7 @@ if dein#check_install()
   call dein#install()
 endif
 
-set tags+=.git/tags,.svn/tags,tags
+"set tags+=.git/tags,.svn/tags,tags
 
 colorscheme elflord
 
