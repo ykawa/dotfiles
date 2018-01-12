@@ -56,6 +56,7 @@ fi
 
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
     export WORKON_HOME=$HOME/.virtualenvs
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
     . /usr/local/bin/virtualenvwrapper.sh
 fi
 
