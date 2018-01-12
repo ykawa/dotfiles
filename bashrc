@@ -7,8 +7,7 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 HISTSIZE=2000
 HISTFILESIZE=2000
-export PROMPT_COMMAND='history -a; history -r'
-
+export PROMPT_COMMAND='history -a; history -c; history -r'
 
 PS1_HOST=${HOSTNAME}
 HOST_LEN=${#HOSTNAME}
