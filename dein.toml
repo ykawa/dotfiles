@@ -16,6 +16,7 @@ repo = 'Yggdroot/indentLine'
 [[plugins]]
 repo = 'vim-airline/vim-airline'
 
+# 要 powerline symbol
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 depends = ['vim-airline']
@@ -28,7 +29,7 @@ hook_add='''
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
   endif
-
+  
   " unicode symbols
   let g:airline_left_sep = '»'
   let g:airline_left_sep = '▶'
@@ -48,7 +49,7 @@ hook_add='''
   let g:airline_symbols.spell = 'Ꞩ'
   let g:airline_symbols.notexists = '∄'
   let g:airline_symbols.whitespace = 'Ξ'
-
+  
   " powerline symbols
   let g:airline_left_sep = ''
   let g:airline_left_alt_sep = ''
@@ -60,41 +61,61 @@ hook_add='''
   let g:airline_symbols.maxlinenr = ''
 '''
 
+# ファイラー
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
   nnoremap <silent><C-e> :NERDTreeToggle<CR>
 '''
 
+#[[plugins]]
+#repo = 'soramugi/auto-ctags.vim'
+#hook_add = '''
+#  let g:auto_ctags = 1
+#  let g:auto_ctags_directory_list = ['.git', '.svn']
+#  let g:auto_ctags_filetype_mode = 0
+#'''
 [[plugins]]
-repo = 'soramugi/auto-ctags.vim'
-hook_add = '''
-  let g:auto_ctags = 1
-  let g:auto_ctags_directory_list = ['.git', '.svn']
-  let g:auto_ctags_filetype_mode = 0
+repo = 'jsfaint/gen_tags.vim'
+hook_source = '''
+  let g:gen_tags#ctags_auto_gen = 1
+  let g:gen_tags#gtags_auto_gen = 1
 '''
+#let g:gen_tags#blacklist = ['$HOME']
+
+[[plugins]]
+repo = 'lighttiger2505/gtags.vim'
+hook_add = '''
+  let g:Gtags_Auto_Map = 1
+  let g:Gtags_OpenQuickfixWindow = 1
+  nmap <silent> K :<C-u>exe("Gtags ".expand('<cword>'))<CR>
+  nmap <silent> R :<C-u>exe("Gtags -r ".expand('<cword>'))<CR>
+'''
+
+# gitの変更箇所を表示します
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
 
 # SEE: https://qiita.com/uplus_e10/items/2a75fbe3d80063eb9c18
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 hook_add = '''
-  let g:quickrun_no_default_key_mappings = 1
-  nnoremap <silent><F11> :QuickRun<CR>
-  nnoremap \r :cclose<CR>:write<CR>:QuickRun -mode n<CR>
-  xnoremap \r :<C-U>cclose<CR>:write<CR>gv:QuickRun -mode v<CR>
-  nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
-  let g:quickrun_config = {
+let g:quickrun_no_default_key_mappings = 1
+nnoremap <silent><F11> :QuickRun<CR>
+nnoremap \r :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
+let g:quickrun_config = {
   \ "_": {
-  \   "runner" : "vimproc",
-  \   "runner/vimproc/updatetime"       : 10,
-  \   "outputter/buffer/close_on_empty" : 1,
-  \   "outputter/buffer/into"           : 1,
-  \   "outputter/buffer/split"          : ":botright 8sp",
-  \   "outputter/error/success"         : "buffer",
-  \   "outputter/error/error"           : "quickfix",
-  \   "hook/time/enable"                : 1,
-  \ },
+    \   "runner" : "vimproc",
+    \   "runner/vimproc/updatetime"       : 10,
+    \   "outputter/buffer/close_on_empty" : 1,
+    \   "outputter/buffer/into"           : 1,
+    \   "outputter/buffer/split"          : ":botright 8sp",
+    \   "outputter"                       : "error",
+    \   "outputter/error/success"         : "buffer",
+    \   "outputter/error/error"           : "quickfix",
+    \   "hook/time/enable"                : 1,
+    \ },
   \}
 '''
-
 

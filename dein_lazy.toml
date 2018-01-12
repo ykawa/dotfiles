@@ -12,7 +12,9 @@ repo = 'Shougo/context_filetype.vim'
 
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
-depends = ['context_filetype.vim', 'nvim-yarp', 'vim-hug-neovim-rpc']
+depends = ['nvim-yarp', 'vim-hug-neovim-rpc', 'context_filetype.vim']
+on_event = 'InsertCharPre'
+on_i = 1
 hook_source = '''
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#auto_complete_delay = 0
@@ -22,13 +24,12 @@ hook_source = '''
   let g:deoplete#enable_refresh_always = 0
   let g:deoplete#enable_smart_case = 1
   let g:deoplete#file#enable_buffer_path = 1
-  let g:deoplete#max_list = 10000
+  let g:deoplete#max_list = 1000
 
   inoremap <expr><tab> pumvisible() ? "\<C-n>" :
   \ neosnippet#expandable_or_jumpable() ?
   \ "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
 '''
-on_i = 1
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
@@ -65,31 +66,44 @@ repo = 'Shougo/denite.nvim'
 depends = ['neomru.vim', 'neoyank.vim']
 on_event = 'BufRead'
 hook_add = '''
-  nmap <silent> <C-r><C-t> :<C-u>Denite filetype<CR>
-  nmap <silent> <C-r><C-p> :<C-u>Denite file_rec<CR>
-  nmap <silent> <C-r><C-l> :<C-u>Denite line<CR>
-  nmap <silent> <C-r><C-g> :<C-u>Denite grep<CR>
-  nmap <silent> <C-r><C-]> :<C-u>DeniteCursorWord grep<CR>
-  nmap <silent> <C-r><C-u> :<C-u>Denite file_mru<CR>
-  nmap <silent> <C-r><C-y> :<C-u>Denite neoyank<CR>
-  nmap <silent> <C-r><C-r> :<C-u>Denite -resume<CR>
-  nmap <silent> <C-r>; :<C-u>Denite -resume -immediately -select=+1<CR>
-  nmap <silent> <C-r>- :<C-u>Denite -resume -immediately -select=-1<CR>
+  nmap [denite] <Nop>
+  map <C-g> [denite]
+  nmap <silent> [denite]<C-t> :<C-u>Denite filetype<CR>
+  nmap <silent> [denite]<C-p> :<C-u>Denite file_rec<CR>
+  nmap <silent> [denite]<C-l> :<C-u>Denite line<CR>
+  nmap <silent> [denite]<C-g> :<C-u>Denite grep<CR>
+  nmap <silent> [denite]<C-]> :<C-u>DeniteCursorWord grep<CR>
+  nmap <silent> [denite]<C-u> :<C-u>Denite file_mru<CR>
+  nmap <silent> [denite]<C-y> :<C-u>Denite neoyank<CR>
+  nmap <silent> [denite]<C-r> :<C-u>Denite -resume<CR>
+  nmap <silent> [denite]; :<C-u>Denite -resume -immediately -select=+1<CR>
+  nmap <silent> [denite]- :<C-u>Denite -resume -immediately -select=-1<CR>
 '''
 
+# git
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+hook_add = '''
+  nmap [figitive] <Nop>
+  map <Leader>g [figitive]
+  nmap <silent> [figitive]s :<C-u>Gstatus<CR>
+  nmap <silent> [figitive]d :<C-u>Gdiff<CR>
+  nmap <silent> [figitive]b :<C-u>Gblame<CR>
+  nmap <silent> [figitive]l :<C-u>Glog<CR>
+'''
 
 # ------------- for ruby
 
-[[plugins]] # メソッドの定義元にジャンプ
+#[[plugins]] # メソッドの定義元にジャンプ
+# gen_tagsに移行できる？
 repo = 'szw/vim-tags'
-on_ft = ['ruby', 'perl', 'python', 'c', 'sh']
+on_ft = ['ruby']
+hook_source = '''
+  let g:vim_tags_auto_generate = 1
+'''
 
 [[plugins]]
 repo = 'Shougo/deoplete-rct'
-on_ft = ['ruby']
-
-[[plugins]]
-repo = 'fishbullet/deoplete-ruby'
 on_ft = ['ruby']
 
 [[plugins]]
@@ -102,39 +116,49 @@ let g:deoplete#sources#omni#input_patterns = {
   \}
 '''
 
-
 # ------------- for python
 
 [[plugins]]
 repo = 'Vimjas/vim-python-pep8-indent'
-on_ft = ['python', 'python3']
+on_ft = ['python']
 
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
-on_ft = ['python', 'python3']
 depends = ['deoplete.nvim']
-
-[[plugins]]
-repo = 'nvie/vim-flake8'
-on_ft = ['python', 'python3']
+on_ft = ['python']
 
 [[plugins]]
 repo = 'w0rp/ale'
-on_ft = ['python', 'python3']
+on_ft = ['python']
 hook_source = '''
   let g:ale_lint_on_save = 1
   let g:ale_lint_on_enter = 1
-  let g:ale_lint_on_text_changed = 1
+  let g:ale_lint_on_text_changed = 0
+
+  let g:ale_sign_error = '✗'
+  let g:ale_sign_error = '⚠'
+  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
   let g:ale_sign_column_always = 1
   let g:ale_set_loclist = 0
-  let g:ale_set_quickfix = 1
+  let g:ale_set_quickfix = 0
+  let g:ale_open_list = 0
+  let g:ale_keep_list_window_open = 0
+
+  let g:ale_linters = {
+  \   'python': ['flake8'],
+  \}
+  nmap [ale] <Nop>
+  map <C-k> [ale]
+  nmap <silent> [ale]<C-P> <Plug>(ale_previous)
+  nmap <silent> [ale]<C-N> <Plug>(ale_next)
 '''
 
-#[[plugins]]
-#repo = 'plytophogy/vim-virtualenv'
-#on_ft = ['python']
-
 [[plugins]]
-repo = 'miyakogi/vim-virtualenv'
-on_ft = ['python', 'python3']
+repo = 'plytophogy/vim-virtualenv'
+on_ft = ['python']
+
+#[[plugins]]
+#repo = 'thinca/vim-qfreplace'
+#on_ft = ['python']
 
