@@ -75,12 +75,12 @@ hook_add = '''
 #  let g:auto_ctags_directory_list = ['.git', '.svn']
 #  let g:auto_ctags_filetype_mode = 0
 #'''
-[[plugins]]
-repo = 'jsfaint/gen_tags.vim'
-hook_source = '''
-  let g:gen_tags#ctags_auto_gen = 1
-  let g:gen_tags#gtags_auto_gen = 1
-'''
+##[[plugins]]
+##repo = 'jsfaint/gen_tags.vim'
+##hook_source = '''
+##  let g:gen_tags#ctags_auto_gen = 1
+##  let g:gen_tags#gtags_auto_gen = 1
+##'''
 #let g:gen_tags#blacklist = ['$HOME']
 
 [[plugins]]
