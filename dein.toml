@@ -29,7 +29,7 @@ hook_add='''
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
   endif
-  
+
   " unicode symbols
   let g:airline_left_sep = '»'
   let g:airline_left_sep = '▶'
@@ -49,7 +49,7 @@ hook_add='''
   let g:airline_symbols.spell = 'Ꞩ'
   let g:airline_symbols.notexists = '∄'
   let g:airline_symbols.whitespace = 'Ξ'
-  
+
   " powerline symbols
   let g:airline_left_sep = ''
   let g:airline_left_alt_sep = ''
@@ -75,21 +75,22 @@ hook_add = '''
 #  let g:auto_ctags_directory_list = ['.git', '.svn']
 #  let g:auto_ctags_filetype_mode = 0
 #'''
+
 [[plugins]]
 repo = 'jsfaint/gen_tags.vim'
-hook_source = '''
-  let g:gen_tags#ctags_auto_gen = 1
-  let g:gen_tags#gtags_auto_gen = 1
-'''
-#let g:gen_tags#blacklist = ['$HOME']
+## "" hook_source = '''
+## ""   let g:gen_tags#ctags_auto_gen = 1
+## ""   let g:gen_tags#gtags_auto_gen = 1
+## ""   let g:gen_tags#blacklist = ['$HOME']
+## "" '''
 
 [[plugins]]
 repo = 'lighttiger2505/gtags.vim'
 hook_add = '''
-  let g:Gtags_Auto_Map = 1
+  let g:Gtags_Auto_Map = 0
   let g:Gtags_OpenQuickfixWindow = 1
   nnoremap <silent><C-k><C-k> :<C-u>exe("Gtags   ".expand('<cword>'))<CR>
-  nnoremap <silent><C-k><C-r> :<C-u>exe("Gtags -r".expand('<cword>'))<CR>
+  nnoremap <silent>J :<C-u>exe("Gtags -r".expand('<cword>'))<CR>
 '''
 
 # gitの変更箇所を表示します
