@@ -96,11 +96,11 @@ hook_add = '''
 
 #[[plugins]] # メソッドの定義元にジャンプ
 # gen_tagsに移行できる？
-repo = 'szw/vim-tags'
-on_ft = ['ruby']
-hook_source = '''
-  let g:vim_tags_auto_generate = 1
-'''
+## repo = 'szw/vim-tags'
+## on_ft = ['ruby']
+## hook_source = '''
+##   let g:vim_tags_auto_generate = 1
+## '''
 
 [[plugins]]
 repo = 'Shougo/deoplete-rct'

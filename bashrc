@@ -1,3 +1,5 @@
+# vim: set autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
+
 case $- in
   *i*) ;;
   *) return;;
@@ -15,7 +17,7 @@ if [ ${HOST_LEN} -gt 8 ]; then
   PS1_HOST="${HOSTNAME:0:4}${HOSTNAME:$HOST_LEN-4:4}"
 fi
 SHORTHOST=$PS1_HOST
-export PS1="\u@$SHORTHOST:\W "
+export PS1="[\u@$SHORTHOST \W]$ "
 unset PS1_HOST
 unset SHORTHOST
 
@@ -64,11 +66,18 @@ if [ -d $HOME/.rbenv/bin ]; then
   eval "$(rbenv init -)"
 fi
 
+
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
   export WORKON_HOME=$HOME/.virtualenvs
-  export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+  export VIRTUALENVWRAPPER_PYTHON="$(command \which python3)"
   . /usr/local/bin/virtualenvwrapper.sh
+fi
+
+if [ -x /usr/local/bin/gtags ]; then
+  export GTAGSCONF=/usr/local/share/gtags/gtags.conf
+  export GTAGSLABEL=pygments
 fi
 
 # send WINCH signal
 kill -s WINCH $$
+
