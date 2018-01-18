@@ -61,21 +61,31 @@ else
   }
 fi
 
+ffg () {
+  find ! -type d -print0 | xargs -0 grep --binary-files=without-match $@
+}
+
+# -- rbenv
 if [ -d $HOME/.rbenv/bin ]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
 fi
 
-
+# -- python - virtualenvwrapper
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
   export WORKON_HOME=$HOME/.virtualenvs
   export VIRTUALENVWRAPPER_PYTHON="$(command \which python3)"
   . /usr/local/bin/virtualenvwrapper.sh
 fi
 
-if [ -x /usr/local/bin/gtags ]; then
-  export GTAGSCONF=/usr/local/share/gtags/gtags.conf
-  export GTAGSLABEL=pygments
+if [ ! -f $HOME/.globalrc ]; then
+  # TODO ちゃんとテストしてない・・・
+  if [ -x /usr/local/bin/gtags ]; then
+    export GTAGSCONF=/usr/local/share/gtags/gtags.conf
+  fi
+  if command which pygmentize >/dev/null; then
+    export GTAGSLABEL=pygments
+  fi
 fi
 
 # send WINCH signal

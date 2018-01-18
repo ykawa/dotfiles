@@ -1,4 +1,5 @@
 # -- 起動時に読む
+# hook_sourceは使えません
 
 [[plugins]]
 repo = 'Shougo/dein.vim'
@@ -67,56 +68,70 @@ repo = 'scrooloose/nerdtree'
 hook_add = '''
   nnoremap <silent><C-e> :NERDTreeToggle<CR>
 '''
-
-#[[plugins]]
-#repo = 'soramugi/auto-ctags.vim'
-#hook_add = '''
-#  let g:auto_ctags = 1
-#  let g:auto_ctags_directory_list = ['.git', '.svn']
-#  let g:auto_ctags_filetype_mode = 0
-#'''
-
+# gtags自動実行
+#  gtags最新版が必要です（以下、手順）
+#   1. universal ctags を入れる
+#   2. pygments を入れる（python3 -m pip install -U pygments）
+#   3. gtags 最新版をコンパイルしてインストール
+#   4. $HOME/.globalrc の normal 箇所を編集 pygments を追加する
 [[plugins]]
 repo = 'jsfaint/gen_tags.vim'
-## "" hook_source = '''
-## ""   let g:gen_tags#ctags_auto_gen = 1
-## ""   let g:gen_tags#gtags_auto_gen = 1
-## ""   let g:gen_tags#blacklist = ['$HOME']
-## "" '''
+hook_add = '''
+  let g:gen_tags#verbose = 0
+  let g:gen_tags#use_cache_dir = 0
+  let g:gen_tags#ctags_auto_gen = 1
+  let g:gen_tags#gtags_auto_gen = 1
+  let g:gen_tags#ctags_bin = '/usr/local/bin/ctags'
+  let g:gen_tags#blacklist = ['$HOME']
+'''
 
 [[plugins]]
 repo = 'lighttiger2505/gtags.vim'
+depends = ['gen_tags.vim']
 hook_add = '''
   let g:Gtags_Auto_Map = 0
   let g:Gtags_OpenQuickfixWindow = 1
-  nnoremap <silent><C-k><C-k> :<C-u>exe("Gtags   ".expand('<cword>'))<CR>
-  nnoremap <silent>J :<C-u>exe("Gtags -r".expand('<cword>'))<CR>
+  nmap [gtags] <Nop>
+  map <C-@> [gtags]
+  nnoremap <silent> [gtags]k :<C-u>exe("Gtags ".expand('<cword>'))<CR>
+  nnoremap <silent> [gtags]j :<C-u>exe("Gtags -r ".expand('<cword>'))<CR>
 '''
 
 # gitの変更箇所を表示します
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
 
+# gitコマンド
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+hook_add = '''
+  nmap [figitive] <Nop>
+  map <Leader>g [figitive]
+  nmap <silent> [figitive]s :<C-u>Gstatus<CR>
+  nmap <silent> [figitive]d :<C-u>Gdiff<CR>
+  nmap <silent> [figitive]b :<C-u>Gblame<CR>
+  nmap <silent> [figitive]l :<C-u>Glog<CR>
+'''
+
 # SEE: https://qiita.com/uplus_e10/items/2a75fbe3d80063eb9c18
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 hook_add = '''
-let g:quickrun_no_default_key_mappings = 1
-"nnoremap <silent> <F11> :QuickRun<CR>
-nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
-nnoremap \r             :cclose<CR>:write<CR>:QuickRun -mode n<CR>
-nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
-let g:quickrun_config = {
-  \ "_": {
-    \   "runner" : "vimproc",
-    \   "runner/vimproc/updatetime"       : 10,
-    \   "outputter/buffer/close_on_empty" : 1,
-    \   "outputter/buffer/into"           : 1,
-    \   "outputter/buffer/split"          : ":botright 8sp",
-    \   "outputter"                       : "error",
-    \   "outputter/error/success"         : "buffer",
-    \   "outputter/error/error"           : "quickfix",
-    \   "hook/time/enable"                : 1,
+  let g:quickrun_no_default_key_mappings = 1
+  nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+  nnoremap \r             :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+  nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
+  let g:quickrun_config = {
+    \ "_": {
+      \ "runner"                          : "vimproc",
+      \ "runner/vimproc/updatetime"       : 10,
+      \ "outputter/buffer/close_on_empty" : 1,
+      \ "outputter/buffer/into"           : 1,
+      \ "outputter/buffer/split"          : ":botright 8sp",
+      \ "outputter"                       : "error",
+      \ "outputter/error/success"         : "buffer",
+      \ "outputter/error/error"           : "quickfix",
+      \ "hook/time/enable"                : 1,
     \ },
   \}
 '''

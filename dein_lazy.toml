@@ -80,27 +80,7 @@ hook_add = '''
   nmap <silent> [denite]- :<C-u>Denite -resume -immediately -select=-1<CR>
 '''
 
-# git
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-hook_add = '''
-  nmap [figitive] <Nop>
-  map <Leader>g [figitive]
-  nmap <silent> [figitive]s :<C-u>Gstatus<CR>
-  nmap <silent> [figitive]d :<C-u>Gdiff<CR>
-  nmap <silent> [figitive]b :<C-u>Gblame<CR>
-  nmap <silent> [figitive]l :<C-u>Glog<CR>
-'''
-
 # ------------- for ruby
-
-#[[plugins]] # メソッドの定義元にジャンプ
-# gen_tagsに移行できる？
-## repo = 'szw/vim-tags'
-## on_ft = ['ruby']
-## hook_source = '''
-##   let g:vim_tags_auto_generate = 1
-## '''
 
 [[plugins]]
 repo = 'Shougo/deoplete-rct'
@@ -110,8 +90,8 @@ on_ft = ['ruby']
 repo = 'osyo-manga/vim-monster'
 on_ft = ['ruby']
 hook_add = '''
-let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
+  let g:monster#completion#rcodetools#backend = "async_rct_complete"
+  let g:deoplete#sources#omni#input_patterns = {
   \ "ruby" : '[^. *\t]\.\w*\|\h\w*::',
   \}
 '''
@@ -119,16 +99,21 @@ let g:deoplete#sources#omni#input_patterns = {
 # ------------- for python
 
 [[plugins]]
+repo = 'plytophogy/vim-virtualenv'
+on_ft = ['python']
+ 
+[[plugins]]
 repo = 'Vimjas/vim-python-pep8-indent'
 on_ft = ['python']
 
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
-depends = ['deoplete.nvim']
+depends = ['vim-virtualenv', 'deoplete.nvim']
 on_ft = ['python']
 
 [[plugins]]
 repo = 'w0rp/ale'
+depends = ['vim-virtualenv'] # 念のためおまじない
 on_ft = ['python']
 hook_source = '''
   let g:ale_lint_on_save = 1
@@ -146,17 +131,13 @@ hook_source = '''
   let g:ale_keep_list_window_open = 0
 
   let g:ale_linters = {
-  \   'python': ['flake8'],
+  \ 'python': ['flake8'],
   \}
   nmap [ale] <Nop>
   map <C-k> [ale]
   nmap <silent> [ale]<C-P> <Plug>(ale_previous)
   nmap <silent> [ale]<C-N> <Plug>(ale_next)
 '''
-
-[[plugins]]
-repo = 'plytophogy/vim-virtualenv'
-on_ft = ['python']
 
 #[[plugins]]
 #repo = 'thinca/vim-qfreplace'
