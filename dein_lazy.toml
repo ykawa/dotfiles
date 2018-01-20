@@ -80,6 +80,13 @@ hook_add = '''
   nmap <silent> [denite]- :<C-u>Denite -resume -immediately -select=-1<CR>
 '''
 
+# ------------- for JavaScript
+
+[[plugins]] # ES6のハイライト
+repo = 'othree/yajs.vim'
+on_ft = ['javascript']
+
+
 # ------------- for ruby
 
 [[plugins]]
