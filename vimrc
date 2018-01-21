@@ -101,6 +101,11 @@ endif
 "set tags+=.git/tags,.svn/tags,tags
 
 colorscheme elflord
+set background=light
+set background=dark
+"highlight Pmenu ctermfg=15 ctermbg=242 gui=underline guibg=DarkGrey
+highlight Pmenu ctermbg=31 guibg=Cyan
+highlight PmenuSel term=bold ctermfg=0 ctermbg=36 guibg=Magenta
 
 " helpやquickfixを 'q' で閉じる
 autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
