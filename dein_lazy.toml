@@ -150,3 +150,19 @@ hook_source = '''
 #repo = 'thinca/vim-qfreplace'
 #on_ft = ['python']
 
+
+# ------------- for perl
+#
+[[plugins]]
+repo = 'c9s/perlomni.vim'
+on_ft = ['perl']
+#build = 'make'
+
+##[[plugins]]
+##repo = 'rdunklau/vim-perltidy'
+##on_ft = ['perl']
+
+[[plugins]]
+repo = 'itchyny/vim-pdf'
+on_ft = ['pdf']
+

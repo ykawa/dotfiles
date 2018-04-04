@@ -9,7 +9,10 @@ repo = 'Shougo/vimproc.vim'
 build = 'make'
 
 [[plugins]] # インデントを見やすく
-repo = 'Yggdroot/indentLine'
+repo = 'nathanaelkane/vim-indent-guides'
+
+#[[plugins]] # インデントを見やすく
+#repo = 'Yggdroot/indentLine'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
@@ -59,6 +62,14 @@ hook_add='''
   let g:airline_symbols.maxlinenr = ''
 '''
 
+# solarized
+[[plugins]]
+repo = 'altercation/vim-colors-solarized'
+hook_add = '''
+  set background=dark
+  colorscheme solarized
+'''
+
 # ファイラー
 [[plugins]]
 repo = 'scrooloose/nerdtree'
@@ -83,16 +94,24 @@ hook_add = '''
   let g:gen_tags#blacklist = ['$HOME']
 '''
 
+
+# :Gtags 関数名         -> 関数名 → ソースコード（定義）
+# :Gtags -r 関数名      -> 関数名 → ソースコード（参照）
+# :Gtags -f ファイル名  -> ソースコード → 関数一覧
+# :Gtags -g 検索文字列  -> ソースコードの grep
+
 [[plugins]]
 repo = 'lighttiger2505/gtags.vim'
 depends = ['gen_tags.vim']
 hook_add = '''
   let g:Gtags_Auto_Map = 0
+  let g:Gtags_Auto_Update = 1
   let g:Gtags_OpenQuickfixWindow = 1
   nmap [gtags] <Nop>
   map <C-@> [gtags]
-  nnoremap <silent> [gtags]k :<C-u>exe("Gtags ".expand('<cword>'))<CR>
-  nnoremap <silent> [gtags]j :<C-u>exe("Gtags -r ".expand('<cword>'))<CR>
+  nnoremap <silent> [gtags]<C-k> :<C-u>exe("Gtags ".expand('<cword>'))<CR>
+  nnoremap <silent> [gtags]<C-j> :<C-u>exe("Gtags -r ".expand('<cword>'))<CR>
+  nnoremap <silent> [gtags]<C-@> :<C-u>GtagsCursor<CR>
 '''
 
 # gitの変更箇所を表示します
