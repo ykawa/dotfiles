@@ -6,16 +6,12 @@ RELATIVE=${LOCATION##$HOME/}
 pushd $HOME
 for f in ${RELATIVE}/*
 do
-  [ ! -f $f ] && continue
-
   dotf=$(basename $f)
   if [ -L .$dotf ]; then
     echo -n "update: "
     readlink .$dotf
-  elif [ -f .$dotf ]; then
+  elif [ -f .$dotf -o -d .$dotf ]; then
     mv .$dotf $dotf.${DATETIME}
-  elif [ -d .$dotf ]; then
-    continue
   else
     echo "no link: $dotf"
     continue
