@@ -89,7 +89,7 @@ nnoremap <S-h> ^
 nnoremap == gg=G''
 nnoremap n nzz
 nnoremap N Nzz
-nmap <C-l> <C-l>:nohlsearch<CR><Esc>
+nnoremap <silent><C-l><C-l> :<C-u>set nohlsearch!<CR><Esc>
 
 filetype plugin indent on
 syntax enable
@@ -100,13 +100,22 @@ endif
 
 "set tags+=.git/tags,.svn/tags,tags
 
-colorscheme elflord
-set background=light
-set background=dark
-"highlight Pmenu ctermfg=15 ctermbg=242 gui=underline guibg=DarkGrey
-highlight Pmenu ctermbg=31 guibg=Cyan
-highlight PmenuSel term=bold ctermfg=0 ctermbg=36 guibg=Magenta
+" colorscheme elflord
+" set background=light
+" set background=dark
+" "highlight Pmenu ctermfg=15 ctermbg=242 gui=underline guibg=DarkGrey
+" highlight Pmenu ctermbg=31 guibg=Cyan
+" highlight PmenuSel term=bold ctermfg=0 ctermbg=36 guibg=Magenta
 
-" helpやquickfixを 'q' で閉じる
+
+" helpやQuickFixを 'q' で閉じる
 autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
+
+" " QuickFix自動で閉じる
+" augroup QfAutoCommands
+"   autocmd!
+"   " Auto-close quickfix window
+"   autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
+" augroup END
+
 
