@@ -34,6 +34,12 @@ if [ ! -f $HOME/.globalrc ]; then
   fi
 fi
 
+# -- node
+if [[ -s ~/.nvm/nvm.sh ]]; then
+  source ~/.nvm/nvm.sh
+fi
+
+
 # send WINCH signal
 kill -s WINCH $$
 

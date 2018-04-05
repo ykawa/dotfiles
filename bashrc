@@ -1,8 +1,8 @@
 # vim: set autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
 
 case $- in
-  *i*) ;;
-  *) return;;
+*i*) ;;
+*) return;;
 esac
 
 HISTCONTROL=ignoreboth
@@ -10,16 +10,6 @@ shopt -s histappend
 HISTSIZE=2000
 HISTFILESIZE=2000
 export PROMPT_COMMAND='history -a; history -c; history -r'
-
-PS1_HOST=${HOSTNAME}
-HOST_LEN=${#HOSTNAME}
-if [ ${HOST_LEN} -gt 8 ]; then
-  PS1_HOST="${HOSTNAME:0:4}${HOSTNAME:$HOST_LEN-4:4}"
-fi
-SHORTHOST=$PS1_HOST
-export PS1="[\u@$SHORTHOST \W]$ "
-unset PS1_HOST
-unset SHORTHOST
 
 shopt -s checkwinsize
 
@@ -47,6 +37,37 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# modify PS1
+PS1_HOST=${HOSTNAME}
+HOST_LEN=${#HOSTNAME}
+if [ ${HOST_LEN} -gt 8 ]; then
+  PS1_HOST="${HOSTNAME:0:4}${HOSTNAME:$HOST_LEN-4:4}"
+fi
+SHORTHOST=$PS1_HOST
+export PS1="[\u@$SHORTHOST \W]$ "
+
+# GIT_PS1_SHOWUPSTREAM
+#  現在のブランチがupstreamより進んでいるとき">"を、遅れているとき"<"を、
+#  遅れてるけど独自の変更もあるとき"<>"を表示する。
+#  オプションが指定できるけど(svnをトラックするかとか)
+# GIT_PS1_SHOWUNTRACKEDFILES
+#  addされてない新規ファイルがある(untracked)とき"%"を表示する
+# GIT_PS1_SHOWSTASHSTATE
+#  stashになにか入っている(stashed)とき"$"を表示する
+# GIT_PS1_SHOWDIRTYSTATE
+#  addされてない変更(unstaged)があったとき"*"を表示する、
+#  addされているがcommitされていない変更(staged)があったとき"+"を表示する
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWUPSTREAM=1
+GIT_PS1_SHOWUNTRACKEDFILES=
+GIT_PS1_SHOWSTASHSTATE=1
+if declare -f __git_ps1 | grep __git_ps1 >/dev/null; then
+  export PS1='$(__git_ps1)'"[\u@$SHORTHOST \W]$ "
+fi
+unset PS1_HOST
+unset SHORTHOST
+
 
 stty werase undef
 bind "\C-w":unix-filename-rubout
