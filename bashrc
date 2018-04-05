@@ -7,8 +7,9 @@ esac
 
 HISTCONTROL=ignoreboth
 shopt -s histappend
-HISTSIZE=2000
-HISTFILESIZE=2000
+HISTSIZE=20000
+HISTFILESIZE=20000
+HISTIGNORE='ls:pwd:exit'
 export PROMPT_COMMAND='history -a; history -c; history -r'
 
 shopt -s checkwinsize
