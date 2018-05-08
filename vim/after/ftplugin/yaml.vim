@@ -1,0 +1,2 @@
+setlocal backspace+=indent
+

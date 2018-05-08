@@ -1,14 +1,14 @@
 # dein_lazy.toml
 # ---------------------------
 #
-[[plugins]]
-repo = 'roxma/nvim-yarp'
-
-[[plugins]]
-repo = 'roxma/vim-hug-neovim-rpc'
-
-[[plugins]]
-repo = 'Shougo/context_filetype.vim'
+#[[plugins]]
+#repo = 'roxma/nvim-yarp'
+#
+#[[plugins]]
+#repo = 'roxma/vim-hug-neovim-rpc'
+#
+#[[plugins]]
+#repo = 'Shougo/context_filetype.vim'
 
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
@@ -165,4 +165,68 @@ on_ft = ['perl']
 [[plugins]]
 repo = 'itchyny/vim-pdf'
 on_ft = ['pdf']
+
+# ------------- for typescript
+#
+[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'mhartington/nvim-typescript'
+depends = ['deoplete.nvim']
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'HerringtonDarkholme/yats.vim'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = ['typescript']
+
+[[plugins]]
+repo  = 'Quramy/tsuquyomi'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'Quramy/vim-js-pretty-template'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'jason0x43/vim-js-indent'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'Quramy/vim-dtsm'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'mhartington/vim-typings'
+on_ft = ['typescript']
+
+# -- TypeScript + Vue
+[[plugins]]
+repo = 'sandersn/vue-ts-plugin'
+on_ft = ['vue']
+
+# ------------- for pug
+#
+[[plugins]]
+repo = 'dNitro/vim-pug-complete'
+on_ft = ['pug']
+
+[[plugins]]
+repo = 'digitaltoad/vim-pug'
+on_ft = ['pug']
+
+[[plugins]]
+repo = 'posva/vim-vue'
+on_ft = ['vue']
+
+# ------------- for ansible
+#
+[[plugins]]
+repo = 'pearofducks/ansible-vim.git'
+on_ft = ['yaml.ansible']
 
