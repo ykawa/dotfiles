@@ -109,7 +109,6 @@ hook_add = '''
 # :Gtags -r 関数名      -> 関数名 → ソースコード（参照）
 # :Gtags -f ファイル名  -> ソースコード → 関数一覧
 # :Gtags -g 検索文字列  -> ソースコードの grep
-
 [[plugins]]
 repo = 'lighttiger2505/gtags.vim'
 depends = ['gen_tags.vim']
