@@ -28,8 +28,10 @@ fi
 
 alias ll='ls -alF'
 alias la='ls -A'
+alias al='ls -al'
 alias l='ls -CF'
 alias s='screen'
+alias open='xdg-open'
 
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -59,18 +61,19 @@ export PS1="[\u@$SHORTHOST \W]$ "
 # # GIT_PS1_SHOWDIRTYSTATE
 # #  addされてない変更(unstaged)があったとき"*"を表示する、
 # #  addされているがcommitされていない変更(staged)があったとき"+"を表示する
-# GIT_PS1_SHOWDIRTYSTATE=1
-# GIT_PS1_SHOWUPSTREAM=1
-# GIT_PS1_SHOWUNTRACKEDFILES=
-# GIT_PS1_SHOWSTASHSTATE=1
-# if declare -f __git_ps1 | grep __git_ps1 >/dev/null; then
-#   export PS1='$(__git_ps1)'"[\u@$SHORTHOST \W]$ "
-# fi
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWUPSTREAM=1
+GIT_PS1_SHOWUNTRACKEDFILES=
+GIT_PS1_SHOWSTASHSTATE=1
+if declare -f __git_ps1 | grep __git_ps1 >/dev/null; then
+  export PS1='$(__git_ps1)'"[\u@$SHORTHOST \W]$ "
+fi
 unset PS1_HOST
 unset SHORTHOST
 
 
 stty werase undef
+stty stop undef
 bind "\C-w":unix-filename-rubout
 
 if builtin command -v resize >/dev/null; then
@@ -87,6 +90,40 @@ ffg () {
   find ! -type d -print0 | xargs -0 grep --binary-files=without-match $@
 }
 
+cffg () {
+  find -maxdepth 2 ! -type d -print0 | xargs -0 grep --binary-files=without-match $@
+}
+
+effg () {
+  local exdir="$1"
+  shift
+  find -type d -name $exdir -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match $@
+}
+
+if [ -d $HOME/bin ]; then
+  PATH="${PATH}:$HOME/bin"
+fi
+
+
 # send WINCH signal
 kill -s WINCH $$
 
+if [ -s /home/ykawa/.virtualenvs/noid36/bin/activate ]; then
+  source /home/ykawa/.virtualenvs/noid36/bin/activate
+fi
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /home/ykawa/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /home/ykawa/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /home/ykawa/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash ] && . /home/ykawa/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
+
+if [ -z "$NVM_DIR" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  source <(npm completion)
+fi
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

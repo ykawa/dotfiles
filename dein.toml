@@ -17,12 +17,23 @@ repo = 'roxma/vim-hug-neovim-rpc'
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
 
-
 [[plugins]] # インデントを見やすく
 repo = 'nathanaelkane/vim-indent-guides'
 
-#[[plugins]] # インデントを見やすく
-#repo = 'Yggdroot/indentLine'
+[[plugins]] # インデントを見やすく
+repo = 'Yggdroot/indentLine'
+hook_add='''
+  let g:indentLine_char = '|'
+'''
+
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
+
+[[plugins]]
+repo = 'thinca/vim-qfreplace'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
@@ -72,13 +83,13 @@ hook_add='''
   let g:airline_symbols.maxlinenr = ''
 '''
 
-# solarized
-[[plugins]]
-repo = 'altercation/vim-colors-solarized'
-hook_add = '''
-  set background=dark
-  colorscheme solarized
-'''
+## solarized
+#[[plugins]]
+#repo = 'altercation/vim-colors-solarized'
+#hook_add = '''
+#  set background=dark
+#  colorscheme solarized
+#'''
 
 # ファイラー
 [[plugins]]

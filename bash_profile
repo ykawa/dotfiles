@@ -34,16 +34,6 @@ if [ ! -f $HOME/.globalrc ]; then
   fi
 fi
 
-# -- Node version manager
-if [ -s ~/.nvm/nvm.sh ]; then
-  source ~/.nvm/nvm.sh
-fi
-
-# -- npm completion
-if type npm >/dev/null 2>&1; then
-  source <(npm completion)
-fi
-
 # send WINCH signal
 kill -s WINCH $$
 

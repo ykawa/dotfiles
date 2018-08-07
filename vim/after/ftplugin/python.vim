@@ -7,7 +7,7 @@ let b:did_ftplugin_python = 1
 "--------------------------------------
 " pip install -U yapf
 "--------------------------------------
-setlocal equalprg=yapf\ --style='{based_on_style:\ google,\ column_limit:\ 120}'
+setlocal equalprg=yapf3\ --style='{based_on_style:\ google,\ column_limit:\ 120}'
 setlocal backspace+=indent
 
 
@@ -46,9 +46,7 @@ setlocal backspace+=indent
 
 "let g:ale_python_flake8_executable = '/home/vagrant/.pyenv/shims/flake8'
 "let g:ale_python_pylint_executable = '/home/vagrant/.pyenv/shims/pylint'
-" let g:ale_python_pylint_options = '--rcfile ~/.pylint.rc'
-
-
+"let g:ale_python_pylint_options = '--rcfile ~/.pylint.rc'
 
 "" if version < 600
 ""   syntax clear
