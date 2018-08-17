@@ -151,18 +151,19 @@ repo = 'itchyny/vim-pdf'
 on_ft = ['pdf']
 
 # ------------- for typescript
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-on_ft = ['typescript']
-
-[[plugins]]
-repo = 'mhartington/nvim-typescript'
-depends = ['deoplete.nvim']
-on_ft = ['typescript']
+##  [[plugins]]
+##  repo = 'autozimu/LanguageClient-neovim'
+##  on_ft = ['typescript']
 
 [[plugins]]
 repo = 'HerringtonDarkholme/yats.vim'
 on_ft = ['typescript']
+
+##  [[plugins]]
+##  repo = 'mhartington/nvim-typescript'
+##  build = './install.sh'
+##  depends = ['deoplete.nvim']
+##  on_ft = ['typescript']
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
