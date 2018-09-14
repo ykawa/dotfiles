@@ -1,0 +1,6 @@
+[core]
+excludesfile = ~/dotfiles/gitignore
+[core]
+excludesfile = ~/dotfiles/gitignore
+[commit]
+	template = ~/dotfiles/gitmessage
