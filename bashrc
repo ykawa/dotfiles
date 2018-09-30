@@ -104,9 +104,15 @@ if [ -d $HOME/bin ]; then
   PATH="${PATH}:$HOME/bin"
 fi
 
-
 # send WINCH signal
 kill -s WINCH $$
+
+if [ -d $HOME/.virtualenvs ]; then
+  activate_file=$(ls -tr /home/ykawa/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
+  if [ -n "$activate_file" ]; then
+    . $activate_file
+  fi
+fi
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
