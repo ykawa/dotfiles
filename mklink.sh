@@ -14,7 +14,7 @@ do
     mv .$dotf $dotf.${DATETIME}
   else
     echo "no link: $dotf"
-    continue
+    # continue
   fi
   ln -sf $f .$dotf
   readlink .$dotf
