@@ -108,18 +108,11 @@ fi
 kill -s WINCH $$
 
 if [ -d $HOME/.virtualenvs ]; then
-  activate_file=$(ls -tr /home/ykawa/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
+  activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
   if [ -n "$activate_file" ]; then
     . $activate_file
   fi
 fi
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[ -f $HOME/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash ] && . $HOME/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[ -f $HOME/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash ] && . $HOME/.nvm/versions/node/v8.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
 
 if [ -z "$NVM_DIR" -a -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
@@ -127,6 +120,12 @@ if [ -z "$NVM_DIR" -a -d "$HOME/.nvm" ]; then
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
   source <(npm completion)
 fi
+
+if [ -z "$NVS_HOME" -a -d "$HOME/.nvs" ]; then
+  export NVS_HOME="$HOME/.nvs"
+  [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+fi
+
 
 if [ -d "$HOME/.yarn" ]; then
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

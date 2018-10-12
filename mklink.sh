@@ -4,6 +4,9 @@ LOCATION=$(cd $(dirname $0); pwd)
 RELATIVE=${LOCATION##$HOME/}
 
 pushd $HOME
+
+touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim
+
 for f in ${RELATIVE}/*
 do
   dotf=$(basename $f)
