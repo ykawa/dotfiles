@@ -76,6 +76,10 @@ stty werase undef
 stty stop undef
 bind "\C-w":unix-filename-rubout
 
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+
 if builtin command -v resize >/dev/null; then
   rs () {
     eval `resize`
