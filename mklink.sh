@@ -5,7 +5,7 @@ RELATIVE=${LOCATION##$HOME/}
 
 pushd $HOME
 
-touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim
+touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim .pythonstartup
 
 for f in ${RELATIVE}/*
 do

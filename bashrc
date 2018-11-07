@@ -87,47 +87,50 @@ else
 fi
 
 ffg () {
-  find ! -type d -print0 | xargs -0 grep --binary-files=without-match $@
+  find ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 cffg () {
-  find -maxdepth 2 ! -type d -print0 | xargs -0 grep --binary-files=without-match $@
+  find -maxdepth 2 ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 effg () {
   local exdir="$1"
   shift
-  find -type d -name $exdir -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match $@
+  find -type d -name $exdir -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 if [ -d $HOME/bin ]; then
   PATH="${PATH}:$HOME/bin"
 fi
 
-# send WINCH signal
-kill -s WINCH $$
+# if [ -d $HOME/.virtualenvs ]; then
+#   activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
+#   if [ -n "$activate_file" ]; then
+#     . $activate_file
+#   fi
+# fi
 
-if [ -d $HOME/.virtualenvs ]; then
-  activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
-  if [ -n "$activate_file" ]; then
-    . $activate_file
-  fi
-fi
-
-if [ -z "$NVM_DIR" -a -d "$HOME/.nvm" ]; then
+if [ -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
   source <(npm completion)
 fi
 
-if [ -z "$NVS_HOME" -a -d "$HOME/.nvs" ]; then
+if [ -d "$HOME/.nvs" ]; then
   export NVS_HOME="$HOME/.nvs"
   [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
 fi
 
-
 if [ -d "$HOME/.yarn" ]; then
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
+
+if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
+  export PYTHONSTARTUP="$HOME/.pythonstartup"
+fi
+
+# send WINCH signal
+kill -s WINCH $$
 

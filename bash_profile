@@ -37,3 +37,6 @@ fi
 # send WINCH signal
 kill -s WINCH $$
 
+if [ -z "$DISPLAY" ] && [ $(tty) = /dev/tty1 ]; then
+  exec startx
+fi
