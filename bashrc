@@ -99,9 +99,7 @@ cffg () {
 }
 
 effg () {
-  local exdir="$1"
-  shift
-  find -type d -name $exdir -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
+  find -type d \( -name node_modules -prune -o -name .git \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 if [ -d $HOME/bin ]; then
