@@ -4,3 +4,5 @@ excludesfile = ~/dotfiles/gitignore
 excludesfile = ~/dotfiles/gitignore
 [commit]
 	template = ~/dotfiles/gitmessage
+[merge]
+	tool = vimdiff
