@@ -212,7 +212,7 @@ on_ft = ['vue']
 repo = 'pearofducks/ansible-vim.git'
 on_ft = ['yaml.ansible']
 
-# ------------- for vim8
+# ------------- for php
 [[plugins]]
 repo  = 'phpactor/phpactor'
 on_ft = ['php']
