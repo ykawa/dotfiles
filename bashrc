@@ -99,7 +99,11 @@ cffg () {
 }
 
 effg () {
-  find -type d \( -name 'node_modules' -o -name '.git' \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
+}
+
+ccol () {
+  cut -c1-${COLUMNS}
 }
 
 if [ -d $HOME/bin ]; then
