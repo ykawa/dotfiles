@@ -118,4 +118,7 @@ autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
 "   autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 " augroup END
 
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
