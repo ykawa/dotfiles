@@ -137,6 +137,10 @@ if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
   export PYTHONSTARTUP="$HOME/.pythonstartup"
 fi
 
+export GOPATH=$HOME/go
+export GOROOT=$( go env GOROOT )
+export PATH=$GOPATH/bin:$PATH
+
 # send WINCH signal
 kill -s WINCH $$
 
