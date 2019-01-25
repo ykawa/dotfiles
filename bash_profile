@@ -37,6 +37,7 @@ fi
 # send WINCH signal
 kill -s WINCH $$
 
-if [ -z "$DISPLAY" ] && [ $(tty) = /dev/tty1 ]; then
+if [ -z "$DISPLAY" ] && [ $(tty) = /dev/tty1 ] && [ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
   exec startx
 fi
+
