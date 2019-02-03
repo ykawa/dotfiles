@@ -38,5 +38,7 @@ fi
 kill -s WINCH $$
 
 if [ -z "$DISPLAY" ] && [ $(tty) = /dev/tty1 ]; then
+  echo "ctrl + c then break start X..." >&2
+  sleep 3
   exec startx
 fi
