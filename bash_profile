@@ -42,3 +42,4 @@ if [ -z "$DISPLAY" ] && [ $(tty) = /dev/tty1 ] && [ ! -f /proc/sys/fs/binfmt_mis
   sleep 3
   exec startx
 fi
+
