@@ -10,7 +10,27 @@ shopt -s histappend
 HISTSIZE=20000
 HISTFILESIZE=20000
 HISTIGNORE='ls:pwd:exit'
-export PROMPT_COMMAND='history -a; history -c; history -r'
+
+case "$TERM" in
+xterm*|rxvt*)
+  PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\033]0;${PWD##*/}\007"'
+  show_command_in_title_bar()
+  {
+    case "$BASH_COMMAND" in
+    *\033]0*|*history*)
+      ;;
+    *)
+      echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
+      ;;
+    esac
+  }
+  trap show_command_in_title_bar DEBUG
+  ;;
+*)
+  ;;
+esac
+
+
 
 shopt -s checkwinsize
 
