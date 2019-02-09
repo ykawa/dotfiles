@@ -1,3 +1,4 @@
+set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
 
@@ -97,16 +98,6 @@ syntax enable
 if dein#check_install()
   call dein#install()
 endif
-
-"set tags+=.git/tags,.svn/tags,tags
-
-" colorscheme elflord
-" set background=light
-" set background=dark
-" "highlight Pmenu ctermfg=15 ctermbg=242 gui=underline guibg=DarkGrey
-" highlight Pmenu ctermbg=31 guibg=Cyan
-" highlight PmenuSel term=bold ctermfg=0 ctermbg=36 guibg=Magenta
-
 
 " helpやQuickFixを 'q' で閉じる
 autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
