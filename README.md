@@ -13,6 +13,5 @@ pip3 install --user --upgrade tox pytest
 
 
 ## composer (apt)
-apt-get install composer
-
+apt-get install composer php7.2-xml php7.2-mbstring
 
