@@ -11,8 +11,7 @@ sudo apt-get install git build-essential ncurses-dev luajit libluajit-5.1-dev \
 sudo apt-get install -y virtualenvwrapper python3-pip python-pip
 ```
 ```bash
-pip3 install --user --upgrade neovim jedi nvim-yarp vim-hug-neovim-rpc \
-  pynvim Pygments
+pip3 install --user --upgrade neovim jedi pynvim Pygments
 ```
 ### (optional) pip3
 ```bash
