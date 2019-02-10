@@ -20,7 +20,7 @@ pip3 install --user --upgrade tox pytest
 ```
 ## php7.2 and composer (apt)
 ```bash
-apt-get install composer php7.2-xml php7.2-mbstring
+apt-get install composer php7.2 php7.2-xml php7.2-mbstring php7.2-curl
 ```
 ### ctags
 ```bash
