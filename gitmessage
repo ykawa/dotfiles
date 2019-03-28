@@ -11,6 +11,9 @@
 # :up: 依存パッケージなどのアップデート
 # :lock: 新機能の公開範囲の制限
 # :cop: セキュリティ関連の改善
+# ---- funny ----
+# :scream:
+# :fast_parrot:
 # ==== Format ====
 # :emoji: Subject
 # Commit body...

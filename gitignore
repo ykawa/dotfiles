@@ -1,6 +1,7 @@
 ykawa/
 *.ykawa
 ykawa.*
+*.ykawa.*
 tmp/
 tmp.*
 tmp?.*
@@ -17,4 +18,5 @@ temp.*
 temp_*.*
 .phpstorm.meta.php
 _ide_helper_models.php
+Ykawa*.java
 
