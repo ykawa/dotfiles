@@ -1,31 +1,6 @@
 # dein_lazy.toml
 # ---------------------------
 [[plugins]]
-repo = 'Shougo/neosnippet-snippets'
-on_i = 1
-
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-depends = ['neosnippet-snippets', 'context_filetype.vim']
-on_i = 1
-on_ft = ['snippet']
-hook_source = '''
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k> <Plug>(neosnippet_expand_target)
-
-  smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-  \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-  let g:neosnippet#enable_completed_snippet = 1
-  let g:neosnippet#expand_word_boundary = 1
-  let g:neosnippet#snippets_directory = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
-  if has('conceal')
-    set conceallevel=2 concealcursor=niv
-  endif
-'''
-
-[[plugins]]
 repo = 'Shougo/denite.nvim'
 depends = ['neomru.vim', 'neoyank.vim']
 on_event = 'BufRead'
@@ -121,9 +96,9 @@ repo = 'c9s/perlomni.vim'
 on_ft = ['perl']
 #build = 'make'
 
-##[[plugins]]
-##repo = 'rdunklau/vim-perltidy'
-##on_ft = ['perl']
+[[plugins]]
+repo = 'rdunklau/vim-perltidy'
+on_ft = ['perl']
 
 # ------------- for PDF
 [[plugins]]

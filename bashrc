@@ -119,60 +119,65 @@ cffg () {
 }
 
 effg () {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 jffg () {
   find -type d \( -name 'node_modules' -o -name '.git' \) -prune -o ! -type d -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-
-ccol () {
-  cut -c1-${COLUMNS}
+pffg () {
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
+  -o -name 'storage' -o -name 'docs' -o -name 'libraries' \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-if [ -d $HOME/bin ]; then
-  PATH="${PATH}:$HOME/bin"
-fi
 
-# if [ -d $HOME/.virtualenvs ]; then
-#   activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
-#   if [ -n "$activate_file" ]; then
-#     . $activate_file
-#   fi
-# fi
+  ccol () {
+    cut -c1-${COLUMNS}
+  }
 
-if [ -d "$HOME/.nvm" ]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  source <(npm completion)
-fi
+  if [ -d $HOME/bin ]; then
+    PATH="${PATH}:$HOME/bin"
+  fi
 
-if [ -d "$HOME/.nvs" ]; then
-  export NVS_HOME="$HOME/.nvs"
-  [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
-fi
+  # if [ -d $HOME/.virtualenvs ]; then
+  #   activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
+  #   if [ -n "$activate_file" ]; then
+  #     . $activate_file
+  #   fi
+  # fi
 
-if [ -d "$HOME/.yarn" ]; then
-  export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-fi
+  if [ -d "$HOME/.nvm" ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    source <(npm completion)
+  fi
 
-if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
-  export PYTHONSTARTUP="$HOME/.pythonstartup"
-fi
+  if [ -d "$HOME/.nvs" ]; then
+    export NVS_HOME="$HOME/.nvs"
+    [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+  fi
 
-if [ -d "$HOME/go" ]; then
-  export GOPATH=$HOME/go
-  export GOROOT=$( go env GOROOT )
-  export PATH=$GOPATH/bin:$PATH
-fi
+  if [ -d "$HOME/.yarn" ]; then
+    export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+  fi
 
-# send WINCH signal
-kill -s WINCH $$
+  if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
+    export PYTHONSTARTUP="$HOME/.pythonstartup"
+  fi
 
-if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
-  export SDKMAN_DIR="$HOME/.sdkman"
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
+  if [ -d "$HOME/go" ]; then
+    export GOPATH=$HOME/go
+    export GOROOT=$( go env GOROOT )
+    export PATH=$GOPATH/bin:$PATH
+  fi
+
+  # send WINCH signal
+  kill -s WINCH $$
+
+  if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
+    export SDKMAN_DIR="$HOME/.sdkman"
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+  fi
 

@@ -6,3 +6,6 @@ excludesfile = ~/dotfiles/gitignore
 	template = ~/dotfiles/gitmessage
 [merge]
 	tool = vimdiff
+[alias]
+	push-f = push --force-with-lease
+	plog = log --no-merges --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(blue)%an%C(red)%d %C(reset)%s'
