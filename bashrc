@@ -1,33 +1,33 @@
 # vim: set autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
 
 case $- in
-*i*) ;;
-*) return;;
+  *i*) ;;
+  *) return;;
 esac
 
-HISTCONTROL=ignoreboth
 shopt -s histappend
+HISTCONTROL=ignoreboth
 HISTSIZE=20000
 HISTFILESIZE=20000
 HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
-xterm*|rxvt*)
-  PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\033]0;${PWD##*/}\007"'
-  show_command_in_title_bar()
-  {
-    case "$BASH_COMMAND" in
-    *\033]0*|*history*)
-      ;;
-    *)
-      echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
-      ;;
-    esac
-  }
-  trap show_command_in_title_bar DEBUG
-  ;;
-*)
-  ;;
+  xterm*|rxvt*)
+    PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\033]0;${PWD##*/}\007"'
+    show_command_in_title_bar()
+    {
+      case "$BASH_COMMAND" in
+        *\033]0*|*history*)
+          ;;
+        *)
+          echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
+          ;;
+      esac
+    }
+    trap show_command_in_title_bar DEBUG
+    ;;
+  *)
+    ;;
 esac
 
 
@@ -119,65 +119,85 @@ cffg () {
 }
 
 effg () {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' -o -name '.tmp' \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 jffg () {
-  find -type d \( -name 'node_modules' -o -name '.git' \) -prune -o ! -type d -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'framework' -o -name '.tmp' \) -prune -o ! -type d -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 pffg () {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-  -o -name 'storage' -o -name 'docs' -o -name 'libraries' \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
+    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
+}
+
+ccol () {
+  cut -c1-${COLUMNS}
+}
+
+# remove everything Docker containers
+removecontainers() {
+  docker stop $(docker ps -aq)
+  docker rm $(docker ps -aq)
+}
+
+# remove everything Docker
+armaggedon() {
+  removecontainers
+  docker network prune -f
+  docker rmi -f $(docker images --filter dangling=true -qa)
+  docker volume rm $(docker volume ls --filter dangling=true -q)
+  docker rmi -f $(docker images -qa)
 }
 
 
-  ccol () {
-    cut -c1-${COLUMNS}
-  }
+if [ -d $HOME/bin ]; then
+  PATH="${PATH}:$HOME/bin"
+fi
 
-  if [ -d $HOME/bin ]; then
-    PATH="${PATH}:$HOME/bin"
-  fi
+# if [ -d $HOME/.virtualenvs ]; then
+#   activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
+#   if [ -n "$activate_file" ]; then
+#     . $activate_file
+#   fi
+# fi
 
-  # if [ -d $HOME/.virtualenvs ]; then
-  #   activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
-  #   if [ -n "$activate_file" ]; then
-  #     . $activate_file
-  #   fi
-  # fi
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  source <(npm completion)
+fi
 
-  if [ -d "$HOME/.nvm" ]; then
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-    source <(npm completion)
-  fi
+if [ -d "$HOME/.nvs" ]; then
+  export NVS_HOME="$HOME/.nvs"
+  [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+fi
 
-  if [ -d "$HOME/.nvs" ]; then
-    export NVS_HOME="$HOME/.nvs"
-    [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
-  fi
+if [ -d "$HOME/.yarn" ]; then
+  export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+fi
 
-  if [ -d "$HOME/.yarn" ]; then
-    export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-  fi
+if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
+  export PYTHONSTARTUP="$HOME/.pythonstartup"
+fi
 
-  if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
-    export PYTHONSTARTUP="$HOME/.pythonstartup"
-  fi
+if [ -d "$HOME/go" ]; then
+  export GOPATH=$HOME/go
+  export GOROOT=$( go env GOROOT )
+  export PATH=$GOPATH/bin:$PATH
+fi
 
-  if [ -d "$HOME/go" ]; then
-    export GOPATH=$HOME/go
-    export GOROOT=$( go env GOROOT )
-    export PATH=$GOPATH/bin:$PATH
-  fi
+if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
+  export SDKMAN_DIR="$HOME/.sdkman"
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
 
-  # send WINCH signal
-  kill -s WINCH $$
+if [[ -e "$HOME/.phpenv/bin/phpenv" ]]; then
+  export PATH="$HOME/.phpenv/bin:$PATH"
+  eval "$(phpenv init -)"
+fi
 
-  if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
-    export SDKMAN_DIR="$HOME/.sdkman"
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-  fi
+# send WINCH signal
+#kill -s WINCH $$
 

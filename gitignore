@@ -1,6 +1,8 @@
+BACKUP/
 ykawa/
 *.ykawa
 ykawa.*
+ykawa_*
 *.ykawa.*
 tmp/
 tmp.*
@@ -19,4 +21,10 @@ temp_*.*
 .phpstorm.meta.php
 _ide_helper_models.php
 Ykawa*.java
+Ykawa*.php
+
+.classpath
+.factorypath
+.project
+.settings/
 
