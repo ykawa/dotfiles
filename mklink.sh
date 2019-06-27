@@ -5,7 +5,7 @@ RELATIVE=${LOCATION##$HOME/}
 
 pushd $HOME
 
-touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim .pythonstartup .xmodmap
+touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim .pythonstartup .Xmodmap
 
 for f in ${RELATIVE}/*
 do
