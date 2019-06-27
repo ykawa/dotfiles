@@ -41,7 +41,7 @@ cd global-6.6.3/
 make -j 4
 sudo make install
 ```
-### vim
+## vim
 ```bash
 git clone https://github.com/vim/vim.git
 cd vim
@@ -54,3 +54,7 @@ src/vim --version | grep -e python -e ruby -e perl -e lua
 sudo make install
 ```
 
+## restore cinnamon settings
+```bash
+dconf load /org/cinnamon/ < cinnamon_settings
+```

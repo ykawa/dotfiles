@@ -1,0 +1,171 @@
+[/]
+desktop-effects-unmaximize-transition='easeNone'
+extension-cache-updated=1552880563
+desktop-effects-maximize-transition='easeInExpo'
+applet-cache-updated=1551847397
+active-display-scale=1
+desktop-effects-map-effect='traditional'
+alttab-switcher-enforce-primary-monitor=false
+command-history=['dconf-editor', 'ls', 'xterm', 'optirun /opt/Hyper/hyper ']
+alttab-switcher-show-all-workspaces=false
+desktop-effects-close-effect='traditional'
+hotcorner-layout=['expo:false:0', 'scale:false:0', 'scale:false:0', 'desktop:false:0']
+desktop-effects-unmaximize-time=100
+desklet-snap-interval=25
+desktop-effects-map-time=100
+enabled-desklets=@as []
+desktop-effects-minimize-effect='traditional'
+alttab-switcher-style='icons+thumbnails'
+panels-scale-text-icons=['1:true']
+panels-height=['1:25']
+next-applet-id=16
+panel-launchers=['DEPRECATED']
+desktop-effects-map-transition='easeOutQuad'
+desktop-effects-tile-transition='easeInQuad'
+desktop-effects-unmaximize-effect='none'
+desktop-effects-maximize-time=100
+panels-resizable=['1:false']
+desktop-effects-maximize-effect='none'
+enabled-applets=['panel1:right:2:systray@cinnamon.org:0', 'panel1:left:0:menu@cinnamon.org:1', 'panel1:left:1:show-desktop@cinnamon.org:2', 'panel1:left:2:panel-launchers@cinnamon.org:3', 'panel1:left:3:window-list@cinnamon.org:4', 'panel1:right:3:keyboard@cinnamon.org:5', 'panel1:right:4:notifications@cinnamon.org:6', 'panel1:right:5:removable-drives@cinnamon.org:7', 'panel1:right:6:user@cinnamon.org:8', 'panel1:right:7:network@cinnamon.org:9', 'panel1:right:8:bluetooth@cinnamon.org:10', 'panel1:right:9:power@cinnamon.org:11', 'panel1:right:10:calendar@cinnamon.org:12', 'panel1:right:11:sound@cinnamon.org:13', 'panel1:right:1:bumblebee@pdcurtis:14', 'panel1:right:0:sysmonitor@orcus:15']
+desktop-effects-minimize-time=160
+alttab-switcher-delay=100
+desktop-effects-tile-effect='none'
+desktop-effects-close-transition='easeOutQuad'
+workspace-osd-duration=400
+desktop-effects-minimize-transition='easeInQuad'
+panel-edit-mode=false
+workspace-osd-x=50
+desklet-cache-updated=1548087968
+desktop-effects-close-time=120
+no-adjacent-panel-barriers=false
+workspace-osd-y=50
+favorite-apps=['cinnamon-settings.desktop', 'org.gnome.Terminal.desktop', 'nemo.desktop', 'hyper.desktop']
+desktop-effects-tile-time=100
+panels-autohide=['1:false']
+device-aliases=['/org/freedesktop/UPower/devices/battery_BAT0:=SMP 01AV479']
+
+[settings-daemon/plugins/power]
+sleep-inactive-ac-timeout=7200
+idle-dim-time=30
+sleep-inactive-battery-timeout=600
+lock-on-suspend=true
+lid-close-ac-action='suspend'
+lid-close-battery-action='suspend'
+sleep-display-battery=1800
+sleep-display-ac=1800
+idle-brightness=10
+
+[settings-daemon/plugins/xsettings]
+buttons-have-icons=true
+menus-have-icons=true
+
+[settings-daemon/peripherals/touchpad]
+motion-threshold=1
+custom-acceleration=true
+motion-acceleration=4.6689314391599748
+custom-threshold=true
+
+[settings-daemon/peripherals/keyboard]
+repeat-interval=uint32 30
+delay=uint32 500
+
+[settings-daemon/peripherals/mouse]
+drag-threshold=8
+custom-acceleration=true
+motion-acceleration=4.5077208153180983
+custom-threshold=false
+double-click=400
+middle-button-enabled=false
+motion-threshold=1
+
+[muffin]
+resize-threshold=24
+tile-hud-threshold=25
+
+[desktop/interface]
+font-name='Meiryo UI 13'
+scaling-factor=uint32 1
+cursor-size=24
+cursor-blink-time=1200
+text-scaling-factor=1.0
+gtk-theme='Arc-Dark'
+toolkit-accessibility=true
+
+[desktop/keybindings/media-keys]
+hibernate=['XF86Hibernate']
+suspend=@as []
+terminal=['<Super>t']
+screensaver=['<Primary><Super>l']
+search=['XF86Search']
+shutdown=['XF86PowerOff']
+
+[desktop/keybindings]
+show-desklets=@as []
+
+[desktop/keybindings/wm]
+maximize=['<Super>m']
+toggle-recording=@as []
+unmaximize=@as []
+toggle-above=['<Shift><Alt>F11']
+switch-to-workspace-left=@as []
+begin-resize=@as []
+switch-to-workspace-down=@as []
+move-to-workspace-right=@as []
+switch-to-workspace-right=@as []
+move-to-monitor-left=['<Shift><Super>Left']
+move-to-workspace-left=@as []
+begin-move=@as []
+push-tile-left=['<Super>Left']
+switch-to-workspace-up=@as []
+
+[desktop/media-handling]
+autorun-x-content-start-app=['x-content/unix-software']
+autorun-never=false
+autorun-x-content-ignore=@as []
+autorun-x-content-open-folder=@as []
+
+[desktop/screensaver]
+screensaver-name=''
+
+[desktop/applications/terminal]
+exec='"/opt/Hyper/hyper" %U'
+
+[desktop/session]
+idle-delay=uint32 1800
+
+[desktop/wm/preferences]
+min-window-opacity=30
+theme='Arc-Dark'
+num-workspaces=1
+titlebar-font='Meiryo UI 13'
+workspace-names=@as []
+
+[desktop/a11y/applications]
+screen-keyboard-enabled=true
+screen-reader-enabled=false
+
+[desktop/a11y/keyboard]
+mousekeys-init-delay=300
+mousekeys-max-speed=10
+mousekeys-accel-time=300
+bouncekeys-delay=300
+slowkeys-delay=300
+
+[desktop/a11y/mouse]
+secondary-click-enabled=false
+secondary-click-time=1.2
+dwell-time=1.2
+dwell-threshold=10
+dwell-click-enabled=false
+
+[desktop/sound]
+event-sounds=false
+
+[theme]
+theme-cache-updated=1549416616
+name='Arc-Dark'
+
+[cinnamon-session]
+auto-save-session=true
+quit-time-delay=60
+
