@@ -198,6 +198,11 @@ if [[ -e "$HOME/.phpenv/bin/phpenv" ]]; then
   eval "$(phpenv init -)"
 fi
 
+
+if [ -d "$HOME/.local/bin" ]; then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
 # send WINCH signal
 #kill -s WINCH $$
 
