@@ -31,7 +31,6 @@ case "$TERM" in
 esac
 
 
-
 shopt -s checkwinsize
 
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -99,6 +98,7 @@ bind "\C-w":unix-filename-rubout
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
+complete -cf sudo
 
 if builtin command -v resize >/dev/null; then
   rs () {
@@ -155,13 +155,7 @@ if [ -d $HOME/bin ]; then
   PATH="${PATH}:$HOME/bin"
 fi
 
-# if [ -d $HOME/.virtualenvs ]; then
-#   activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
-#   if [ -n "$activate_file" ]; then
-#     . $activate_file
-#   fi
-# fi
-
+# -- NVM
 if [ -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -169,35 +163,77 @@ if [ -d "$HOME/.nvm" ]; then
   source <(npm completion)
 fi
 
+# -- NVS
 if [ -d "$HOME/.nvs" ]; then
   export NVS_HOME="$HOME/.nvs"
   [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
 fi
 
+# -- yarn
 if [ -d "$HOME/.yarn" ]; then
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
 
-if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
-  export PYTHONSTARTUP="$HOME/.pythonstartup"
-fi
-
+# -- go
 if [ -d "$HOME/go" ]; then
   export GOPATH=$HOME/go
-  export GOROOT=$( go env GOROOT )
+  export GOROOT=$(go env GOROOT)
   export PATH=$GOPATH/bin:$PATH
 fi
 
+# -- sdkman
 if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
   export SDKMAN_DIR="$HOME/.sdkman"
   source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi
 
+# -- phpenv
 if [[ -e "$HOME/.phpenv/bin/phpenv" ]]; then
   export PATH="$HOME/.phpenv/bin:$PATH"
   eval "$(phpenv init -)"
 fi
 
+# -- rbenv
+if [ -d $HOME/.rbenv/bin ]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+fi
+
+# -- python - pyenv
+if [ -d $HOME/.pyenv/bin ]; then
+  export PYENV_ROOT=$HOME/.pyenv
+  export PATH=$PYENV_ROOT/bin:$PATH
+  eval "$(pyenv init -)"
+fi
+
+# -- plenv
+if [ -d $HOME/.plenv/bin ]; then
+  export PATH="$HOME/.plenv/bin:$PATH"
+  eval "$(plenv init -)"
+fi
+
+# -- virtualenvs
+if [ -d $HOME/.virtualenvs ]; then
+  activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
+  if [ -n "$activate_file" ]; then
+    . $activate_file
+  fi
+fi
+
+# -- PYTHONSTARTUP
+if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
+  export PYTHONSTARTUP="$HOME/.pythonstartup"
+fi
+
+# -- GNU Global
+if [ ! -f $HOME/.globalrc ]; then
+  if [ -x /usr/local/bin/gtags ]; then
+    export GTAGSCONF=/usr/local/share/gtags/gtags.conf
+  fi
+  if command which pygmentize >/dev/null; then
+    export GTAGSLABEL=pygments
+  fi
+fi
 
 if [ -d "$HOME/.local/bin" ]; then
   export PATH="$PATH:$HOME/.local/bin"
@@ -205,4 +241,6 @@ fi
 
 # send WINCH signal
 #kill -s WINCH $$
+# send WINCH signal
+kill -s WINCH $$
 
