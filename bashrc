@@ -119,16 +119,16 @@ cffg () {
 }
 
 effg () {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' -o -name '.tmp' \) -prune -o ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' -o -name '.tmp' \) -prune -o -type f -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 jffg () {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'framework' -o -name '.tmp' \) -prune -o ! -type d -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'framework' -o -name '.tmp' \) -prune -o -type f -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 pffg () {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
+    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 ccol () {
