@@ -4,14 +4,16 @@
 
 ## dependencies
 ```bash
-sudo apt-get install git build-essential ncurses-dev luajit libluajit-5.1-dev \
+sudo apt-get install --no-install-recommends git build-essential ncurses-dev luajit libluajit-5.1-dev \
   python-dev python3-dev ruby-dev libperl-dev
 ```
 ```bash
-sudo apt-get install -y virtualenvwrapper python3-pip python-pip
+sudo apt-get install --no-install-recommends -y virtualenvwrapper python3-pip python-pip
 ```
 ```bash
-pip3 install --user --upgrade neovim jedi pynvim Pygments
+pip3 install --user --upgrade neovim jedi pynvim Pygments gevent
+(or)
+python -m pip --no-cache-dir install --user --upgrade neovim jedi pynvim Pygments gevent
 ```
 ### (optional) pip3
 ```bash
@@ -19,7 +21,7 @@ pip3 install --user --upgrade tox pytest
 ```
 ## php7.2 and composer (apt)
 ```bash
-apt-get install composer php7.2 php7.2-xml php7.2-mbstring php7.2-curl
+apt-get install --no-install-recommends composer php7.2 php7.2-xml php7.2-mbstring php7.2-curl
 ```
 ### ctags
 ```bash
