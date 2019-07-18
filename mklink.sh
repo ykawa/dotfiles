@@ -6,7 +6,6 @@ RELATIVE=${LOCATION##$HOME/}
 pushd $HOME
 
 touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim .pythonstartup .Xmodmap .my.cnf .grcat
-
 for f in ${RELATIVE}/*
 do
   dotf=$(basename $f)
@@ -23,4 +22,11 @@ do
   readlink .$dotf
 done
 popd
+
+if [ ! -e ~/.git-completion.bash ]; then
+  wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -O ~/.git-completion.bash
+fi
+if [ ! -e ~/.git-prompt.sh ]; then
+  wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+fi
 

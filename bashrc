@@ -55,6 +55,8 @@ alias open='xdg-open'
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
+  elif [ -f ~/.git-completion.bash ]; then
+    . ~/.git-completion.bash
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   fi
@@ -80,6 +82,9 @@ export PS1="[\u@$SHORTHOST \W]$ "
 # # GIT_PS1_SHOWDIRTYSTATE
 # #  addされてない変更(unstaged)があったとき"*"を表示する、
 # #  addされているがcommitされていない変更(staged)があったとき"+"を表示する
+if [ -e ~/.git-prompt.sh ]; then
+  source ~/.git-prompt.sh
+fi
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWUPSTREAM=1
 GIT_PS1_SHOWUNTRACKEDFILES=
