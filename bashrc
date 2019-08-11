@@ -7,8 +7,8 @@ esac
 
 shopt -s histappend
 HISTCONTROL=ignoreboth
-HISTSIZE=20000
-HISTFILESIZE=20000
+HISTSIZE=100000
+HISTFILESIZE=100000
 HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
@@ -33,9 +33,9 @@ esac
 
 shopt -s checkwinsize
 
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-if [ -x /usr/bin/dircolors ]; then
+if [ type dircolors >/dev/null 2>&1 ]; then
   test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
   alias ls='ls --color=auto'
   alias dir='dir --color=auto'
