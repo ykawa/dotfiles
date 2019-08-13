@@ -7,7 +7,7 @@ altscreen off
 startup_message off
 vbell off
 
-defscrollback 10000
+defscrollback 100000
 termcapinfo xterm* ti@:te@
 term xterm-256color
 termcapinfo xterm* 'Co#256:pa#32767:AB=\E[48;5;%dm:AF=\E[38;5;%dm:'
@@ -35,19 +35,19 @@ bind -c resize ^k eval 'command -c resize' 'resize -v -1'
 bindkey -k k5 prev
 bindkey -k k6 next
 
-screen 0
-screen 1
-split
-
-focus down
-select 0
-title 'console'
-resize -v 8
-
-focus up
-select 1
-title 'workspace'
-# fire the WINCH signal
-sleep 1
-resize -v +1
+# screen 0
+# screen 1
+# split
+# 
+# focus down
+# select 0
+# title 'console'
+# resize -v 8
+# 
+# focus up
+# select 1
+# title 'workspace'
+# # fire the WINCH signal
+# sleep 1
+# resize -v +1
 
