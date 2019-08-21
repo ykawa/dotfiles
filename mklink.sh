@@ -5,13 +5,14 @@ RELATIVE=${LOCATION##$HOME/}
 
 pushd $HOME
 
-touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim .pythonstartup .Xmodmap .my.cnf .grcat .dircolors
+touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim .pythonstartup .Xmodmap .my.cnf .grcat .dircolors .hyper.js
 for f in ${RELATIVE}/*
 do
   dotf=$(basename $f)
   if [ -L .$dotf ]; then
     echo -n "update: "
     readlink .$dotf
+    mv .$dotf $dotf.${DATETIME}
   elif [ -f .$dotf -o -d .$dotf ]; then
     mv .$dotf $dotf.${DATETIME}
   else
