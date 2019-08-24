@@ -85,10 +85,10 @@ export PS1="[\u@$SHORTHOST \W]$ "
 if [ -e ~/.git-prompt.sh ]; then
   source ~/.git-prompt.sh
 fi
-GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWDIRTYSTATE=
 GIT_PS1_SHOWUPSTREAM=1
 GIT_PS1_SHOWUNTRACKEDFILES=
-GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWSTASHSTATE=
 if declare -f __git_ps1 | grep __git_ps1 >/dev/null; then
   export PS1='$(__git_ps1)'"[\u@$SHORTHOST \W]$ "
 fi
@@ -248,4 +248,6 @@ fi
 #kill -s WINCH $$
 # send WINCH signal
 kill -s WINCH $$
+
+[ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
 

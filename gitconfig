@@ -1,11 +1,16 @@
 [core]
-excludesfile = ~/dotfiles/gitignore
-[core]
-excludesfile = ~/dotfiles/gitignore
+  excludesfile = ~/dotfiles/gitignore
+
 [commit]
-	template = ~/dotfiles/gitmessage
+  template = ~/dotfiles/gitmessage
+
 [merge]
-	tool = vimdiff
+  tool = vimdiff
+
 [alias]
-	push-f = push --force-with-lease
-	plog = log --no-merges --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(blue)%an%C(red)%d %C(reset)%s'
+  push-f = push --force-with-lease
+  plog = log --no-merges --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(blue)%an%C(red)%d %C(reset)%s'
+
+[http]
+  postBuffer = 1048576000
+
