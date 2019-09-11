@@ -228,6 +228,9 @@ fi
 # -- PYTHONSTARTUP
 if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
   export PYTHONSTARTUP="$HOME/.pythonstartup"
+  update_users() {
+    python3 -m pip list --user --format=legacy | awk '{print $1}' | xargs python3 -m pip install --no-cache-dir --user --upgrade
+  }
 fi
 
 # -- GNU Global
