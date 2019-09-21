@@ -71,17 +71,6 @@ fi
 SHORTHOST=$PS1_HOST
 export PS1="[\u@$SHORTHOST \W]$ "
 
-# # GIT_PS1_SHOWUPSTREAM
-# #  現在のブランチがupstreamより進んでいるとき">"を、遅れているとき"<"を、
-# #  遅れてるけど独自の変更もあるとき"<>"を表示する。
-# #  オプションが指定できるけど(svnをトラックするかとか)
-# # GIT_PS1_SHOWUNTRACKEDFILES
-# #  addされてない新規ファイルがある(untracked)とき"%"を表示する
-# # GIT_PS1_SHOWSTASHSTATE
-# #  stashになにか入っている(stashed)とき"$"を表示する
-# # GIT_PS1_SHOWDIRTYSTATE
-# #  addされてない変更(unstaged)があったとき"*"を表示する、
-# #  addされているがcommitされていない変更(staged)があったとき"+"を表示する
 if [ -e ~/.git-prompt.sh ]; then
   source ~/.git-prompt.sh
 fi
@@ -247,10 +236,14 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$PATH:$HOME/.local/bin"
 fi
 
-# send WINCH signal
-#kill -s WINCH $$
-# send WINCH signal
-kill -s WINCH $$
+if [ -n "$STY" ]; then
+  scr_cd()
+  {
+    cd $1
+    screen -X chdir $PWD
+  }
+  alias cd=scr_cd
+fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
 
