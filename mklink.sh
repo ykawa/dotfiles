@@ -5,7 +5,24 @@ RELATIVE=${LOCATION##$HOME/}
 
 pushd $HOME
 
-touch .bash_profile .bashrc .gitconfig .globalrc .perltidyrc .screenrc .vimrc .vim .pythonstartup .Xmodmap .my.cnf .grcat .dircolors .hyper.js .tmux.conf
+touch \
+  .bash_profile \
+  .bashrc \
+  .dircolors \
+  .gitconfig \
+  .globalrc \
+  .grcat \
+  .hyper\
+  .js \
+  .my.cnf \
+  .perltidyrc \
+  .pythonstartup \
+  .screenrc \
+  .tmux.conf \
+  .vimrc \
+  .vim \
+  .Xmodmap
+
 for f in ${RELATIVE}/*
 do
   dotf=$(basename $f)

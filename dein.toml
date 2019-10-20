@@ -58,9 +58,9 @@ hook_add = '''
 repo = 'Shougo/neosnippet-snippets'
 on_i = 1
 
-[[plugins]] # インデントを見やすく
-repo = 'nathanaelkane/vim-indent-guides'
-
+# [[plugins]] # インデントを見やすく
+# repo = 'nathanaelkane/vim-indent-guides'
+# 
 [[plugins]] # インデントを見やすく
 repo = 'Yggdroot/indentLine'
 hook_add='''
@@ -200,6 +200,7 @@ repo = 'thinca/vim-quickrun'
 hook_add = '''
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+  nnoremap <silent> <F9> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
   nnoremap \r             :cclose<CR>:write<CR>:QuickRun -mode n<CR>
   nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
   let g:quickrun_config = {

@@ -5,6 +5,7 @@ case $- in
   *) return;;
 esac
 
+shopt -s checkwinsize
 shopt -s histappend
 HISTCONTROL=ignoreboth
 HISTSIZE=100000
@@ -29,9 +30,6 @@ case "$TERM" in
   *)
     ;;
 esac
-
-
-shopt -s checkwinsize
 
 [ type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -204,6 +202,8 @@ fi
 if [ -d $HOME/.plenv/bin ]; then
   export PATH="$HOME/.plenv/bin:$PATH"
   eval "$(plenv init -)"
+elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
+  eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 fi
 
 # -- virtualenvs
@@ -243,6 +243,10 @@ if [ -n "$STY" ]; then
     screen -X chdir $PWD
   }
   alias cd=scr_cd
+fi
+
+if [ type stack >/dev/null 2>&1 ]; then
+  eval "$(stack --bash-completion-script stack)"
 fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
