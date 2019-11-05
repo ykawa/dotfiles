@@ -239,8 +239,8 @@ fi
 if [ -n "$STY" ]; then
   scr_cd()
   {
-    cd $1
-    screen -X chdir $PWD
+    cd "$@"
+    screen -X chdir "$PWD"
   }
   alias cd=scr_cd
 fi

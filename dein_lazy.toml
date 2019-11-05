@@ -202,26 +202,24 @@ depends = 'deoplete.nvim'
 rev = 'next'
 build = 'bash install.sh'
 hook_source = '''
-    set hidden
-    let g:LanguageClient_serverCommands = {
-      \ 'haskell': ['hie-wrapper'],
+set hidden
+let g:LanguageClient_serverCommands = {
+    \ 'haskell': ['hie-wrapper'],
     \ }
-    let g:LanguageClient_autoStart = 1
-    if &filetype == 'haskell'
-      let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
-    endif
-    nnoremap <silent> gt :call LanguageClient_textDocument_hover()<CR>
-    nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
-    nnoremap <silent> gs :call LanugageClient_textDocument_documentSymbol()<CR>
-    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-    nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
-    nnoremap <silent> g- :call LanguageClient_textDocument_formatting()<CR>
+let g:LanguageClient_settingsPath = '/home/ykawa/.config/nvim/settings.json'
+let g:LanguageClient_autoStart = 1
+if &filetype == 'haskell'
+    let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
+endif
+nnoremap <silent> gt :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> gs :call LanugageClient_textDocument_documentSymbol()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> g- :call LanguageClient_textDocument_formatting()<CR>
 '''
 
 [[plugins]]
 repo = 'neovimhaskell/haskell-vim'
 on_ft = 'haskell'
-hook_source = '''
-    set formatprg=stylish-haskell
-'''
 

@@ -4,25 +4,15 @@
 
 module.exports = {
   config: {
-    hypercwd: {
-      initialWorkingDirectory: '~/'
-    },
-
-    verminal: {
-      fontSize: 14,
-      fontFamily: '"Source Code Pro for Powerline"'
-    },
-
     // choose either `'stable'` for receiving highly polished,
     // or `'canary'` for less polished but more frequent updates
     updateChannel: 'stable',
 
-    // // default font size in pixels for all tabs
+    // default font size in pixels for all tabs
     fontSize: 14,
 
-    // // font family with optional fallbacks
-    // fontFamily: '"Consolas Regular"',
-    // fontFamily: '"Source Han Code JP", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+    // font family with optional fallbacks
+    //fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
     fontFamily: '"Source Han Code JP"',
 
     // default font weight: 'normal' or 'bold'
@@ -37,11 +27,11 @@ module.exports = {
     // letter spacing as a relative unit
     letterSpacing: 0,
 
-    // // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
-    // cursorColor: 'rgba(248,28,229,0.8)',
+    // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
+    cursorColor: 'rgba(248,28,229,0.8)',
 
-    // // terminal text color under BLOCK cursor
-    // cursorAccentColor: '#000',
+    // terminal text color under BLOCK cursor
+    cursorAccentColor: '#000',
 
     // `'BEAM'` for |, `'UNDERLINE'` for _, `'BLOCK'` for █
     cursorShape: 'BLOCK',
@@ -49,18 +39,18 @@ module.exports = {
     // set to `true` (without backticks and without quotes) for blinking cursor
     cursorBlink: true,
 
-    // // color of the text
-    // foregroundColor: '#fff',
+    // color of the text
+    foregroundColor: '#fff',
 
-    // // terminal background color
-    // // opacity is only supported on macOS
-    // backgroundColor: '#000',
+    // terminal background color
+    // opacity is only supported on macOS
+    backgroundColor: '#000',
 
-    // // terminal selection color
-    // selectionColor: 'rgba(248,28,229,0.3)',
+    // terminal selection color
+    selectionColor: 'rgba(248,28,229,0.3)',
 
-    // // border color (window, tabs)
-    // borderColor: '#333',
+    // border color (window, tabs)
+    borderColor: '#333',
 
     // custom CSS to embed in the main window
     css: '',
@@ -78,7 +68,7 @@ module.exports = {
     showWindowControls: '',
 
     // custom padding (CSS format, i.e.: `top right bottom left`)
-    padding: '3px 3px',
+    padding: '12px 14px',
 
     // the full list. if you're going to provide the full color palette,
     // including the 6 x 6 color cubes and the grayscale map, just provide
@@ -99,7 +89,7 @@ module.exports = {
       lightBlue: '#6A76FB',
       lightMagenta: '#FD7CFC',
       lightCyan: '#68FDFE',
-      lightWhite: '#FFFFFF'
+      lightWhite: '#FFFFFF',
     },
 
     // the shell to run when spawning a new session (i.e. /usr/local/bin/fish)
@@ -148,8 +138,35 @@ module.exports = {
     // rendering (slower, but supports transparent backgrounds)
     webGLRenderer: true,
 
+    scrollback: 1000000,
+
     // for advanced config flags please refer to https://hyper.is/#cfg
-    scrollback: 1000000
+    hypercwd: {
+      initialWorkingDirectory: '~/'
+    },
+
+    verminal: {
+      fontSize: 14,
+      fontFamily: '"Source Code Pro for Powerline"'
+    },
+
+    MaterialTheme: {
+      // Set the theme variant,
+      // OPTIONS: 'Darker', 'Palenight', 'Ocean', ''
+      theme: 'Darker',
+
+      // [Optional] Set the rgba() app background opacity, useful when enableVibrance is true
+      // OPTIONS: From 0.1 to 1
+      backgroundOpacity: '1',
+
+      // [Optional] Set the accent color for the current active tab
+      accentColor: '#64FFDA',
+
+      // [Optional] Mac Only. Need restart. Enable the vibrance and blurred background
+      // OPTIONS: 'dark', 'ultra-dark', 'bright'
+      // NOTE: The backgroundOpacity should be between 0.1 and 0.9 to see the effect.
+      vibrancy: 'dark'
+    },
   },
 
   // a list of plugins to fetch and install from npm
@@ -159,13 +176,11 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   plugins: [
-    'verminal',
-    'hypercwd',
-    'hyper-search',
-    'hyper-tab-icons-plus',
-    'hyperterm-bold-tab',
-    // 'hyper-papercolor'
-    'hyper-solarized-dark-transparent'
+    "verminal",
+    "hypercwd",
+    "hyper-search",
+    "hyper-tab-icons-plus",
+    "hyper-material-theme"
   ],
 
   // in development, you can create a directory under
@@ -179,5 +194,5 @@ module.exports = {
     'tab:jump:prefix': 'alt',
     'editor:copy': 'alt+c',
     'editor:paste': 'alt+v'
-  }
+  },
 };
