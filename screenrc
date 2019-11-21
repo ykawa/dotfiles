@@ -1,10 +1,10 @@
 autodetach on
 altscreen off
-cjkwidth off
-defutf8 on
 defbce on
+defutf8 on
 defencoding utf8
 encoding utf8 utf8
+cjkwidth off
 
 startup_message off
 vbell off
@@ -17,7 +17,7 @@ term xterm-256color
 hardstatus alwayslastline "%{= wg}%{.bw}%-w%{.rw}%n %t%{-}%+w %=%{..G} %{=b kw} %H %{..Y} %Y %m/%d %C%a "
 hardstatus off
 
-shelltitle "$ |bash"
+#shelltitle "$ |bash"
 
 shell -$SHELL
 
@@ -35,3 +35,4 @@ bind -c resize ^k eval 'command -c resize' 'resize -v -1'
 
 bindkey -k k5 prev
 bindkey -k k6 next
+

@@ -215,6 +215,9 @@ hook_add = '''
       \ "outputter/error/error"           : "quickfix",
       \ "hook/time/enable"                : 1,
     \ },
+    \ "python": {
+    \   "command": "python3"
+    \ }
   \}
 '''
 

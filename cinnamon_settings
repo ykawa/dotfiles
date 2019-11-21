@@ -1,11 +1,11 @@
 [/]
 desktop-effects-unmaximize-transition='easeNone'
-extension-cache-updated=1552880563
+extension-cache-updated=1569854272
 desktop-effects-maximize-transition='easeInExpo'
-applet-cache-updated=1551847397
+applet-cache-updated=1569853173
 active-display-scale=1
 desktop-effects-map-effect='traditional'
-alttab-switcher-enforce-primary-monitor=false
+alttab-switcher-enforce-primary-monitor=true
 command-history=['dconf-editor', 'ls', 'xterm', 'optirun /opt/Hyper/hyper ']
 alttab-switcher-show-all-workspaces=false
 desktop-effects-close-effect='traditional'
@@ -15,17 +15,19 @@ desklet-snap-interval=25
 desktop-effects-map-time=100
 enabled-desklets=@as []
 desktop-effects-minimize-effect='traditional'
-alttab-switcher-style='icons+thumbnails'
+alttab-switcher-style='icons+preview'
 panels-scale-text-icons=['1:true']
+prevent-focus-stealing=false
 panels-height=['1:25']
 next-applet-id=16
 panel-launchers=['DEPRECATED']
 desktop-effects-map-transition='easeOutQuad'
 desktop-effects-tile-transition='easeInQuad'
 desktop-effects-unmaximize-effect='none'
+alttab-minimized-aware=true
 desktop-effects-maximize-time=100
-panels-resizable=['1:false']
 desktop-effects-maximize-effect='none'
+panels-resizable=['1:false']
 enabled-applets=['panel1:right:2:systray@cinnamon.org:0', 'panel1:left:0:menu@cinnamon.org:1', 'panel1:left:1:show-desktop@cinnamon.org:2', 'panel1:left:2:panel-launchers@cinnamon.org:3', 'panel1:left:3:window-list@cinnamon.org:4', 'panel1:right:3:keyboard@cinnamon.org:5', 'panel1:right:4:notifications@cinnamon.org:6', 'panel1:right:5:removable-drives@cinnamon.org:7', 'panel1:right:6:user@cinnamon.org:8', 'panel1:right:7:network@cinnamon.org:9', 'panel1:right:8:bluetooth@cinnamon.org:10', 'panel1:right:9:power@cinnamon.org:11', 'panel1:right:10:calendar@cinnamon.org:12', 'panel1:right:11:sound@cinnamon.org:13', 'panel1:right:1:bumblebee@pdcurtis:14', 'panel1:right:0:sysmonitor@orcus:15']
 desktop-effects-minimize-time=160
 alttab-switcher-delay=100
@@ -35,7 +37,7 @@ workspace-osd-duration=400
 desktop-effects-minimize-transition='easeInQuad'
 panel-edit-mode=false
 workspace-osd-x=50
-desklet-cache-updated=1548087968
+desklet-cache-updated=1571730388
 desktop-effects-close-time=120
 no-adjacent-panel-barriers=false
 workspace-osd-y=50
@@ -45,7 +47,7 @@ panels-autohide=['1:false']
 device-aliases=['/org/freedesktop/UPower/devices/battery_BAT0:=SMP 01AV479']
 
 [settings-daemon/plugins/power]
-sleep-inactive-ac-timeout=7200
+sleep-inactive-ac-timeout=0
 idle-dim-time=30
 sleep-inactive-battery-timeout=600
 lock-on-suspend=true
@@ -67,7 +69,7 @@ custom-threshold=true
 
 [settings-daemon/peripherals/keyboard]
 repeat-interval=uint32 30
-delay=uint32 500
+delay=uint32 449
 
 [settings-daemon/peripherals/mouse]
 drag-threshold=8
@@ -78,18 +80,22 @@ double-click=400
 middle-button-enabled=false
 motion-threshold=1
 
+[sounds]
+login-enabled=false
+
 [muffin]
 resize-threshold=24
 tile-hud-threshold=25
 
 [desktop/interface]
+text-scaling-factor=1.0
+cursor-size=24
 font-name='Meiryo UI 13'
 scaling-factor=uint32 1
-cursor-size=24
-cursor-blink-time=1200
-text-scaling-factor=1.0
-gtk-theme='Arc-Dark'
 toolkit-accessibility=true
+cursor-blink-time=826
+gtk-theme='CBlack'
+keyboard-layout-prefer-variant-names=true
 
 [desktop/keybindings/media-keys]
 hibernate=['XF86Hibernate']
@@ -133,9 +139,12 @@ exec='"/opt/Hyper/hyper" %U'
 [desktop/session]
 idle-delay=uint32 1800
 
+[desktop/privacy]
+recent-files-max-age=-1
+
 [desktop/wm/preferences]
 min-window-opacity=30
-theme='Arc-Dark'
+theme='CBlack'
 num-workspaces=1
 titlebar-font='Meiryo UI 13'
 workspace-names=@as []
@@ -159,13 +168,16 @@ dwell-threshold=10
 dwell-click-enabled=false
 
 [desktop/sound]
+maximum-volume=100
 event-sounds=false
 
+[desktop/background/slideshow]
+delay=15
+
 [theme]
-theme-cache-updated=1549416616
-name='Arc-Dark'
+theme-cache-updated=1569854353
+name='CBlack'
 
 [cinnamon-session]
 auto-save-session=true
 quit-time-delay=60
-

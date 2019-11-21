@@ -13,7 +13,7 @@ module.exports = {
 
     // font family with optional fallbacks
     //fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
-    fontFamily: '"Source Han Code JP"',
+    fontFamily: '"Source Han Code JP", "Myrica M", "Consolas", "Source Code Pro for Powerline"',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',
@@ -68,7 +68,7 @@ module.exports = {
     showWindowControls: '',
 
     // custom padding (CSS format, i.e.: `top right bottom left`)
-    padding: '12px 14px',
+    padding: '2px 3px',
 
     // the full list. if you're going to provide the full color palette,
     // including the 6 x 6 color cubes and the grayscale map, just provide
@@ -111,7 +111,9 @@ module.exports = {
     shellArgs: ['--login'],
 
     // for environment variables
-    env: {},
+    env: {
+      LANG: 'ja_JP.UTF-8'
+    },
 
     // set to `false` for no bell
     bell: 'SOUND',
@@ -145,11 +147,6 @@ module.exports = {
       initialWorkingDirectory: '~/'
     },
 
-    verminal: {
-      fontSize: 14,
-      fontFamily: '"Source Code Pro for Powerline"'
-    },
-
     MaterialTheme: {
       // Set the theme variant,
       // OPTIONS: 'Darker', 'Palenight', 'Ocean', ''
@@ -176,7 +173,6 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   plugins: [
-    "verminal",
     "hypercwd",
     "hyper-search",
     "hyper-tab-icons-plus",

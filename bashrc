@@ -208,6 +208,7 @@ fi
 
 # -- virtualenvs
 if [ -d $HOME/.virtualenvs ]; then
+  export VIRTUAL_ENV_DISABLE_PROMPT=1
   activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
   if [ -n "$activate_file" ]; then
     . $activate_file

@@ -7,7 +7,7 @@ let b:did_ftplugin_python = 1
 "--------------------------------------
 " pip install -U yapf
 "--------------------------------------
-setlocal equalprg=yapf3\ --style='{based_on_style:\ google,\ column_limit:\ 120}'
+setlocal equalprg=yapf\ --style='{based_on_style:\ google,\ column_limit:\ 120}'
 setlocal backspace+=indent
 
 
