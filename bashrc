@@ -209,10 +209,15 @@ fi
 # -- virtualenvs
 if [ -d $HOME/.virtualenvs ]; then
   export VIRTUAL_ENV_DISABLE_PROMPT=1
-  activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
-  if [ -n "$activate_file" ]; then
-    . $activate_file
+  export WORKON_HOME=$HOME/.virtualenvs
+  export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+  if [ -e /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
+    . /usr/share/virtualenvwrapper/virtualenvwrapper.sh
   fi
+  #activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
+  #if [ -n "$activate_file" ]; then
+  #  . $activate_file
+  #fi
 fi
 
 # -- PYTHONSTARTUP

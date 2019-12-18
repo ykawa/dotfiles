@@ -39,6 +39,7 @@ set nostartofline
 set showmatch matchtime=1
 set nowritebackup
 
+set relativenumber
 set number
 set nowrap
 set virtualedit+=block
@@ -92,9 +93,6 @@ nnoremap n nzz
 nnoremap N Nzz
 nnoremap <silent><C-l><C-l> :<C-u>set nohlsearch!<CR><Esc>
 
-filetype plugin indent on
-syntax enable
-
 if dein#check_install()
   call dein#install()
 endif
@@ -112,4 +110,7 @@ autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+
+filetype plugin indent on
+syntax enable
 

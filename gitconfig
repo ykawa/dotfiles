@@ -14,3 +14,5 @@
 [http]
   postBuffer = 1048576000
 
+[push]
+	default = simple

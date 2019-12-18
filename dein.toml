@@ -221,3 +221,7 @@ hook_add = '''
   \}
 '''
 
+# SEE https://qiita.com/uji_/items/5cc267d6a96c417a29ef
+[[plugins]]
+repo = 'andymass/vim-matchup'
+

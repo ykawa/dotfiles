@@ -31,11 +31,11 @@ do
     if [ $? == 0 ]; then
       continue
     else
-      echo -n "update: .$dotf"
+      echo "update: .$dotf"
       mv .$dotf $dotf.${DATETIME}
     fi
   elif [ -f .$dotf -o -d .$dotf ]; then
-    echo -n "update: .$dotf"
+    echo "update: .$dotf"
     mv .$dotf $dotf.${DATETIME}
   else
     echo "no link: $dotf"
