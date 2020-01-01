@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-#	 $ tic -o ~/.terminfo screen.terminfo
+#	 $ tic -o ~/.terminfo xterm.terminfo
 #-------------------------------------------------------------------------------
 #	Reconstructed via infocmp from file: /lib/terminfo/x/xterm
 xterm|xterm-debian|X11 terminal emulator,
