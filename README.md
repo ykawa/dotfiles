@@ -3,27 +3,36 @@
 # install vim
 
 ## dependencies
+
 ```bash
 sudo apt-get install --no-install-recommends git build-essential ncurses-dev luajit libluajit-5.1-dev \
   python-dev python3-dev ruby-dev libperl-dev
 ```
+
 ```bash
 sudo apt-get install --no-install-recommends -y virtualenvwrapper python3-pip python-pip
 ```
+
 ```bash
 pip3 install --user --upgrade neovim jedi pynvim Pygments gevent
 (or)
 python -m pip --no-cache-dir install --user --upgrade neovim jedi pynvim Pygments gevent
 ```
+
 ### (optional) pip3
+
 ```bash
 pip3 install --user --upgrade tox pytest
 ```
-## php7.2 and composer (apt)
+
+## php7.2/~7.x and composer (apt)
+
 ```bash
-apt-get install --no-install-recommends composer php7.2 php7.2-xml php7.2-mbstring php7.2-curl
+apt-get install --no-install-recommends composer php php-xml php-mbstring php-curl
 ```
+
 ### ctags
+
 ```bash
 git clone https://github.com/universal-ctags/ctags.git
 cd ctags/
@@ -32,7 +41,9 @@ bash autogen.sh
 make -j 4
 sudo make install
 ```
+
 ### gnu globals
+
 ```bash
 wget https://ftp.gnu.org/pub/gnu/global/global-6.6.3.tar.gz
 tar xvfz global-6.6.3.tar.gz
@@ -43,7 +54,9 @@ cd global-6.6.3/
 make -j 4
 sudo make install
 ```
+
 ## vim
+
 ```bash
 git clone https://github.com/vim/vim.git
 cd vim
@@ -57,6 +70,15 @@ sudo make install
 ```
 
 ## restore cinnamon settings
+
 ```bash
 dconf load /org/cinnamon/ < cinnamon_settings
+```
+
+## phpactor
+
+```bash
+vim(install dein plugin)
+cd ~/.cache/dein/repos/github.com/phpactor/phpactor/
+composer install
 ```
