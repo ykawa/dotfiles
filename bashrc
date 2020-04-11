@@ -152,7 +152,9 @@ if [ -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  source <(npm completion)
+  if [ type npm >/dev/null 2>&1 ]; then
+    source <(npm completion)
+  fi
 fi
 
 # -- NVS
@@ -253,6 +255,10 @@ fi
 
 if [ type stack >/dev/null 2>&1 ]; then
   eval "$(stack --bash-completion-script stack)"
+fi
+
+if [ -d "$HOME/.cargo/bin" ]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local

@@ -4,6 +4,8 @@ ykawa/
 ykawa.*
 ykawa_*
 *.ykawa.*
+Ykawa*.java
+Ykawa*.php
 tmp/
 tmp.*
 tmp?.*
@@ -20,11 +22,12 @@ temp.*
 temp_*.*
 .phpstorm.meta.php
 _ide_helper_models.php
-Ykawa*.java
-Ykawa*.php
-
 .classpath
 .factorypath
 .project
 .settings/
+*.bak.php
+*.php.bak
+*.old
+_Deparsed_XSubs.pm
 
