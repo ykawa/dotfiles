@@ -10,7 +10,7 @@
 
 [alias]
   push-f = push --force-with-lease
-  plog = log --no-merges --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(blue)%an%C(red)%d %C(reset)%s'
+  plog = log --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(blue)%an%C(red)%d %C(reset)%s'
 
 [http]
   postBuffer = 1048576000
