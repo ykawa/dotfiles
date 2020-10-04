@@ -212,7 +212,7 @@ fi
 if [ -d $HOME/.virtualenvs ]; then
   export VIRTUAL_ENV_DISABLE_PROMPT=1
   export WORKON_HOME=$HOME/.virtualenvs
-  export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+  #export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
   if [ -e /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
     . /usr/share/virtualenvwrapper/virtualenvwrapper.sh
   fi
@@ -260,6 +260,11 @@ fi
 if [ -d "$HOME/.cargo/bin" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
+
+if [ -d "$HOME/.config/composer/vendor/bin" ]; then
+  export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+fi
+
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
 

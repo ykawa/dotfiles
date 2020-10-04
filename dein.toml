@@ -216,7 +216,7 @@ hook_add = '''
       \ "hook/time/enable"                : 1,
     \ },
     \ "python": {
-    \   "command": "python3"
+    \   "command": "/usr/bin/python3"
     \ }
   \}
 '''

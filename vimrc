@@ -93,6 +93,9 @@ nnoremap n nzz
 nnoremap N Nzz
 nnoremap <silent><C-l><C-l> :<C-u>set nohlsearch!<CR><Esc>
 
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python'
+
 if dein#check_install()
   call dein#install()
 endif
