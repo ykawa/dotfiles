@@ -1,4 +1,8 @@
 # vim: set autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
+## exec 5> debug_output.txt
+## BASH_XTRACEFD="5"
+## PS4='$LINENO: '
+## set -x
 
 case $- in
   *i*) ;;
@@ -168,12 +172,12 @@ if [ -d "$HOME/.yarn" ]; then
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
 
-# -- go
-if [ -d "$HOME/go" ]; then
-  export GOPATH=$HOME/go
-  export GOROOT=$(go env GOROOT)
-  export PATH=$GOPATH/bin:$PATH
-fi
+# # -- go
+# if [ -d "$HOME/go" ]; then
+#   export GOPATH=$HOME/go
+#   export GOROOT=$(go env GOROOT)
+#   export PATH=$GOPATH/bin:$PATH
+# fi
 
 # -- sdkman
 if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
@@ -212,7 +216,7 @@ fi
 if [ -d $HOME/.virtualenvs ]; then
   export VIRTUAL_ENV_DISABLE_PROMPT=1
   export WORKON_HOME=$HOME/.virtualenvs
-  #export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+  export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
   if [ -e /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
     . /usr/share/virtualenvwrapper/virtualenvwrapper.sh
   fi
@@ -264,7 +268,6 @@ fi
 if [ -d "$HOME/.config/composer/vendor/bin" ]; then
   export PATH="$HOME/.config/composer/vendor/bin:$PATH"
 fi
-
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
 
