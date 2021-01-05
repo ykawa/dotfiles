@@ -271,3 +271,15 @@ fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
 
+# for developing alpine docker images helper.
+alprun()
+{
+  docker run --rm -it -v $HOME/ash_history:/work/.ash_history \
+    -v $(pwd):/work -w /work alpine:latest \
+    sh -c "addgroup -g `id -g` people;
+      adduser -D -G people -h /work -u `id -u` person;
+      apk add --no-cache sudo;
+      echo '%people ALL=(ALL) NOPASSWD: ALL'> /etc/sudoers;
+      su - person"
+}
+
