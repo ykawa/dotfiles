@@ -1,8 +1,8 @@
 # vim: set autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
-## exec 5> debug_output.txt
-## BASH_XTRACEFD="5"
-## PS4='$LINENO: '
-## set -x
+#exec 4> $HOME/debug_output.txt
+#BASH_XTRACEFD=4
+#PS4='$LINENO: '
+#set -x
 
 case $- in
   *i*) ;;
@@ -18,11 +18,11 @@ HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
   xterm*|rxvt*)
-    PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\033]0;${PWD##*/}\007"'
+    PROMPT_COMMAND='history -a && history -c && history -r && echo -ne "\033]0;${PWD##*/}\007"'
     show_command_in_title_bar()
     {
       case "$BASH_COMMAND" in
-        *\033]0*|*history*)
+        echo*|*history*)
           ;;
         *)
           echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
@@ -38,7 +38,9 @@ esac
 [ type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 if [ type dircolors >/dev/null 2>&1 ]; then
-  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  if [ -e ~/dotfiles/dircolors ]; then
+    eval "$(dircolors -b ~/dotfiles/dircolors)"
+  fi
   alias ls='ls --color=auto'
   alias dir='dir --color=auto'
   alias vdir='vdir --color=auto'
@@ -274,6 +276,7 @@ fi
 # for developing alpine docker images helper.
 alprun()
 {
+  touch $HOME/ash_history
   docker run --rm -it -v $HOME/ash_history:/work/.ash_history \
     -v $(pwd):/work -w /work alpine:latest \
     sh -c "addgroup -g `id -g` people;
