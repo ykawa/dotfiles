@@ -1,0 +1,26 @@
+[desktop]
+computer-icon-visible=true
+desktop-layout='true::false'
+font='Meiryo UI 13'
+home-icon-visible=true
+network-icon-visible=true
+show-orphaned-desktop-icons=true
+volumes-visible=true
+
+[preferences]
+default-folder-viewer='list-view'
+last-server-connect-method=3
+show-hidden-files=false
+show-location-entry=false
+
+[window-state]
+devices-expanded=true
+geometry='960x1024+470+0'
+maximized=true
+my-computer-expanded=true
+network-expanded=true
+side-pane-view='tree'
+sidebar-bookmark-breakpoint=0
+sidebar-width=347
+start-with-sidebar=true
+start-with-toolbar=true
