@@ -4,6 +4,10 @@ scriptencoding utf-8
 
 filetype off
 
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
 " dein.vim
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
@@ -110,10 +114,12 @@ autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
 "   autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 " augroup END
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
 filetype plugin indent on
 syntax enable
+
+" vimでtwitter
+let twitvim_enable_python = 1
+let twitvim_browser_cmd = 'google-chrome'
+let twitvim_force_ssl = 1
+let twitvim_count = 40
 
