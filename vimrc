@@ -1,3 +1,9 @@
+" 全設定をデフォルト値に設定する
+set all&
+autocmd!
+" tiny と small はここで終了する
+"if !1 | finish | endif
+
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
@@ -105,7 +111,7 @@ if dein#check_install()
 endif
 
 " helpやQuickFixを 'q' で閉じる
-autocmd FileType help,qf nnoremap <silent><buffer>q <C-w>c
+autocmd FileType help,qf,vim,twitvim nnoremap <silent><buffer>q <C-w>c
 
 " " QuickFix自動で閉じる
 " augroup QfAutoCommands
@@ -122,4 +128,18 @@ let twitvim_enable_python = 1
 let twitvim_browser_cmd = 'google-chrome'
 let twitvim_force_ssl = 1
 let twitvim_count = 40
+nmap [twitvim] <Nop>
+map <S-t> [twitvim]
+nnoremap [twitvim]T :<C-u>PosttoTwitter<CR>
+nnoremap [twitvim]F :<C-u>FriendsTwitter<CR><C-w><C-w>
+nnoremap [twitvim]U :<C-u>UserTwitter<CR><C-w><C-w>
+nnoremap [twitvim]R :<C-u>MentionsTwitter<CR><C-w><C-w>
+nnoremap [twitvim]D :<C-u>DMTwitter<CR>
+nnoremap [twitvim]S :<C-u>DMSentTwitter<CR>
+nnoremap [twitvim]N :<C-u>NextTwitter<CR>
+nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
+nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR>
+
+nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> -- :exe "resize " . (winheight(0) * 2/3)<CR>
 
