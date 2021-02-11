@@ -59,10 +59,11 @@ alias open='xdg-open'
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
-  elif [ -f ~/.git-completion.bash ]; then
-    . ~/.git-completion.bash
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+  fi
+  if [ -f ~/.git-completion.bash ]; then
+    . ~/.git-completion.bash
   fi
 fi
 
