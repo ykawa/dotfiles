@@ -111,7 +111,7 @@ if dein#check_install()
 endif
 
 " helpやQuickFixを 'q' で閉じる
-autocmd FileType help,qf,vim,twitvim nnoremap <silent><buffer>q <C-w>c
+autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
 
 " " QuickFix自動で閉じる
 " augroup QfAutoCommands
@@ -119,9 +119,6 @@ autocmd FileType help,qf,vim,twitvim nnoremap <silent><buffer>q <C-w>c
 "   " Auto-close quickfix window
 "   autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 " augroup END
-
-filetype plugin indent on
-syntax enable
 
 " vimでtwitter
 let twitvim_enable_python = 1
@@ -142,4 +139,11 @@ nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR>
 
 nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> -- :exe "resize " . (winheight(0) * 2/3)<CR>
+
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+nnoremap Q  <Nop>
+
+filetype plugin indent on
+syntax enable
 
