@@ -121,13 +121,15 @@ hook_add='''
   let g:airline_symbols.maxlinenr = ''
 '''
 
-## solarized
-#[[plugins]]
-#repo = 'altercation/vim-colors-solarized'
-#hook_add = '''
-#  set background=dark
-#  colorscheme solarized
-#'''
+# solarized
+[[plugins]]
+repo = 'altercation/vim-colors-solarized'
+hook_add = '''
+  let g:solarized_termcolors=256
+  let g:solarized_termtrans=0
+  set background=dark
+  colorscheme solarized
+'''
 
 # ファイラー
 [[plugins]]
