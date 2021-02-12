@@ -283,7 +283,7 @@ alprun()
     sh -c "addgroup -g `id -g` people;
       adduser -D -G people -h /work -u `id -u` person;
       apk add --no-cache sudo;
-      echo '%people ALL=(ALL) NOPASSWD: ALL'> /etc/sudoers;
+      echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
       su - person"
 }
 
