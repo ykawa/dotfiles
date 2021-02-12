@@ -144,6 +144,10 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q  <Nop>
 
+nnoremap <silent><C-F5> :tabprev<CR>
+nnoremap <silent><C-F6> :tabnext<CR>
+
+
 filetype plugin indent on
 syntax enable
 
