@@ -1,4 +1,4 @@
-# vim: set autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
+# vim: filetype=sh autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
 #exec 4> $HOME/debug_output.txt
 #BASH_XTRACEFD=4
 #PS4='$LINENO: '

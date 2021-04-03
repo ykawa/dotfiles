@@ -34,7 +34,7 @@ if dein#load_state(s:dein_dir)
 endif
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 set mouse-=a
@@ -111,6 +111,7 @@ if dein#check_install()
 endif
 
 " helpやQuickFixを 'q' で閉じる
+nnoremap q <Nop>
 autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
 
 " " QuickFix自動で閉じる
@@ -119,8 +120,12 @@ autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
 "   " Auto-close quickfix window
 "   autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 " augroup END
+"
 
-" vimでtwitter
+" twitvim 以下でインストール
+" curl -NLOJ 'https://www.vim.org/scripts/download_script.php?src_id=23560'
+" vim ~/Downloads/twitvim-0.9.1.vmb
+" :so %
 let twitvim_enable_python = 1
 let twitvim_browser_cmd = 'google-chrome'
 let twitvim_force_ssl = 1
@@ -137,16 +142,18 @@ nnoremap [twitvim]N :<C-u>NextTwitter<CR>
 nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
 nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR>
 
+" ++ と -- でバッファのウインドウサイズを変更する
 nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> -- :exe "resize " . (winheight(0) * 2/3)<CR>
 
+" 不要なキーを削除する
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q  <Nop>
 
+" CTRL-F5 と CTRL-F6 で複数ファイルのタブ移動する
 nnoremap <silent><C-F5> :tabprev<CR>
 nnoremap <silent><C-F6> :tabnext<CR>
-
 
 filetype plugin indent on
 syntax enable

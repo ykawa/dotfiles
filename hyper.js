@@ -13,7 +13,7 @@ module.exports = {
 
     // font family with optional fallbacks
     //fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
-    fontFamily: '"Source Han Code JP", "Myrica M", "Consolas", "Source Code Pro for Powerline"',
+    fontFamily: '"Source Han Code JP R", "PowerlineSymbols", "Myrica M", "Consolas", "Source Code Pro for Powerline"',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',

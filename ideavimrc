@@ -1,0 +1,219 @@
+" 検索するときに大文字小文字を区別しない
+set ignorecase
+
+" 検索時に大文字を含んでいたら大/小を区別
+set smartcase
+
+" インクリメンタル検索 (検索ワードの最初の文字を入力した時点で検索が開始)
+set incsearch
+
+" 検索対象をハイライト
+set hlsearch
+
+" 対応する括弧やブレースを表示
+set showmatch matchtime=1
+
+" メッセージ表示欄を2行確保
+set cmdheight=2
+
+" ステータス行を常に表示
+set laststatus=2
+
+" ウィンドウの右下にまだ実行していない入力中のコマンドを表示
+set showcmd
+
+" 省略されずに表示
+set display=lastline
+
+" 行末のスペースを可視化
+set listchars=tab:^\ ,trail:~
+
+" ヤンクでクリップボードにコピー
+set clipboard+=unnamed
+
+" 対応する括弧を強調表示
+set showmatch
+
+" 行をまたいで移動
+set whichwrap=b,s,h,l,<,>,[,],~
+
+" インデント方法の変更
+set cinoptions+=:0
+
+" インデント幅
+set shiftwidth=4
+
+" タブキー押下時に挿入される文字幅を指定
+set softtabstop=4
+
+" ヤンクでクリップボードにコピー
+noremap "+y "*y
+noremap "+Y "*Y
+noremap "+p "*p
+noremap "+P "*P
+noremap <C-S-c> "*y
+noremap <C-S-v> "*P
+
+" コード折り畳みを無効化
+nnoremap zM <Nop>
+nnoremap zc <Nop>
+nnoremap zC <Nop>
+nnoremap zR <Nop>
+nnoremap zo <Nop>
+nnoremap zO <Nop>
+
+" surround を有効化
+set surround
+
+" 検索機能をIDEA純正に
+nnoremap / :<C-u>action Find<CR>
+
+" ジャンプ機能をIDEA純正に
+nnoremap <C-o> :<C-u>action Back<CR>
+nnoremap <C-i> :<C-u>action Forward<CR>
+nnoremap <C-S-o> <C-o>
+nnoremap <C-S-i> <C-i>
+
+" 前/次のメソッド定義へジャンプ
+nnoremap [m :<C-u>action MethodUp<CR>
+nnoremap ]m :<C-u>action MethodDown<CR>
+
+" 前/次の変更箇所へジャンプ
+nnoremap [c :<C-u>action VcsShowPrevChangeMarker<CR>
+nnoremap ]c :<C-u>action VcsShowNextChangeMarker<CR>
+
+" 前/次のエラー箇所へジャンプ
+nnoremap [e :<C-u>action GotoPreviousError<CR>
+nnoremap ]e :<C-u>action GotoNextError<CR>
+
+" K         JavaDocを表示
+" gjK       インターフェイスへジャンプ
+" gjk       宣言へジャンプ
+" gji       実装クラスへジャンプ
+" gjs       スーパークラスへジャンプ
+" gjt       テストクラスへジャンプ
+" Ctrl + k  出現箇所の検索
+nnoremap K :<C-u>action QuickJavaDoc<CR>
+nnoremap gjK :<C-u>action GotoDeclaration<CR>
+nnoremap gjk :<C-u>action GotoTypeDeclaration<CR>
+nnoremap gji :<C-u>action GotoImplementation<CR>
+nnoremap gjs :<C-u>action GotoSuperMethod<CR>
+nnoremap gjt :<C-u>action GotoTest<CR>
+nnoremap <C-k> :<C-u>action ShowUsages<CR>
+
+" コードリファクタリング機能
+nnoremap cre :<C-u>action RenameElement<CR>
+nnoremap cS :<C-u>action ChangeSignature<CR>
+nnoremap cts :<C-u>action ChangeTypeSignature<CR>
+
+" IDEアクションを検索
+nnoremap <Space>a :<C-u>action GotoAction<CR>
+
+" コード生成メニューを表示
+nnoremap <Space>G :<C-u>action Generate<CR>
+
+" 新規クラスを生成
+nnoremap <Space>gn :<C-u>action NewClass<CR>
+
+" メソッドをオーバーライド
+nnoremap <Space>go :<C-u>action OverrideMethods<CR>
+
+" コンストラクタを生成
+nnoremap <Space>gc :<C-u>action GenerateConstructor<CR>
+
+" Getter を生成
+nnoremap <Space>gg :<C-u>action GenerateGetter<CR>
+
+" Setter を生成
+nnoremap <Space>gs :<C-u>action GenerateSetter<CR>
+
+" Getter/Setter を生成
+nnoremap <Space>ga :<C-u>action GenerateGetterAndSetter<CR>
+
+" equals を生成
+nnoremap <Space>ge :<C-u>action GenerateEquals<CR>
+
+" テストメソッドを生成
+nnoremap <Space>gt :<C-u>action GenerateTestMethod<CR>
+
+" 現在のバッファをフォーマット
+nnoremap <Space>= :<C-u>action ReformatCode<CR>
+
+" アウトラインを表示
+nnoremap <Space>o :<C-u>action FileStructurePopup<CR>
+
+" 現在のバッファを閉じる
+nnoremap <Space>q :<C-u>action CloseContent<CR>
+
+" 最後の閉じたバッファを開く
+nnoremap <Space>Q :<C-u>action ReopenClosedTab<CR>
+
+" どこでも検索
+nnoremap <Space>e :<C-u>action SearchEverywhere<CR>
+
+" ファイルを検索
+nnoremap <Space>f :<C-u>action GotoFile<CR>
+
+" ファイルを全文検索
+nnoremap <Space>F :<C-u>action FindInPath<CR>
+
+" クラスを検索
+nnoremap <Space>s :<C-u>action GotoClass<CR>
+
+" シンボルを検索
+nnoremap <Space>S :<C-u>action GotoSymbol<CR>
+
+" 端末を表示
+nnoremap <Space>t :<C-u>action ActivateTerminalToolWindow<CR>
+
+" 実行
+nnoremap <Space>r :<C-u>action Run<CR>
+
+" 現在のクラスを実行
+nnoremap <Space>R :<C-u>action Run<CR>
+
+" プロジェクト管理
+nnoremap <Space>P :<C-u>action ManageRecentProjects<CR>
+
+" 現在の行をブレークポイントに指定/指定解除
+nnoremap <Space>b :<C-u>action ToggleLineBreakpoint<CR>
+
+" 前回の変更箇所へジャンプ
+nnoremap g; :<C-u>action JumpToLastChange<CR>
+nnoremap g, :<C-u>action JumpToNextChange<CR>
+
+" 現在のタブ以外を閉じる
+nnoremap <C-w>o :<C-u>action CloseAllEditorsButActive<CR>
+
+" 入力モード中に素早くjjと入力した場合はESCとみなす
+inoremap jj <Esc>
+
+" vを二回で行末まで選択
+vnoremap v $h
+
+nnoremap j gj
+nnoremap k gk
+nnoremap <S-l> $
+nnoremap <S-h> ^
+nnoremap == gg=G''
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap <silent><C-l><C-l> :<C-u>set nohlsearch!<CR><Esc>
+
+" helpやQuickFixを 'q' で閉じる
+nnoremap q <Nop>
+autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
+
+" ++ と -- でバッファのウインドウサイズを変更する
+nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> -- :exe "resize " . (winheight(0) * 2/3)<CR>
+
+" 不要なキーを削除する
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+nnoremap Q  <Nop>
+
+" CTRL-F5 と CTRL-F6 で複数ファイルのタブ移動する
+nnoremap <silent><C-F5> :tabprev<CR>
+nnoremap <silent><C-F6> :tabnext<CR>
+
