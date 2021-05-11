@@ -277,7 +277,7 @@ fi
 # for developing alpine docker images helper.
 alprun()
 {
-  touch $HOME/ash_history
+  touch $HOME/ash_history .ash_history
   docker run --rm -it -v $HOME/ash_history:/work/.ash_history \
     -v $(pwd):/work -w /work alpine:latest \
     sh -c "addgroup -g `id -g` people;
@@ -285,5 +285,6 @@ alprun()
       apk add --no-cache sudo;
       echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
       su - person"
+  rm -f .ash_history
 }
 
