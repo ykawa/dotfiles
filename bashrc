@@ -134,6 +134,10 @@ ccol () {
   cut -c1-${COLUMNS}
 }
 
+cls () {
+  perl -e 'print "\n"x`tput lines`'
+}
+
 # remove everything Docker containers
 removecontainers() {
   docker stop $(docker ps -aq)
