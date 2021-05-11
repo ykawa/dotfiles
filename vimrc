@@ -127,7 +127,7 @@ autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
 " vim ~/Downloads/twitvim-0.9.1.vmb
 " :so %
 let twitvim_enable_python = 1
-let twitvim_browser_cmd = 'google-chrome'
+let twitvim_browser_cmd = 'google-chrome-stable'
 let twitvim_force_ssl = 1
 let twitvim_count = 40
 nmap [twitvim] <Nop>
