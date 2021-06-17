@@ -291,4 +291,3 @@ alprun()
       su - person"
   rm -f .ash_history
 }
-
