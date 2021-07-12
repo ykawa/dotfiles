@@ -61,8 +61,8 @@ set display=lastline
 set cmdheight=2
 set wildmode=list:full
 
-set list
-set listchars=tab:\¦\ ,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+set nolist
+"set listchars=tab:\¦\ ,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 " インデントをshiftwidthの倍数に丸める
 set shiftround
 set smartindent
