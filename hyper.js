@@ -60,7 +60,7 @@ module.exports = {
 
     // if you're using a Linux setup which show native menus, set to false
     // default: `true` on Linux, `true` on Windows, ignored on macOS
-    showHamburgerMenu: '',
+    showHamburgerMenu: false,
 
     // set to `false` (without backticks and without quotes) if you want to hide the minimize, maximize and close buttons
     // additionally, set to `'left'` if you want them on the left, like in Ubuntu
@@ -165,7 +165,6 @@ module.exports = {
       vibrancy: 'dark'
     },
   },
-
   // a list of plugins to fetch and install from npm
   // format: [@org/]project[#version]
   // examples:
@@ -176,7 +175,8 @@ module.exports = {
     "hypercwd",
     "hyper-search",
     "hyper-tab-icons-plus",
-    "hyper-material-theme"
+    "hyper-material-theme",
+    "hyperterm-paste"
   ],
 
   // in development, you can create a directory under
