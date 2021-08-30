@@ -158,57 +158,8 @@ if [ -d $HOME/bin ]; then
   PATH="${PATH}:$HOME/bin"
 fi
 
-# -- NVM
-if [ -d "$HOME/.nvm" ]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  if [ type npm >/dev/null 2>&1 ]; then
-    source <(npm completion)
-  fi
-fi
-
-# -- NVS
-if [ -d "$HOME/.nvs" ]; then
-  export NVS_HOME="$HOME/.nvs"
-  [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
-fi
-
-# -- yarn
-if [ -d "$HOME/.yarn" ]; then
-  export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-fi
-
-# # -- go
-# if [ -d "$HOME/go" ]; then
-#   export GOPATH=$HOME/go
-#   export GOROOT=$(go env GOROOT)
-#   export PATH=$GOPATH/bin:$PATH
-# fi
-
-# -- sdkman
-if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
-  export SDKMAN_DIR="$HOME/.sdkman"
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
-
-# -- phpenv
-if [[ -e "$HOME/.phpenv/bin/phpenv" ]]; then
-  export PATH="$HOME/.phpenv/bin:$PATH"
-  eval "$(phpenv init -)"
-fi
-
-# -- rbenv
-if [ -d $HOME/.rbenv/bin ]; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
-fi
-
-# -- python - pyenv
-if [ -d $HOME/.pyenv/bin ]; then
-  export PYENV_ROOT=$HOME/.pyenv
-  export PATH=$PYENV_ROOT/bin:$PATH
-  eval "$(pyenv init -)"
+if [ type npm >/dev/null 2>&1 ]; then
+  source <(npm completion)
 fi
 
 # -- plenv
@@ -219,26 +170,9 @@ elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
   eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 fi
 
-# -- virtualenvs
-if [ -d $HOME/.virtualenvs ]; then
-  export VIRTUAL_ENV_DISABLE_PROMPT=1
-  export WORKON_HOME=$HOME/.virtualenvs
-  export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-  if [ -e /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
-    . /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-  fi
-  #activate_file=$(ls -tr $HOME/.virtualenvs/*/bin/activate 2>/dev/null | tail -1)
-  #if [ -n "$activate_file" ]; then
-  #  . $activate_file
-  #fi
-fi
-
 # -- PYTHONSTARTUP
 if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
   export PYTHONSTARTUP="$HOME/.pythonstartup"
-  update_users() {
-    python3 -m pip list --user --format=legacy | awk '{print $1}' | xargs python3 -m pip install --no-cache-dir --user --upgrade
-  }
 fi
 
 # -- GNU Global
@@ -246,14 +180,12 @@ if [ ! -f $HOME/.globalrc ]; then
   if [ -x /usr/local/bin/gtags ]; then
     export GTAGSCONF=/usr/local/share/gtags/gtags.conf
   fi
-  if command which pygmentize >/dev/null; then
+  if command type pygmentize >/dev/null; then
     export GTAGSLABEL=pygments
   fi
 fi
 
-if [ -d "$HOME/.local/bin" ]; then
-  export PATH="$PATH:$HOME/.local/bin"
-fi
+echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
 
 if [ -n "$STY" ]; then
   scr_cd()
@@ -262,18 +194,6 @@ if [ -n "$STY" ]; then
     screen -X chdir "$PWD"
   }
   alias cd=scr_cd
-fi
-
-if [ type stack >/dev/null 2>&1 ]; then
-  eval "$(stack --bash-completion-script stack)"
-fi
-
-if [ -d "$HOME/.cargo/bin" ]; then
-  export PATH="$HOME/.cargo/bin:$PATH"
-fi
-
-if [ -d "$HOME/.config/composer/vendor/bin" ]; then
-  export PATH="$HOME/.config/composer/vendor/bin:$PATH"
 fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
