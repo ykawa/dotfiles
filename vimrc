@@ -105,6 +105,7 @@ nnoremap <silent><C-l><C-l> :<C-u>set nohlsearch!<CR><Esc>
 
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python_host_prog = '/usr/bin/python'
+let g:powerline_pycmd = 'py3'
 
 if dein#check_install()
   call dein#install()
@@ -154,6 +155,12 @@ nnoremap Q  <Nop>
 " CTRL-F5 と CTRL-F6 で複数ファイルのタブ移動する
 nnoremap <silent><C-F5> :tabprev<CR>
 nnoremap <silent><C-F6> :tabnext<CR>
+
+if isdirectory('/usr/lib/python3.9/site-packages')
+py3 << EOF
+sys.path.insert(0, '/usr/lib/python3.9/site-packages')
+EOF
+endif
 
 filetype plugin indent on
 syntax enable
