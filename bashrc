@@ -185,6 +185,14 @@ if [ ! -f $HOME/.globalrc ]; then
   fi
 fi
 
+if [ -z "$GOPATH" -a -d "$HOME/go" ]; then
+  export GOPATH="$HOME/go"
+fi
+
+if [ -n "$GOROOT" ]; then
+  echo ":$PATH:" | grep -q ":$GOROOT/bin:" || export PATH="$GOROOT/bin:$PATH"
+fi
+
 echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
 
 if [ -n "$STY" ]; then
