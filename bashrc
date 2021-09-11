@@ -219,3 +219,17 @@ alprun()
       su - person"
   rm -f .ash_history
 }
+
+# for developing bullseye docker images helper.
+debrun()
+{
+  touch $HOME/bash_history .bash_history
+  docker run --rm -it -v $HOME/bash_history:/work/.bash_history \
+    -v $(pwd):/work -w /work debian:11-slim \
+    sh -c "groupadd -g `id -g` people;
+      useradd -u `id -u` -g people -s /bin/bash -d /work person;
+      apt-get update; apt-get install -y sudo;
+      echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
+      su - person"
+  [ "$HOME" = $(pwd) ] || rm -f .bash_history
+}
