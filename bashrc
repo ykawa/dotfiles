@@ -16,24 +16,57 @@ HISTSIZE=100000
 HISTFILESIZE=100000
 HISTIGNORE='ls:pwd:exit'
 
-case "$TERM" in
-  xterm*|rxvt*)
-    PROMPT_COMMAND='history -a && history -c && history -r && echo -ne "\033]0;${PWD##*/}\007"'
-    show_command_in_title_bar()
-    {
-      case "$BASH_COMMAND" in
-        echo*|*history*)
-          ;;
-        *)
-          echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
-          ;;
-      esac
-    }
-    trap show_command_in_title_bar DEBUG
-    ;;
-  *)
-    ;;
-esac
+if [ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ];then
+  case "$TERM" in
+    xterm*|rxvt*)
+      PROMPT_COMMAND='history -a && history -c && history -r && echo -ne "\033]0;${PWD##*/}\007"'
+      show_command_in_title_bar()
+      {
+        case "$BASH_COMMAND" in
+          echo*|*history*)
+            ;;
+          *)
+            echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
+            ;;
+        esac
+      }
+      trap show_command_in_title_bar DEBUG
+      ;;
+    *)
+      ;;
+  esac
+fi
+
+short_host_name() {
+  local len=${#HOSTNAME}
+  if [ $len -gt 8 ]; then
+    echo "${HOSTNAME:0:4}${HOSTNAME:$len-4:4}"
+  else
+    echo "${HOSTNAME}"
+  fi
+}
+
+# wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+if [ -e ~/.git-prompt.sh ]; then
+  source ~/.git-prompt.sh
+  GIT_PS1_SHOWDIRTYSTATE=
+  GIT_PS1_SHOWUPSTREAM=1
+  GIT_PS1_SHOWUNTRACKEDFILES=
+  GIT_PS1_SHOWSTASHSTATE=
+  export PS1='$(__git_ps1)'"[\u@$(short_host_name) \W]$ "
+else
+  export PS1="[\u@$(short_host_name) \W]$ "
+fi
+unset -f short_host_name
+
+# wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -O ~/.git-completion.bash
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+elif [ -f /usr/share/bash-completion/bash_completion ]; then
+  . /usr/share/bash-completion/bash_completion
+elif [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+fi
 
 [ type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -55,40 +88,6 @@ alias al='ls -al'
 alias l='ls -CF'
 alias s='screen'
 alias open='xdg-open'
-
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-  if [ -f ~/.git-completion.bash ]; then
-    . ~/.git-completion.bash
-  fi
-fi
-
-# modify PS1
-PS1_HOST=${HOSTNAME}
-HOST_LEN=${#HOSTNAME}
-if [ ${HOST_LEN} -gt 8 ]; then
-  PS1_HOST="${HOSTNAME:0:4}${HOSTNAME:$HOST_LEN-4:4}"
-fi
-SHORTHOST=$PS1_HOST
-export PS1="[\u@$SHORTHOST \W]$ "
-
-if [ -e ~/.git-prompt.sh ]; then
-  source ~/.git-prompt.sh
-fi
-GIT_PS1_SHOWDIRTYSTATE=
-GIT_PS1_SHOWUPSTREAM=1
-GIT_PS1_SHOWUNTRACKEDFILES=
-GIT_PS1_SHOWSTASHSTATE=
-if declare -f __git_ps1 | grep __git_ps1 >/dev/null; then
-  export PS1='$(__git_ps1)'"[\u@$SHORTHOST \W]$ "
-fi
-unset PS1_HOST
-unset SHORTHOST
-
 
 stty werase undef
 stty stop undef
@@ -154,10 +153,7 @@ armaggedon() {
 }
 
 
-if [ -d $HOME/bin ]; then
-  PATH="${PATH}:$HOME/bin"
-fi
-
+# -- npm
 if [ type npm >/dev/null 2>&1 ]; then
   source <(npm completion)
 fi
@@ -185,6 +181,7 @@ if [ ! -f $HOME/.globalrc ]; then
   fi
 fi
 
+# -- GO
 if [ -z "$GOPATH" -a -d "$HOME/go" ]; then
   export GOPATH="$HOME/go"
 fi
@@ -193,8 +190,7 @@ if [ -n "$GOROOT" ]; then
   echo ":$PATH:" | grep -q ":$GOROOT/bin:" || export PATH="$GOROOT/bin:$PATH"
 fi
 
-echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
-
+# -- gnu screen
 if [ -n "$STY" ]; then
   scr_cd()
   {
@@ -202,6 +198,15 @@ if [ -n "$STY" ]; then
     screen -X chdir "$PWD"
   }
   alias cd=scr_cd
+fi
+
+# -- local env
+if [ -d $HOME/bin ]; then
+  PATH="${PATH}:$HOME/bin"
+fi
+
+if [ -d $HOME/.local ]; then
+  echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
 fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
