@@ -1,5 +1,6 @@
 # dein_lazy.toml
-# ---------------------------
+
+# ------------- file operation
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 depends = ['neomru.vim', 'neoyank.vim']
@@ -28,31 +29,16 @@ hook_source = '''
 '''
 
 # ------------- for JavaScript
-
 [[plugins]] # ES6のハイライト
 repo = 'othree/yajs.vim'
 on_ft = ['javascript']
 
-# ------------- for ruby
-[[plugins]]
-repo = 'Shougo/deoplete-rct'
-on_ft = ['ruby']
-
-[[plugins]]
-repo = 'osyo-manga/vim-monster'
-on_ft = ['ruby']
-hook_source = '''
-  let g:monster#completion#rcodetools#backend = "async_rct_complete"
-  let g:deoplete#sources#omni#input_patterns = {
-  \ "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-  \}
-'''
 
 # ------------- for python
 [[plugins]]
 repo = 'plytophogy/vim-virtualenv'
 on_ft = ['python']
- 
+
 [[plugins]]
 repo = 'Vimjas/vim-python-pep8-indent'
 on_ft = ['python']
@@ -106,26 +92,16 @@ repo = 'itchyny/vim-pdf'
 on_ft = ['pdf']
 
 # ------------- for typescript
-##  [[plugins]]
-##  repo = 'autozimu/LanguageClient-neovim'
-##  on_ft = ['typescript']
-
 [[plugins]]
 repo = 'HerringtonDarkholme/yats.vim'
 on_ft = ['typescript']
-
-##  [[plugins]]
-##  repo = 'mhartington/nvim-typescript'
-##  build = './install.sh'
-##  depends = ['deoplete.nvim']
-##  on_ft = ['typescript']
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
 on_ft = ['typescript']
 
 [[plugins]]
-repo  = 'Quramy/tsuquyomi'
+repo = 'Quramy/tsuquyomi'
 on_ft = ['typescript']
 
 [[plugins]]
@@ -144,37 +120,14 @@ on_ft = ['typescript']
 repo = 'mhartington/vim-typings'
 on_ft = ['typescript']
 
-# -- TypeScript + Vue
-[[plugins]]
-repo = 'sandersn/vue-ts-plugin'
-on_ft = ['vue']
-
-# ------------- for pug
-[[plugins]]
-repo = 'dNitro/vim-pug-complete'
-on_ft = ['pug']
-
-[[plugins]]
-repo = 'digitaltoad/vim-pug'
-on_ft = ['pug']
-
-[[plugins]]
-repo = 'posva/vim-vue'
-on_ft = ['vue']
-
-# ------------- for ansible
-[[plugins]]
-repo = 'pearofducks/ansible-vim.git'
-on_ft = ['yaml.ansible']
-
 # ------------- for php
 [[plugins]]
-repo  = 'phpactor/phpactor'
+repo = 'phpactor/phpactor'
 on_ft = ['php']
 build = 'composer install'
 
 [[plugins]]
-repo  = 'vim-scripts/PDV--phpDocumentor-for-Vim'
+repo = 'vim-scripts/PDV--phpDocumentor-for-Vim'
 on_ft = ['php']
 
 [[plugins]]
@@ -194,32 +147,3 @@ hook_source = '''
   let g:go_highlight_build_constraints = 1
   let g:go_fmt_command = "goimports"
 '''
-
-# ------------- for Haskell
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-depends = 'deoplete.nvim'
-rev = 'next'
-build = 'bash install.sh'
-hook_source = '''
-  set hidden
-  let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie-wrapper'],
-    \ }
-  let g:LanguageClient_settingsPath = '/home/ykawa/.config/nvim/settings.json'
-  let g:LanguageClient_autoStart = 1
-  if &filetype == 'haskell'
-    let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
-  endif
-  nnoremap <silent> gt :call LanguageClient_textDocument_hover()<CR>
-  nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
-  nnoremap <silent> gs :call LanugageClient_textDocument_documentSymbol()<CR>
-  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-  nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
-  nnoremap <silent> g- :call LanguageClient_textDocument_formatting()<CR>
-'''
-
-[[plugins]]
-repo = 'neovimhaskell/haskell-vim'
-on_ft = 'haskell'
-

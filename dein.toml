@@ -52,17 +52,11 @@ hook_add = '''
 repo = 'Shougo/neosnippet-snippets'
 on_i = 1
 
-# [[plugins]] # インデントを見やすく
-# repo = 'nathanaelkane/vim-indent-guides'
-# 
 [[plugins]] # インデントを見やすく
 repo = 'Yggdroot/indentLine'
-hook_add='''
+hook_add = '''
   let g:indentLine_char = '|'
 '''
-
-[[plugins]]
-repo = 'editorconfig/editorconfig-vim'
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
@@ -80,7 +74,7 @@ repo = 'vim-airline/vim-airline'
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 depends = ['vim-airline']
-hook_add='''
+hook_add = '''
   let g:airline_theme = 'jellybeans'
   let g:airline_powerline_fonts = 1
   let g:airline#extensions#tabline#enabled = 1
@@ -120,16 +114,6 @@ hook_add='''
   let g:airline_symbols.readonly = ''
   let g:airline_symbols.linenr = '☰'
   let g:airline_symbols.maxlinenr = ''
-'''
-
-# solarized
-[[plugins]]
-repo = 'altercation/vim-colors-solarized'
-hook_add = '''
-  let g:solarized_termcolors=256
-  let g:solarized_termtrans=0
-  set background=dark
-  colorscheme solarized
 '''
 
 # ファイラー
@@ -179,18 +163,6 @@ hook_add = '''
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
 
-# gitコマンド
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-hook_add = '''
-  nmap [figitive] <Nop>
-  map <Leader>g [figitive]
-  nmap <silent> [figitive]s :<C-u>Gstatus<CR>
-  nmap <silent> [figitive]d :<C-u>Gdiff<CR>
-  nmap <silent> [figitive]b :<C-u>Gblame<CR>
-  nmap <silent> [figitive]l :<C-u>Glog<CR>
-'''
-
 # SEE: https://qiita.com/uplus_e10/items/2a75fbe3d80063eb9c18
 [[plugins]]
 repo = 'thinca/vim-quickrun'
@@ -224,4 +196,3 @@ hook_add = '''
 # SEE https://qiita.com/uji_/items/5cc267d6a96c417a29ef
 [[plugins]]
 repo = 'andymass/vim-matchup'
-
