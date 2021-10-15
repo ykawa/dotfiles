@@ -1,25 +1,5 @@
 # dein_lazy.toml
 
-# ------------- file operation
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-depends = ['neomru.vim', 'neoyank.vim']
-on_event = 'BufRead'
-hook_source = '''
-  nmap [denite] <Nop>
-  map <C-g> [denite]
-  nmap <silent> [denite]<C-t> :<C-u>Denite filetype<CR>
-  nmap <silent> [denite]<C-p> :<C-u>Denite file_rec<CR>
-  nmap <silent> [denite]<C-l> :<C-u>Denite line<CR>
-  nmap <silent> [denite]<C-g> :<C-u>Denite grep<CR>
-  nmap <silent> [denite]<C-]> :<C-u>DeniteCursorWord grep<CR>
-  nmap <silent> [denite]<C-u> :<C-u>Denite file_mru<CR>
-  nmap <silent> [denite]<C-y> :<C-u>Denite neoyank<CR>
-  nmap <silent> [denite]<C-r> :<C-u>Denite -resume<CR>
-  nmap <silent> [denite]; :<C-u>Denite -resume -immediately -select=+1<CR>
-  nmap <silent> [denite]- :<C-u>Denite -resume -immediately -select=-1<CR>
-'''
-
 # ------------- for JSON
 [[plugins]]
 repo = 'elzr/vim-json'
@@ -32,7 +12,6 @@ hook_source = '''
 [[plugins]] # ES6のハイライト
 repo = 'othree/yajs.vim'
 on_ft = ['javascript']
-
 
 # ------------- for python
 [[plugins]]
@@ -82,68 +61,8 @@ repo = 'c9s/perlomni.vim'
 on_ft = ['perl']
 #build = 'make'
 
-[[plugins]]
-repo = 'rdunklau/vim-perltidy'
-on_ft = ['perl']
-
-# ------------- for PDF
-[[plugins]]
-repo = 'itchyny/vim-pdf'
-on_ft = ['pdf']
-
 # ------------- for typescript
-[[plugins]]
-repo = 'HerringtonDarkholme/yats.vim'
-on_ft = ['typescript']
-
-[[plugins]]
-repo = 'leafgarland/typescript-vim'
-on_ft = ['typescript']
-
 [[plugins]]
 repo = 'Quramy/tsuquyomi'
 on_ft = ['typescript']
 
-[[plugins]]
-repo = 'Quramy/vim-js-pretty-template'
-on_ft = ['typescript']
-
-[[plugins]]
-repo = 'jason0x43/vim-js-indent'
-on_ft = ['typescript']
-
-[[plugins]]
-repo = 'Quramy/vim-dtsm'
-on_ft = ['typescript']
-
-[[plugins]]
-repo = 'mhartington/vim-typings'
-on_ft = ['typescript']
-
-# ------------- for php
-[[plugins]]
-repo = 'phpactor/phpactor'
-on_ft = ['php']
-build = 'composer install'
-
-[[plugins]]
-repo = 'vim-scripts/PDV--phpDocumentor-for-Vim'
-on_ft = ['php']
-
-[[plugins]]
-repo = 'kristijanhusak/deoplete-phpactor'
-on_ft = ['php']
-
-# ------------- for Go
-[[plugins]]
-repo = 'fatih/vim-go'
-on_ft = ['go']
-hook_source = '''
-  let g:go_highlight_functions = 1
-  let g:go_highlight_methods = 1
-  let g:go_highlight_fields = 1
-  let g:go_highlight_types = 1
-  let g:go_highlight_operators = 1
-  let g:go_highlight_build_constraints = 1
-  let g:go_fmt_command = "goimports"
-'''
