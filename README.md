@@ -1,5 +1,12 @@
 # backup dotfiles
 
+# install
+
+```bash
+git clone https://github.com/ykawa/dotfiles.git ~/dotfiles
+bash ~/dotfiles/mklink.sh
+```
+
 # install vim
 
 ## dependencies
