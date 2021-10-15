@@ -166,6 +166,7 @@ repo = 'airblade/vim-gitgutter'
 # SEE: https://qiita.com/uplus_e10/items/2a75fbe3d80063eb9c18
 [[plugins]]
 repo = 'thinca/vim-quickrun'
+depends = ['vimproc.vim']
 hook_add = '''
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
@@ -196,3 +197,28 @@ hook_add = '''
 # SEE https://qiita.com/uji_/items/5cc267d6a96c417a29ef
 [[plugins]]
 repo = 'andymass/vim-matchup'
+
+[[plugins]]
+repo = 'twitvim/twitvim'
+hook_add = '''
+  " twitvim 以下でインストール
+  " curl -NLOJ 'https://www.vim.org/scripts/download_script.php?src_id=23560'
+  " vim ~/Downloads/twitvim-0.9.1.vmb
+  " :so %
+  let twitvim_enable_python = 1
+  let twitvim_browser_cmd = 'google-chrome-stable'
+  let twitvim_force_ssl = 1
+  let twitvim_count = 40
+  nmap [twitvim] <Nop>
+  map <S-t> [twitvim]
+  nnoremap [twitvim]T :<C-u>PosttoTwitter<CR>
+  nnoremap [twitvim]F :<C-u>FriendsTwitter<CR><C-w><C-w>
+  nnoremap [twitvim]U :<C-u>UserTwitter<CR><C-w><C-w>
+  nnoremap [twitvim]R :<C-u>MentionsTwitter<CR><C-w><C-w>
+  nnoremap [twitvim]D :<C-u>DMTwitter<CR>
+  nnoremap [twitvim]S :<C-u>DMSentTwitter<CR>
+  nnoremap [twitvim]N :<C-u>NextTwitter<CR>
+  nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
+  nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR>
+'''
+

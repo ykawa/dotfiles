@@ -34,7 +34,6 @@ if dein#load_state(s:dein_dir)
 endif
 
 set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 set mouse-=a
@@ -62,7 +61,6 @@ set cmdheight=2
 set wildmode=list:full
 
 set nolist
-"set listchars=tab:\¦\ ,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 " インデントをshiftwidthの倍数に丸める
 set shiftround
 set smartindent
@@ -122,26 +120,6 @@ autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
 "   autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 " augroup END
 "
-
-" twitvim 以下でインストール
-" curl -NLOJ 'https://www.vim.org/scripts/download_script.php?src_id=23560'
-" vim ~/Downloads/twitvim-0.9.1.vmb
-" :so %
-let twitvim_enable_python = 1
-let twitvim_browser_cmd = 'google-chrome-stable'
-let twitvim_force_ssl = 1
-let twitvim_count = 40
-nmap [twitvim] <Nop>
-map <S-t> [twitvim]
-nnoremap [twitvim]T :<C-u>PosttoTwitter<CR>
-nnoremap [twitvim]F :<C-u>FriendsTwitter<CR><C-w><C-w>
-nnoremap [twitvim]U :<C-u>UserTwitter<CR><C-w><C-w>
-nnoremap [twitvim]R :<C-u>MentionsTwitter<CR><C-w><C-w>
-nnoremap [twitvim]D :<C-u>DMTwitter<CR>
-nnoremap [twitvim]S :<C-u>DMSentTwitter<CR>
-nnoremap [twitvim]N :<C-u>NextTwitter<CR>
-nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
-nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR>
 
 " ++ と -- でバッファのウインドウサイズを変更する
 nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
