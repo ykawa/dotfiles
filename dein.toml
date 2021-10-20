@@ -22,6 +22,9 @@ hook_add = '''
         \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
 '''
 
+[[plugins]]
+repo = 'editorconfig/editorconfig-vim'
+
 # if !has('nvim')
 [[plugins]]
 repo = 'roxma/nvim-yarp'
