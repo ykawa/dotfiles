@@ -20,7 +20,6 @@ touch \
   .screenrc \
   .tmux.conf \
   .vimrc \
-  .vim \
   .Xmodmap \
   .zshrc
 
@@ -47,11 +46,7 @@ done
 popd
 
 if !(type "wget" >/dev/null 2>&1); then
-  if [ ! -e ~/.git-completion.bash ]; then
-    wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -O ~/.git-completion.bash
-  fi
-  if [ ! -e ~/.git-prompt.sh ]; then
-    wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
-  fi
+  wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -O ~/.git-completion.bash
+  wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
 fi
 
