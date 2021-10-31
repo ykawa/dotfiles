@@ -17,55 +17,64 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
-" プラグイン導入 For Mac/Linux users(Winは別)
 call plug#begin('~/.vim/bundle')
 
-  Plug 'prabirshrestha/async.vim'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  inoremap <expr><Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-  inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-  inoremap <expr><cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
-
-  Plug 'prabirshrestha/vim-lsp'
-  Plug 'mattn/vim-lsp-settings'
-  Plug 'mattn/vim-lsp-icons'
-  function! s:on_lsp_buffer_enabled() abort
-      setlocal omnifunc=lsp#complete
-      setlocal signcolumn=no
-      if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-      nmap <buffer> gd <plug>(lsp-definition)
-      nmap <buffer> gs <plug>(lsp-document-symbol-search)
-      nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-      nmap <buffer> gr <plug>(lsp-references)
-      nmap <buffer> gi <plug>(lsp-implementation)
-      nmap <buffer> gt <plug>(lsp-type-definition)
-      nmap <buffer> <leader>rn <plug>(lsp-rename)
-      nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-      nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-      nmap <buffer> K <plug>(lsp-hover)
-      nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-      nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-
-      let g:lsp_diagnostics_enabled = 0
-      let g:lsp_diagnostics_signs_enabled = 0
-      let g:lsp_document_highlight_enabled = 0
-      let g:lsp_document_code_action_signs_enabled = 0
-  endfunction
-
-  augroup lsp_install
-      au!
-      autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-  augroup END
-
-  Plug 'hrsh7th/vim-vsnip'
-  Plug 'hrsh7th/vim-vsnip-integ'
-
+  Plug 'dracula/vim', { 'as': 'dracula' }
   Plug 'editorconfig/editorconfig-vim'
   Plug 'Yggdroot/indentLine'
   Plug 'andymass/vim-matchup'
-  Plug 'thinca/vim-quickrun'
   Plug 'airblade/vim-gitgutter'
+
+  Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/neosnippet-snippets'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+  " 必須 coc-perl: cpan Perl::LanguageServer
+  let g:coc_global_extensions = [
+        \ 'coc-json',
+        \ 'coc-markdownlint',
+        \ 'coc-neosnippet',
+        \ 'coc-pairs',
+        \ 'coc-perl',
+        \ 'coc-snippets',
+        \ 'coc-syntax',
+        \ 'coc-yaml',
+  \ ]
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+  
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <silent><expr> <c-@> coc#refresh()
+  inoremap <silent><expr> <C-k>
+        \ pumvisible() ? coc#_select_confirm() :
+        \ "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  nmap <leader>rn <Plug>(coc-rename)            " \+r+n でリネーム処理
+  xmap <leader>f  <Plug>(coc-format-selected)
+  nmap <leader>f  <Plug>(coc-format-selected)
+
+  Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+  Plug 'thinca/vim-quickrun'
+  let g:quickrun_no_default_key_mappings = 1
+  let g:quickrun_config = get(g:, 'quickrun_config', {})
+  let g:quickrun_config._ = {
+        \ 'runner'                          : 'vimproc',
+        \ 'runner/vimproc/updatetime'       : 60,
+        \ 'outputter/buffer/opener'         : '8split',
+        \ 'outputter/buffer/into'           : 0,
+        \ 'outputter/error/success'         : 'buffer',
+        \ 'outputter/error/error'           : 'quickfix',
+        \ 'outputter/buffer/close_on_empty' : 1,
+  \ }
+  set splitbelow  " quickrun の結果を画面の下方に表示する
+  nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+  nnoremap <silent> <F9>  :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+  nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 
   Plug 'twitvim/twitvim'
   let twitvim_enable_python = 1
@@ -83,8 +92,6 @@ call plug#begin('~/.vim/bundle')
   nnoremap [twitvim]N :<C-u>NextTwitter<CR>
   nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
   nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR><script>
-
-  Plug 'c9s/perlomni.vim'
 
 call plug#end()
 
@@ -143,7 +150,7 @@ set fileformats=unix,dos,mac
 
 set completeopt=longest,menu,menuone
 
-"" 補完の際の大文字小文字の区別しない
+" 補完の際の大文字小文字の区別しない
 set infercase
 " 新しく開く代わりにすでに開いてあるバッファを開く
 set switchbuf=useopen
@@ -170,7 +177,7 @@ let g:powerline_pycmd = 'py3'
 
 " helpやQuickFixを 'q' で閉じる
 nnoremap q <Nop>
-autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
+autocmd FileType help,qf,vim,twitvim,denite,quickrun nnoremap <silent><buffer>q <C-w>c
 
 " ++ と -- でバッファのウインドウサイズを変更する
 nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -185,6 +192,12 @@ nnoremap Q  <Nop>
 nnoremap <silent><C-F5> :tabprev<CR>
 nnoremap <silent><C-F6> :tabnext<CR>
 
+" .vimrc 再読込設定 & 編集時はReload
+nnoremap <Leader>r :source $MYVIMRC<CR>
+autocmd BufWritePost .vimrc source $MYVIMRC
+
 filetype plugin indent on
 syntax enable
+
+colorscheme dracula
 
