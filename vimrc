@@ -1,37 +1,105 @@
 " 全設定をデフォルト値に設定する
 set all&
 autocmd!
+
 " tiny と small はここで終了する
-"if !1 | finish | endif
+if !1 | finish | endif
+
+" vim-plug 自動インストール(curl必須)
+" 詳しくは https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" プラグインが不足していると PlugInstall を実行する
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+call plug#begin('~/.vim/bundle')
+
+  Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'Yggdroot/indentLine'
+  Plug 'andymass/vim-matchup'
+  Plug 'airblade/vim-gitgutter'
+
+  Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/neosnippet-snippets'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+  " 必須 coc-perl: cpan Perl::LanguageServer
+  let g:coc_global_extensions = [
+        \ 'coc-json',
+        \ 'coc-markdownlint',
+        \ 'coc-neosnippet',
+        \ 'coc-pairs',
+        \ 'coc-perl',
+        \ 'coc-snippets',
+        \ 'coc-syntax',
+        \ 'coc-yaml',
+  \ ]
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+  
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <silent><expr> <c-@> coc#refresh()
+  inoremap <silent><expr> <C-k>
+        \ pumvisible() ? coc#_select_confirm() :
+        \ "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  nmap <leader>rn <Plug>(coc-rename)            " \+r+n でリネーム処理
+  xmap <leader>f  <Plug>(coc-format-selected)
+  nmap <leader>f  <Plug>(coc-format-selected)
+
+  Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+  Plug 'thinca/vim-quickrun'
+  let g:quickrun_no_default_key_mappings = 1
+  let g:quickrun_config = get(g:, 'quickrun_config', {})
+  let g:quickrun_config._ = {
+        \ 'runner'                          : 'vimproc',
+        \ 'runner/vimproc/updatetime'       : 60,
+        \ 'outputter/buffer/opener'         : '8split',
+        \ 'outputter/buffer/into'           : 0,
+        \ 'outputter/error/success'         : 'buffer',
+        \ 'outputter/error/error'           : 'quickfix',
+        \ 'outputter/buffer/close_on_empty' : 1,
+  \ }
+  set splitbelow  " quickrun の結果を画面の下方に表示する
+  nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+  nnoremap <silent> <F9>  :cclose<CR>:write<CR>:QuickRun -mode n<CR>
+  nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
+
+  Plug 'twitvim/twitvim'
+  let twitvim_enable_python = 1
+  let twitvim_browser_cmd = 'google-chrome-stable'
+  let twitvim_force_ssl = 1
+  let twitvim_count = 40
+  nmap [twitvim] <Nop>
+  map <S-t> [twitvim]
+  nnoremap [twitvim]T :<C-u>PosttoTwitter<CR>
+  nnoremap [twitvim]F :<C-u>FriendsTwitter<CR><C-w><C-w>
+  nnoremap [twitvim]U :<C-u>UserTwitter<CR><C-w><C-w>
+  nnoremap [twitvim]R :<C-u>MentionsTwitter<CR><C-w><C-w>
+  nnoremap [twitvim]D :<C-u>DMTwitter<CR>
+  nnoremap [twitvim]S :<C-u>DMSentTwitter<CR>
+  nnoremap [twitvim]N :<C-u>NextTwitter<CR>
+  nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
+  nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR><script>
+
+call plug#end()
 
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
 
 filetype off
-
-" dein.vim
-let s:dein_dir = expand('~/.cache/dein')
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-if &runtimepath !~# '/dein.vim'
-  if !isdirectory(s:dein_repo_dir)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-  endif
-  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
-endif
-
-if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
-
-  let g:rc_dir    = expand('~/dotfiles')
-  let s:toml      = g:rc_dir . '/dein.toml'
-  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-
-  call dein#load_toml(s:toml,      {'lazy': 0})
-  call dein#load_toml(s:lazy_toml, {'lazy': 1})
-  call dein#end()
-  call dein#save_state()
-endif
 
 set statusline+=%#warningmsg#
 set statusline+=%*
@@ -82,7 +150,7 @@ set fileformats=unix,dos,mac
 
 set completeopt=longest,menu,menuone
 
-"" 補完の際の大文字小文字の区別しない
+" 補完の際の大文字小文字の区別しない
 set infercase
 " 新しく開く代わりにすでに開いてあるバッファを開く
 set switchbuf=useopen
@@ -99,27 +167,17 @@ nnoremap <S-h> ^
 nnoremap == gg=G''
 nnoremap n nzz
 nnoremap N Nzz
+
+" CTRL+l ２回で検索の強調表示を消す
 nnoremap <silent><C-l><C-l> :<C-u>set nohlsearch!<CR><Esc>
 
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python_host_prog = '/usr/bin/python'
 let g:powerline_pycmd = 'py3'
 
-if dein#check_install()
-  call dein#install()
-endif
-
 " helpやQuickFixを 'q' で閉じる
 nnoremap q <Nop>
-autocmd FileType help,qf,vim,twitvim,denite nnoremap <silent><buffer>q <C-w>c
-
-" " QuickFix自動で閉じる
-" augroup QfAutoCommands
-"   autocmd!
-"   " Auto-close quickfix window
-"   autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
-" augroup END
-"
+autocmd FileType help,qf,vim,twitvim,denite,quickrun nnoremap <silent><buffer>q <C-w>c
 
 " ++ と -- でバッファのウインドウサイズを変更する
 nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -134,12 +192,12 @@ nnoremap Q  <Nop>
 nnoremap <silent><C-F5> :tabprev<CR>
 nnoremap <silent><C-F6> :tabnext<CR>
 
-if isdirectory('/usr/lib/python3.9/site-packages')
-py3 << EOF
-sys.path.insert(0, '/usr/lib/python3.9/site-packages')
-EOF
-endif
+" .vimrc 再読込設定 & 編集時はReload
+nnoremap <Leader>r :source $MYVIMRC<CR>
+autocmd BufWritePost .vimrc source $MYVIMRC
 
 filetype plugin indent on
 syntax enable
+
+colorscheme dracula
 
