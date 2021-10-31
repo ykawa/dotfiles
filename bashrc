@@ -30,11 +30,11 @@ if [ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ];then
             ;;
         esac
       }
-      trap show_command_in_title_bar DEBUG
-      ;;
-    *)
-      ;;
-  esac
+    trap show_command_in_title_bar DEBUG
+    ;;
+  *)
+    ;;
+esac
 fi
 
 short_host_name() {
@@ -127,7 +127,7 @@ jffg () {
 pffg () {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
     -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
+  }
 
 ccol () {
   cut -c1-${COLUMNS}
@@ -164,6 +164,10 @@ if [ -d $HOME/.plenv/bin ]; then
   eval "$(plenv init -)"
 elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
   eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
+elif [ -d $HOME/perl5 ]; then
+  export PERL_CPANM_OPT="--local-lib=~/perl5"
+  export PATH="$HOME/perl5/bin:$PATH"
+  export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
 fi
 
 # -- PYTHONSTARTUP
@@ -197,7 +201,7 @@ if [ -n "$STY" ]; then
     cd "$@"
     screen -X chdir "$PWD"
   }
-  alias cd=scr_cd
+alias cd=scr_cd
 fi
 
 # -- local env
@@ -207,6 +211,10 @@ fi
 
 if [ -d $HOME/.local ]; then
   echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [ -d $HOME/.vim/bin ]; then
+  echo ":$PATH:" | grep -q ":$HOME/.vim/bin:" || export PATH="$HOME/.vim/bin:$PATH"
 fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
@@ -222,8 +230,8 @@ alprun()
       apk add --no-cache sudo;
       echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
       su - person"
-  rm -f .ash_history
-}
+      rm -f .ash_history
+    }
 
 # for developing bullseye docker images helper.
 debrun()
@@ -236,6 +244,6 @@ debrun()
       apt-get update; apt-get install -y --no-install-recommends sudo $@;
       echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
       su - person"
-  [ "$HOME" = $(pwd) ] || rm -f .bash_history
-}
+      [ "$HOME" = $(pwd) ] || rm -f .bash_history
+    }
 
