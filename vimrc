@@ -21,15 +21,17 @@ call plug#begin('~/.vim/bundle')
 
   Plug 'dracula/vim', { 'as': 'dracula' }
   Plug 'editorconfig/editorconfig-vim'
-  Plug 'Yggdroot/indentLine'
   Plug 'andymass/vim-matchup'
   Plug 'airblade/vim-gitgutter'
+  Plug 'Yggdroot/indentLine'
+  let g:indentLine_conceallevel = 0
 
   Plug 'Shougo/neosnippet.vim'
   Plug 'Shougo/neosnippet-snippets'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-  " 必須 coc-perl: cpan Perl::LanguageServer
+  " 必須
+  " coc-perl: cpanm -n Perl::LanguageServer
   let g:coc_global_extensions = [
         \ 'coc-json',
         \ 'coc-markdownlint',
@@ -196,8 +198,16 @@ nnoremap <silent><C-F6> :tabnext<CR>
 nnoremap <Leader>r :source $MYVIMRC<CR>
 autocmd BufWritePost .vimrc source $MYVIMRC
 
+" 個別設定
+" Makefile
+let _curfile=expand("%:r")
+if _curfile == 'Makefile'
+  setlocal noexpandtab
+endif
+
 filetype plugin indent on
 syntax enable
-
-colorscheme dracula
+try
+  colorscheme dracula
+endtry
 
