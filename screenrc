@@ -21,7 +21,7 @@ hardstatus off
 
 #shelltitle "$ |bash"
 
-shell -$SHELL
+shell $SHELL
 
 # Resize window
 bind  r eval 'command -c resize' 'echo "Resize window"'

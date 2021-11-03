@@ -17,23 +17,25 @@ HISTFILESIZE=100000
 HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
-  xterm*|rxvt*)
-    if [ "$TERMINAL_EMULATOR" = "JetBrains-JediTerm" -o -n "$STY" ];then
-      PROMPT_COMMAND='history -a && history -c && history -r'
-    else
-      PROMPT_COMMAND='history -a && history -c && history -r && echo -ne "\033]0;${PWD##*/}\007"'
-      show_command_in_title_bar()
-      {
-        case "$BASH_COMMAND" in
-          echo*|history*)
-            ;;
-          *)
-            echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
-            ;;
-        esac
-      }
-      trap show_command_in_title_bar DEBUG
-    fi
+  xterm*|rxvt*|Eterm|aterm|kterm|gnome*|screen*)
+    custom_prompt() {
+      history -a
+      history -c
+      history -r
+      printf "\033]0;%s\007" "${PWD##*/}"
+    }
+    PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'custom_prompt'
+    show_command_in_title_bar()
+    {
+      case "$BASH_COMMAND" in
+        echo*|history*)
+          ;;
+        *)
+          printf "\033]0;%s\007" "${BASH_COMMAND}"
+          ;;
+      esac
+    }
+    trap show_command_in_title_bar DEBUG
     ;;
   *) ;;
 esac
@@ -219,6 +221,11 @@ if [ -d $HOME/.vim/bin ]; then
 fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
+
+# https://gnunn1.github.io/tilix-web/manual/vteconfig/
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+  source /etc/profile.d/vte.sh
+fi
 
 # for developing alpine docker images helper.
 alprun()
