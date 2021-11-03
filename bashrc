@@ -16,26 +16,27 @@ HISTSIZE=100000
 HISTFILESIZE=100000
 HISTIGNORE='ls:pwd:exit'
 
-if [ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ];then
-  case "$TERM" in
-    xterm*|rxvt*)
+case "$TERM" in
+  xterm*|rxvt*)
+    if [ "$TERMINAL_EMULATOR" = "JetBrains-JediTerm" -o -n "$STY" ];then
+      PROMPT_COMMAND='history -a && history -c && history -r'
+    else
       PROMPT_COMMAND='history -a && history -c && history -r && echo -ne "\033]0;${PWD##*/}\007"'
       show_command_in_title_bar()
       {
         case "$BASH_COMMAND" in
-          echo*|*history*)
+          echo*|history*)
             ;;
           *)
             echo -ne "\033]0;${BASH_COMMAND} - ${PWD##*/}\007"
             ;;
         esac
       }
-    trap show_command_in_title_bar DEBUG
+      trap show_command_in_title_bar DEBUG
+    fi
     ;;
-  *)
-    ;;
+  *) ;;
 esac
-fi
 
 short_host_name() {
   local len=${#HOSTNAME}
@@ -86,7 +87,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias al='ls -al'
 alias l='ls -CF'
-alias s='screen'
+alias s='screen -DRR'
 alias open='xdg-open'
 
 stty werase undef
@@ -127,7 +128,7 @@ jffg () {
 pffg () {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
     -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
-  }
+}
 
 ccol () {
   cut -c1-${COLUMNS}
@@ -201,7 +202,7 @@ if [ -n "$STY" ]; then
     cd "$@"
     screen -X chdir "$PWD"
   }
-alias cd=scr_cd
+  alias cd=scr_cd
 fi
 
 # -- local env
@@ -226,12 +227,12 @@ alprun()
   docker run --rm -it -v $HOME/ash_history:/work/.ash_history \
     -v $(pwd):/work -w /work alpine:latest \
     sh -c "addgroup -g `id -g` people;
-      adduser -D -G people -h /work -u `id -u` person;
-      apk add --no-cache sudo;
-      echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
-      su - person"
-      rm -f .ash_history
-    }
+  adduser -D -G people -h /work -u `id -u` person;
+  apk add --no-cache sudo;
+  echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
+  su - person"
+  rm -f .ash_history
+}
 
 # for developing bullseye docker images helper.
 debrun()
@@ -240,10 +241,10 @@ debrun()
   docker run --rm -it -v $HOME/bash_history:/work/.bash_history \
     -v $(pwd):/work -w /work debian:latest \
     sh -c "groupadd -g `id -g` people;
-      useradd -u `id -u` -g people -s /bin/bash -d /work person;
-      apt-get update; apt-get install -y --no-install-recommends sudo $@;
-      echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
-      su - person"
-      [ "$HOME" = $(pwd) ] || rm -f .bash_history
-    }
+  useradd -u `id -u` -g people -s /bin/bash -d /work person;
+  apt-get update; apt-get install -y --no-install-recommends sudo $@;
+  echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
+  su - person"
+  [ "$HOME" = $(pwd) ] || rm -f .bash_history
+}
 
