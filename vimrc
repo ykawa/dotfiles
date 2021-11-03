@@ -22,7 +22,16 @@ call plug#begin('~/.vim/bundle')
   Plug 'dracula/vim', { 'as': 'dracula' }
   Plug 'editorconfig/editorconfig-vim'
   Plug 'andymass/vim-matchup'
+
   Plug 'airblade/vim-gitgutter'
+  function! GitStatus()
+    let [a,m,r] = GitGutterGetHunkSummary()
+    return printf('+%d ~%d -%d', a, m, r)
+  endfunction
+  let g:gitgutter_highlight_lines = 0
+  set statusline+=%{GitStatus()}
+  set updatetime=400
+
   Plug 'Yggdroot/indentLine'
   let g:indentLine_conceallevel = 0
 
@@ -95,6 +104,8 @@ call plug#begin('~/.vim/bundle')
   nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
   nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR><script>
 
+  Plug 'Clavelito/indent-sh.vim'
+  Plug 'Clavelito/indent-awk.vim'
 call plug#end()
 
 set nocompatible
