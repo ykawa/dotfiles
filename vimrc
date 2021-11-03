@@ -29,7 +29,9 @@ call plug#begin('~/.vim/bundle')
     return printf('+%d ~%d -%d', a, m, r)
   endfunction
   let g:gitgutter_highlight_lines = 0
-  set statusline+=%{GitStatus()}
+  if exists('GitGutterGetHunkSummary')
+    set statusline+=%{GitStatus()}
+  endif
   set updatetime=400
 
   Plug 'Yggdroot/indentLine'
@@ -42,20 +44,17 @@ call plug#begin('~/.vim/bundle')
   " 必須
   " coc-perl: cpanm -n Perl::LanguageServer
   let g:coc_global_extensions = [
-        \ 'coc-json',
         \ 'coc-markdownlint',
         \ 'coc-neosnippet',
-        \ 'coc-pairs',
-        \ 'coc-perl',
         \ 'coc-snippets',
-        \ 'coc-syntax',
+        \ 'coc-json',
+        \ 'coc-perl',
         \ 'coc-yaml',
   \ ]
   function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~# '\s'
   endfunction
-  
   inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
         \ <SID>check_back_space() ? "\<TAB>" :
