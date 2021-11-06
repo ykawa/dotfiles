@@ -67,7 +67,7 @@ fi
 
 [ type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-if [ type dircolors >/dev/null 2>&1 ]; then
+if command -v type dircolors >/dev/null 2>&1; then
   if [ -e ~/dotfiles/dircolors ]; then
     eval "$(dircolors -b ~/dotfiles/dircolors)"
   fi
