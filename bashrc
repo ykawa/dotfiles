@@ -244,3 +244,8 @@ debrun()
   [ "$HOME" = $(pwd) ] || rm -f .bash_history
 }
 
+c() {
+  # usage: ls -la | c
+  perl ~/dotfiles/colon.pl
+}
+
