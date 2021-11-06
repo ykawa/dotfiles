@@ -77,6 +77,7 @@ if command -v type dircolors >/dev/null 2>&1; then
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
   alias egrep='egrep --color=auto'
+  alias cgrep='grep --color=always'
 fi
 
 alias ll='ls -alF'
