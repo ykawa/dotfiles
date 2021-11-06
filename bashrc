@@ -18,13 +18,7 @@ HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
   xterm*|rxvt*|Eterm|aterm|kterm|gnome*|screen*)
-    custom_prompt() {
-      history -a
-      history -c
-      history -r
-      printf "\033]0;%s\007" "${PWD##*/}"
-    }
-    PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'custom_prompt'
+    PROMPT_COMMAND='history -a; history -c; history -r; printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
     show_command_in_title_bar()
     {
       case "$BASH_COMMAND" in
@@ -221,11 +215,6 @@ if [ -d $HOME/.vim/bin ]; then
 fi
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
-
-# https://gnunn1.github.io/tilix-web/manual/vteconfig/
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-  source /etc/profile.d/vte.sh
-fi
 
 # for developing alpine docker images helper.
 alprun()
