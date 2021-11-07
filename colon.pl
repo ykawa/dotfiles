@@ -20,12 +20,12 @@ my $cn = @ct;    # count of color table
 while ( <> )
 {
   my $i = 0;
-  while ( /([\s,;:\.]*)([^(\s|,|;|:|\.)]+)/g )
+  while ( /([\s,;:\.\/]*)([^(\s|,|;|:|\.\/)]+)/g )
   {
     print( colored( $1, 'reset' ) );
     print( colored( $2, $ct[ $i++ % $cn ] ) );
   }
-  if ( /[\s,;:\.]*$/ )
+  if ( /[\s,;:\.\/]*$/ )
   {
     print( colored( $&, 'reset' ) );
   }
