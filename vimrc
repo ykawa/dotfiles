@@ -44,11 +44,12 @@ call plug#begin('~/.vim/bundle')
   " 必須
   " coc-perl: cpanm -n Perl::LanguageServer
   let g:coc_global_extensions = [
+        \ 'coc-json',
         \ 'coc-markdownlint',
         \ 'coc-neosnippet',
-        \ 'coc-snippets',
-        \ 'coc-json',
         \ 'coc-perl',
+        \ 'coc-sh',
+        \ 'coc-snippets',
         \ 'coc-yaml',
   \ ]
   function! s:check_back_space() abort
