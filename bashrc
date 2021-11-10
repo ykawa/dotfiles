@@ -10,6 +10,7 @@ case $- in
 esac
 
 shopt -s checkwinsize
+shopt -s expand_aliases
 shopt -s histappend
 HISTCONTROL=ignoreboth
 HISTSIZE=100000
@@ -17,7 +18,10 @@ HISTFILESIZE=100000
 HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
-  xterm*|rxvt*|Eterm|aterm|kterm|gnome*|screen*)
+  screen*)
+    PROMPT_COMMAND='history -a; history -c; history -r; printf "\033_%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
+    ;;
+  xterm*|rxvt*|Eterm|aterm|kterm|gnome*)
     PROMPT_COMMAND='history -a; history -c; history -r; printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
     show_command_in_title_bar()
     {
@@ -94,6 +98,7 @@ bind "\C-w":unix-filename-rubout
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
+xhost +local:root > /dev/null 2>&1
 complete -cf sudo
 
 if builtin command -v resize >/dev/null; then
@@ -245,7 +250,30 @@ debrun()
   [ "$HOME" = $(pwd) ] || rm -f .bash_history
 }
 
-c() {
+ex()
+{
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1       ;;
+      *.tar.gz)    tar xzf $1       ;;
+      *.bz2)       bunzip2 $1       ;;
+      *.rar)       unrar x $1       ;;
+      *.gz)        gunzip $1        ;;
+      *.tar)       tar xf $1        ;;
+      *.tbz2)      tar xjf $1       ;;
+      *.tgz)       tar xzf $1       ;;
+      *.zip)       unzip -u sjis $1 ;;
+      *.Z)         uncompress $1    ;;
+      *.7z)        7z x $1          ;;
+      *)           echo "'$1' cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+c()
+{
   # usage: ls -la | c
   perl ~/dotfiles/colon.pl
 }
