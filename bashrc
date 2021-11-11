@@ -75,15 +75,15 @@ if command -v type dircolors >/dev/null 2>&1; then
   if [ -e ~/dotfiles/dircolors ]; then
     eval "$(dircolors -b ~/dotfiles/dircolors)"
   fi
-  alias ls='ls --color=auto'
-  alias dir='dir --color=auto'
-  alias vdir='vdir --color=auto'
-  alias grep='grep --color=auto'
-  alias fgrep='fgrep --color=auto'
-  alias egrep='egrep --color=auto'
-  alias cgrep='grep --color=always'
 fi
 
+alias ls='ls --group-directories-first --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias cgrep='grep --color=always'
 alias ll='ls -alF'
 alias la='ls -A'
 alias al='ls -al'
