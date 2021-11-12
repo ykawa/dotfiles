@@ -1,5 +1,5 @@
 # vim: filetype=sh autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
-#exec 4> $HOME/debug_output.txt
+#exec 4>> $HOME/debug_output.txt
 #BASH_XTRACEFD=4
 #PS4='$LINENO: '
 #set -x
@@ -19,7 +19,18 @@ HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
   screen*)
-    PROMPT_COMMAND='history -a; history -c; history -r; printf "\033_%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
+    PROMPT_COMMAND='history -a; history -c; history -r; printf "\033k\033\134\033k%s@%s:%s\033\134" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
+    show_command_in_title_bar()
+    {
+      case "$BASH_COMMAND" in
+        echo*|history*|printf*|LS_COLORS*)
+          ;;
+        *)
+          printf "\033k\033\134\033k%s@%s\$ %s\033\134" "${USER}" "${HOSTNAME%%.*}" "${BASH_COMMAND}"
+          ;;
+      esac
+    }
+    trap show_command_in_title_bar DEBUG
     ;;
   xterm*|rxvt*|Eterm|aterm|kterm|gnome*)
     PROMPT_COMMAND='history -a; history -c; history -r; printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
