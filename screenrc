@@ -13,7 +13,6 @@ vbell off
 
 defscrollback 100000
 termcapinfo xterm* ti@:te@
-term xterm-256color
 
 #hardstatus alwayslastline "%{= wg} %-w%{=b bw}%n %t%{-}%+w %= %{=b kw} %Y/%m/%d %0c"
 hardstatus alwayslastline "%{= wg}%{.bw}%-w%{.rw}%n %t%{-}%+w %=%{..G} %{=b kw} %H %{..Y} %Y %m/%d %C%a "
