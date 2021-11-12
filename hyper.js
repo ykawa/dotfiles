@@ -172,11 +172,12 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   plugins: [
-    "hypercwd",
+    "hyper-material-theme",
+    "hyper-pane",
     "hyper-search",
     "hyper-tab-icons-plus",
-    "hyper-material-theme",
-    "hyperterm-paste"
+    "hypercwd",
+    "hyperterm-paste",
   ],
 
   // in development, you can create a directory under
@@ -185,10 +186,35 @@ module.exports = {
   localPlugins: [],
 
   keymaps: {
-    // Example
-    // 'window:devtools': 'cmd+alt+o',
-    'tab:jump:prefix': 'alt',
+    //'window:devtools': 'ctrl+alt+o',
     'editor:copy': 'alt+c',
-    'editor:paste': 'alt+v'
+    'editor:paste': 'alt+v',
+    'editor:search': 'ctrl+shift+f',
+    'editor:search-close': 'esc',
+    'pane:close': 'ctrl+alt+w',
+    'pane:splitDown': 'ctrl+alt+e',
+    'pane:splitRight': 'ctrl+alt+d',
+    'plugins:update': 'ctrl+shift+u',
+    'tab:jump:prefix': 'alt',
+    'window:preferences': 'ctrl+,',
   },
+
+  paneNavigation: {
+    debug: false,
+    hotkeys: {
+      navigation: {
+        up: 'ctrl+alt+up',
+        down: 'ctrl+alt+down',
+        left: 'ctrl+alt+left',
+        right: 'ctrl+alt+right'
+      },
+      jump_prefix: 'ctrl+alt', // completed with 1-9 digits
+      permutation_modifier: 'shift', // Added to jump and navigation hotkeys for pane permutation
+      maximize: 'meta+enter'
+    },
+    showIndicators: true, // Show pane number
+    focusOnMouseHover: false,
+    inactivePaneOpacity: 0.4 // Set to 1 to disable inactive panes dimming
+  }
+
 };
