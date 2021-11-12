@@ -19,14 +19,14 @@ HISTIGNORE='ls:pwd:exit'
 
 case "$TERM" in
   screen*)
-    PROMPT_COMMAND='history -a; history -c; history -r; printf "\033k\033\134\033k%s@%s:%s\033\134" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
+    PROMPT_COMMAND='history -a; history -c; history -r; printf "\033k\033\134\033k%s\033\134" "${PWD/#$HOME/\~}"'
     show_command_in_title_bar()
     {
       case "$BASH_COMMAND" in
         echo*|history*|printf*|LS_COLORS*)
           ;;
         *)
-          printf "\033k\033\134\033k%s@%s\$ %s\033\134" "${USER}" "${HOSTNAME%%.*}" "${BASH_COMMAND}"
+          printf "\033k\033\134\033k\$ %s\033\134" "${BASH_COMMAND}"
           ;;
       esac
     }
@@ -37,7 +37,7 @@ case "$TERM" in
     show_command_in_title_bar()
     {
       case "$BASH_COMMAND" in
-        echo*|history*)
+        echo*|history*|screen*)
           ;;
         *)
           printf "\033]0;%s\007" "${BASH_COMMAND}"
@@ -59,15 +59,16 @@ short_host_name() {
 }
 
 # wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+PS1="[\u@$(short_host_name) \W]$ "
 if [ -e ~/.git-prompt.sh ]; then
   source ~/.git-prompt.sh
   GIT_PS1_SHOWDIRTYSTATE=
   GIT_PS1_SHOWUPSTREAM=1
   GIT_PS1_SHOWUNTRACKEDFILES=
   GIT_PS1_SHOWSTASHSTATE=
-  export PS1='$(__git_ps1)'"[\u@$(short_host_name) \W]$ "
+  export PS1='$(__git_ps1)'"${PS1:+$PS1}"
 else
-  export PS1="[\u@$(short_host_name) \W]$ "
+  export PS1="${PS1:+$PS1}"
 fi
 unset -f short_host_name
 
