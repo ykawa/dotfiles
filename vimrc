@@ -44,6 +44,7 @@ call plug#begin('~/.vim/bundle')
   " 必須
   " coc-perl: cpanm -n Perl::LanguageServer
   let g:coc_global_extensions = [
+        \ 'coc-clangd',
         \ 'coc-json',
         \ 'coc-markdownlint',
         \ 'coc-neosnippet',
@@ -106,6 +107,11 @@ call plug#begin('~/.vim/bundle')
 
   Plug 'Clavelito/indent-sh.vim'
   Plug 'Clavelito/indent-awk.vim'
+
+  Plug 'kana/vim-operator-user'
+  Plug 'rhysd/vim-clang-format'
+  autocmd FileType c,cpp,objc nnoremap == :<C-u>ClangFormat<CR>
+  autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
 call plug#end()
 
 set nocompatible
