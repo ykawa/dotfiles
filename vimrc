@@ -45,6 +45,7 @@ call plug#begin('~/.vim/bundle')
   " coc-perl: cpanm -n Perl::LanguageServer
   let g:coc_global_extensions = [
         \ 'coc-clangd',
+        \ 'coc-docker',
         \ 'coc-json',
         \ 'coc-markdownlint',
         \ 'coc-neosnippet',
