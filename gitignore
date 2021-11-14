@@ -9,12 +9,9 @@
 .phpstorm.meta.php
 .project
 .settings/
-BACKUP/
-Ykawa*
-YKawa*
-YKAWA*
 _Deparsed_XSubs.pm
 _ide_helper_models.php
+BACKUP/
 temp.*
 temp/
 temp_*.*
@@ -29,6 +26,9 @@ tmp_?.*
 tmp_??.*
 tmp_???.*
 tmp_????.*
-ykawa.*
+YKAWA*
+YKawa*
+Ykawa*
+ykawa*
+YKAWA/
 ykawa/
-ykawa_*
