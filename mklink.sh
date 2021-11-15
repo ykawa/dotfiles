@@ -12,8 +12,7 @@ touch \
   .gitconfig \
   .globalrc \
   .grcat \
-  .hyper\
-  .js \
+  .hyper.js \
   .my.cnf \
   .perltidyrc \
   .pythonstartup \
