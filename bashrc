@@ -179,6 +179,7 @@ if [ -d $HOME/.plenv/bin ]; then
   export PATH="$HOME/.plenv/bin:$PATH"
   eval "$(plenv init -)"
 elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
+  # cpanm --local-lib=~/perl5 local::lib
   eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 elif [ -d $HOME/perl5 ]; then
   export PERL_CPANM_OPT="--local-lib=~/perl5"
