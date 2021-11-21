@@ -113,6 +113,8 @@ call plug#begin('~/.vim/bundle')
   Plug 'rhysd/vim-clang-format'
   autocmd FileType c,cpp,objc nnoremap == :<C-u>ClangFormat<CR>
   autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+
+  Plug 'ekalinin/Dockerfile.vim'
 call plug#end()
 
 set nocompatible
