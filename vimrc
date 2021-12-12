@@ -37,7 +37,8 @@ call plug#begin('~/.vim/bundle')
   Plug 'Yggdroot/indentLine'
   let g:indentLine_conceallevel = 0
 
-  Plug 'Shougo/neosnippet.vim'
+  "Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'Shougo/neosnippet-snippets'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -115,6 +116,12 @@ call plug#begin('~/.vim/bundle')
   autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
 
   Plug 'ekalinin/Dockerfile.vim'
+
+  " perl
+  if executable('perltidy')
+    autocmd FileType perl nnoremap == <Esc>:%!perltidy -se<CR>
+  endif
+
 call plug#end()
 
 set nocompatible
