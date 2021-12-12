@@ -211,6 +211,12 @@ if [ -n "$GOROOT" ]; then
   echo ":$PATH:" | grep -q ":$GOROOT/bin:" || export PATH="$GOROOT/bin:$PATH"
 fi
 
+# -- ruby
+if [ -d $HOME/.rbenv ]; then
+  echo ":$PATH:" | grep -q ":$HOME/.rbenv:" || export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+fi
+
 # -- gnu screen
 if [ -n "$STY" ]; then
   scr_cd()
