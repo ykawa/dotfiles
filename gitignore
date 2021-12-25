@@ -1,3 +1,4 @@
+bin/
 !.yarn/cache
 !.yarn/plugins
 !.yarn/releases
