@@ -53,6 +53,8 @@ call plug#begin('~/.vim/bundle')
         \ 'coc-perl',
         \ 'coc-sh',
         \ 'coc-snippets',
+        \ 'coc-solargraph',
+        \ 'coc-vetur',
         \ 'coc-yaml',
   \ ]
   function! s:check_back_space() abort
@@ -122,6 +124,8 @@ call plug#begin('~/.vim/bundle')
     autocmd FileType perl nnoremap == <Esc>:%!perltidy -se<CR>
   endif
 
+  Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-endwise'
 call plug#end()
 
 set nocompatible

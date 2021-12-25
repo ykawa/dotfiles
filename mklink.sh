@@ -10,6 +10,7 @@ touch \
   .bashrc \
   .dircolors \
   .gitconfig \
+  .gemrc \
   .globalrc \
   .grcat \
   .hyper.js \
