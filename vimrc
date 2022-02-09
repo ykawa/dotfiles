@@ -37,9 +37,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'Yggdroot/indentLine'
   let g:indentLine_conceallevel = 0
 
-  "Plug 'Shougo/neosnippet.vim'
   Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'Shougo/neosnippet-snippets'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
   " 必須
