@@ -174,16 +174,20 @@ if [ type npm >/dev/null 2>&1 ]; then
   source <(npm completion)
 fi
 
+if [ -d $HOME/.nodebrew/current/bin ]; then
+  echo ":$PATH:" | grep -q ":$HOME/.nodebrew/current/bin:" || export PATH="$HOME/.nodebrew/current/bin:$PATH"
+fi
+
 # -- plenv
 if [ -d $HOME/.plenv/bin ]; then
-  export PATH="$HOME/.plenv/bin:$PATH"
+  echo ":$PATH:" | grep -q ":$HOME/.plenv/bin:" || export PATH="$HOME/.plenv/bin:$PATH"
   eval "$(plenv init -)"
 elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
   # cpanm --local-lib=~/perl5 local::lib
   eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 elif [ -d $HOME/perl5 ]; then
+  echo ":$PATH:" | grep -q ":$HOME/perl5/bin:" || export PATH="$HOME/perl5/bin:$PATH"
   export PERL_CPANM_OPT="--local-lib=~/perl5"
-  export PATH="$HOME/perl5/bin:$PATH"
   export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
 fi
 
@@ -229,7 +233,7 @@ fi
 
 # -- local env
 if [ -d $HOME/bin ]; then
-  PATH="${PATH}:$HOME/bin"
+  echo ":$PATH:" | grep -q ":$HOME/bin:" || export PATH="$HOME/bin:$PATH"
 fi
 
 if [ -d $HOME/.local ]; then
