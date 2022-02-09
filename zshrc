@@ -87,6 +87,8 @@ zstyle ':vcs_info:*' actionformats '[%b|%a]'
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' use-simple true
 
+xhost +local:root > /dev/null 2>&1
+
 #show_command_in_title_bar() {
 #  print -Pn "\e]0;%n@%m: %~\a"
 #}
@@ -102,20 +104,17 @@ precmd () {
 #  (develop=)[ykawa@tiger dotfiles]$ 
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 
-export PATH="$HOME/bin:$PATH" # パス
-
 ## dircolors
 if [ -e ~/dotfiles/dircolors ]; then
   eval "$(dircolors -b ~/dotfiles/dircolors)"
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 fi
 
-if [ -d ${HOME}/.rbenv ]; then
-  export PATH=$HOME/.rbenv/bin:$PATH
+if [ -d $HOME/.rbenv ]; then
+  echo ":$PATH:" | grep -q ":$HOME/.rbenv/bin:" || export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
   . ~/.rbenv/completions/rbenv.zsh
 fi
-xhost +local:root > /dev/null 2>&1
 
 # -- npm
 if [ type npm >/dev/null 2>&1 ]; then
@@ -124,14 +123,14 @@ fi
 
 # -- plenv
 if [ -d $HOME/.plenv/bin ]; then
-  export PATH="$HOME/.plenv/bin:$PATH"
+  echo ":$PATH:" | grep -q ":$HOME/.plenv/bin:" || export PATH="$HOME/.plenv/bin:$PATH"
   eval "$(plenv init -)"
 elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
   # cpanm --local-lib=~/perl5 local::lib
   eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 elif [ -d $HOME/perl5 ]; then
   export PERL_CPANM_OPT="--local-lib=~/perl5"
-  export PATH="$HOME/perl5/bin:$PATH"
+  echo ":$PATH:" | grep -q ":$HOME/perl5/bin:" || export PATH="$HOME/perl5/bin:$PATH"
   export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
 fi
 
@@ -177,10 +176,11 @@ fi
 
 # -- local env
 if [ -d $HOME/bin ]; then
+  echo ":$PATH:" | grep -q ":$HOME/bin:" || export PATH="$HOME/bin:$PATH"
   PATH="${PATH}:$HOME/bin"
 fi
 
-if [ -d $HOME/.local ]; then
+if [ -d $HOME/.local/bin ]; then
   echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
 fi
 
