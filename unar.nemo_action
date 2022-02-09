@@ -1,0 +1,11 @@
+[Nemo Action]
+Active=true
+Name=解凍
+Comment=unarで解凍
+Exec=unar -f -o %P/%f %F
+Icon-Name=gnome-mime-application-x-compress
+Selection=m
+Extensions=any;
+Quote=double
+Dependencies=unarchiver
+EscapeSpaces=true
