@@ -113,6 +113,71 @@ export EDITOR="$VISUAL"
 xhost +local:root > /dev/null 2>&1
 complete -cf sudo
 
+# -- npm
+if [ -d $HOME/.nodebrew/current/bin ]; then
+  export PATH="$HOME/.nodebrew/current/bin:$PATH"
+fi
+
+if [ type npm >/dev/null 2>&1 ]; then
+  source <(npm completion)
+fi
+
+# -- plenv
+if [ -d $HOME/.plenv/bin ]; then
+  export PATH="$HOME/.plenv/bin:$PATH"
+  eval "$(plenv init -)"
+elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
+  # cpanm --local-lib=~/perl5 local::lib
+  eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
+elif [ -d $HOME/perl5 ]; then
+  export PATH="$HOME/perl5/bin:$PATH"
+  export PERL_CPANM_OPT="--local-lib=~/perl5"
+  export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
+fi
+
+# -- PYTHONSTARTUP
+if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
+  export PYTHONSTARTUP="$HOME/.pythonstartup"
+fi
+
+# -- GNU Global
+if [ ! -f $HOME/.globalrc ]; then
+  if [ -x /usr/local/bin/gtags ]; then
+    export GTAGSCONF=/usr/local/share/gtags/gtags.conf
+  fi
+  if command type pygmentize >/dev/null; then
+    export GTAGSLABEL=pygments
+  fi
+fi
+
+# -- GO
+if [ -z "$GOPATH" -a -d "$HOME/go" ]; then
+  export GOPATH="$HOME/go"
+fi
+
+if [ -n "$GOROOT" ]; then
+  export PATH="$GOROOT/bin:$PATH"
+fi
+
+# -- ruby
+if [ -d $HOME/.rbenv ]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+fi
+
+# -- local env
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.vim/bin:$PATH"
+
+[ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
+
+# -------------------------------------------
+# clean up and normalize the PATH.
+# -------------------------------------------
+eval "$(perl ~/dotfiles/organize_path.pl)"
+
+# -------------------------------------------
 if builtin command -v resize >/dev/null; then
   rs () {
     eval `resize`
@@ -121,6 +186,16 @@ else
   rs () {
     kill -s WINCH $$
   }
+fi
+
+# -- gnu screen
+if [ -n "$STY" ]; then
+  scr_cd()
+  {
+    cd "$@"
+    screen -X chdir "$PWD"
+  }
+  alias cd=scr_cd
 fi
 
 ffg () {
@@ -167,84 +242,6 @@ armaggedon() {
   docker rmi -f $(docker images -qa)
   docker system prune -f
 }
-
-
-# -- npm
-if [ type npm >/dev/null 2>&1 ]; then
-  source <(npm completion)
-fi
-
-if [ -d $HOME/.nodebrew/current/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.nodebrew/current/bin:" || export PATH="$HOME/.nodebrew/current/bin:$PATH"
-fi
-
-# -- plenv
-if [ -d $HOME/.plenv/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.plenv/bin:" || export PATH="$HOME/.plenv/bin:$PATH"
-  eval "$(plenv init -)"
-elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
-  # cpanm --local-lib=~/perl5 local::lib
-  eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
-elif [ -d $HOME/perl5 ]; then
-  echo ":$PATH:" | grep -q ":$HOME/perl5/bin:" || export PATH="$HOME/perl5/bin:$PATH"
-  export PERL_CPANM_OPT="--local-lib=~/perl5"
-  export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
-fi
-
-# -- PYTHONSTARTUP
-if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
-  export PYTHONSTARTUP="$HOME/.pythonstartup"
-fi
-
-# -- GNU Global
-if [ ! -f $HOME/.globalrc ]; then
-  if [ -x /usr/local/bin/gtags ]; then
-    export GTAGSCONF=/usr/local/share/gtags/gtags.conf
-  fi
-  if command type pygmentize >/dev/null; then
-    export GTAGSLABEL=pygments
-  fi
-fi
-
-# -- GO
-if [ -z "$GOPATH" -a -d "$HOME/go" ]; then
-  export GOPATH="$HOME/go"
-fi
-
-if [ -n "$GOROOT" ]; then
-  echo ":$PATH:" | grep -q ":$GOROOT/bin:" || export PATH="$GOROOT/bin:$PATH"
-fi
-
-# -- ruby
-if [ -d $HOME/.rbenv ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.rbenv:" || export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
-fi
-
-# -- gnu screen
-if [ -n "$STY" ]; then
-  scr_cd()
-  {
-    cd "$@"
-    screen -X chdir "$PWD"
-  }
-  alias cd=scr_cd
-fi
-
-# -- local env
-if [ -d $HOME/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/bin:" || export PATH="$HOME/bin:$PATH"
-fi
-
-if [ -d $HOME/.local ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
-fi
-
-if [ -d $HOME/.vim/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.vim/bin:" || export PATH="$HOME/.vim/bin:$PATH"
-fi
-
-[ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
 
 # for developing alpine docker images helper.
 alprun()

@@ -104,6 +104,11 @@ precmd () {
 #  (develop=)[ykawa@tiger dotfiles]$ 
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 
+# -- coreutils for macos
+if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
+  export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+fi
+
 ## dircolors
 if [ -e ~/dotfiles/dircolors ]; then
   eval "$(dircolors -b ~/dotfiles/dircolors)"
@@ -111,26 +116,30 @@ if [ -e ~/dotfiles/dircolors ]; then
 fi
 
 if [ -d $HOME/.rbenv ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.rbenv/bin:" || export PATH="$HOME/.rbenv/bin:$PATH"
+  export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
   . ~/.rbenv/completions/rbenv.zsh
 fi
 
 # -- npm
+if [ -d $HOME/.nodebrew/current/bin ]; then
+  export PATH="$HOME/.nodebrew/current/bin:$PATH"
+fi
+
 if [ type npm >/dev/null 2>&1 ]; then
   source <(npm completion)
 fi
 
 # -- plenv
 if [ -d $HOME/.plenv/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.plenv/bin:" || export PATH="$HOME/.plenv/bin:$PATH"
+  export PATH="$HOME/.plenv/bin:$PATH"
   eval "$(plenv init -)"
 elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
   # cpanm --local-lib=~/perl5 local::lib
   eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 elif [ -d $HOME/perl5 ]; then
   export PERL_CPANM_OPT="--local-lib=~/perl5"
-  echo ":$PATH:" | grep -q ":$HOME/perl5/bin:" || export PATH="$HOME/perl5/bin:$PATH"
+  export PATH="$HOME/perl5/bin:$PATH"
   export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
 fi
 
@@ -155,13 +164,34 @@ if [ -z "$GOPATH" -a -d "$HOME/go" ]; then
 fi
 
 if [ -n "$GOROOT" ]; then
-  echo ":$PATH:" | grep -q ":$GOROOT/bin:" || export PATH="$GOROOT/bin:$PATH"
+  export PATH="$GOROOT/bin:$PATH"
 fi
 
 # -- ruby
 if [ -d $HOME/.rbenv ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.rbenv:" || export PATH="$HOME/.rbenv/bin:$PATH"
+  export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
+fi
+
+# -- local env
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.vim/bin:$PATH"
+
+# -------------------------------------------
+# clean up and normalize the PATH.
+# -------------------------------------------
+eval "$(perl ~/dotfiles/organize_path.pl)"
+
+# -------------------------------------------
+if builtin command -v resize >/dev/null; then
+  rs () {
+    eval `resize`
+  }
+else
+  rs () {
+    kill -s WINCH $$
+  }
 fi
 
 # -- gnu screen
@@ -172,30 +202,6 @@ if [ -n "$STY" ]; then
     screen -X chdir "$PWD"
   }
   alias cd=scr_cd
-fi
-
-# -- local env
-if [ -d $HOME/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/bin:" || export PATH="$HOME/bin:$PATH"
-  PATH="${PATH}:$HOME/bin"
-fi
-
-if [ -d $HOME/.local/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.local/bin:" || export PATH="$HOME/.local/bin:$PATH"
-fi
-
-if [ -d $HOME/.vim/bin ]; then
-  echo ":$PATH:" | grep -q ":$HOME/.vim/bin:" || export PATH="$HOME/.vim/bin:$PATH"
-fi
-
-if builtin command -v resize >/dev/null; then
-  rs () {
-    eval `resize`
-  }
-else
-  rs () {
-    kill -s WINCH $$
-  }
 fi
 
 ffg () {
@@ -296,4 +302,3 @@ ex()
     echo "'$1' is not a valid file"
   fi
 }
-
