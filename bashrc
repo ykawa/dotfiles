@@ -103,8 +103,10 @@ alias l='ls -CF'
 alias s='screen -DRR'
 alias open='xdg-open'
 
-stty werase undef
-stty stop undef
+if [ type stty >/dev/null 2>&1 ]; then
+  stty werase undef
+  stty stop undef
+fi
 bind "\C-w":unix-filename-rubout
 
 export VISUAL=vim
@@ -112,6 +114,8 @@ export EDITOR="$VISUAL"
 
 xhost +local:root > /dev/null 2>&1
 complete -cf sudo
+
+export PATH="/opt/bin:$HOME/bin:$PATH"
 
 # -- npm
 if [ -d $HOME/.nodebrew/current/bin ]; then
@@ -231,6 +235,8 @@ cls () {
 removecontainers() {
   docker stop $(docker ps -aq)
   docker rm $(docker ps -aq)
+  docker system prune -f
+  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
 }
 
 # remove everything Docker

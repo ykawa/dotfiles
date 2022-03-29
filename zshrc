@@ -225,6 +225,11 @@ pffg () {
     -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
+rffg () {
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
+    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
+}
+
 c()
 { # usage: ls -la | c
   perl ~/dotfiles/colon.pl
@@ -242,6 +247,8 @@ cls () {
 removecontainers() {
   docker stop $(docker ps -aq)
   docker rm $(docker ps -aq)
+  docker system prune -f
+  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
 }
 
 # remove everything Docker
