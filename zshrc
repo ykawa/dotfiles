@@ -11,8 +11,8 @@ compinit
 
 bindkey -e
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 setopt append_history
 setopt hist_expand
 setopt hist_ignore_all_dups
@@ -258,7 +258,7 @@ armaggedon() {
   docker rmi -f $(docker images --filter dangling=true -qa)
   docker volume rm $(docker volume ls --filter dangling=true -q)
   docker rmi -f $(docker images -qa)
-  docker system prune -f
+  docker system prune -f -a
 }
 
 alprun()

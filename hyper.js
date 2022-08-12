@@ -177,7 +177,8 @@ module.exports = {
     "hyper-search",
     "hyper-tab-icons-plus",
     "hypercwd",
-    "hyperterm-paste"
+    "hyperterm-paste",
+    "hyper-disable-new-version-notification"
   ],
 
   // in development, you can create a directory under

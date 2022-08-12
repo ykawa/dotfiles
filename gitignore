@@ -54,14 +54,12 @@ $RECYCLE.BIN/
 .com.apple.timemachine.donotpresent
 .dat*
 .directory
+.dockerignore
 .DocumentRevisions-V100
 .DS_*
 .DS_Store
 .dynamodb/
 .env
-.env.*
-.env.production
-.env.test
 .eslintcache
 .factorypath
 .fseventsd
