@@ -38,8 +38,10 @@ call plug#begin('~/.vim/bundle')
   let g:indentLine_conceallevel = 0
 
   Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/neosnippet-snippets'
 
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " 必須
   " coc-perl: cpanm -n Perl::LanguageServer
   let g:coc_global_extensions = [
@@ -50,24 +52,40 @@ call plug#begin('~/.vim/bundle')
         \ 'coc-neosnippet',
         \ 'coc-perl',
         \ 'coc-sh',
-        \ 'coc-snippets',
         \ 'coc-solargraph',
         \ 'coc-vetur',
         \ 'coc-yaml',
   \ ]
   function! s:check_back_space() abort
     let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
+    return !col || getline('.')[col - 1] =~# '\s'
   endfunction
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
+
+  imap <silent><expr> <TAB>
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
         \ <SID>check_back_space() ? "\<TAB>" :
         \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-  inoremap <silent><expr> <c-@> coc#refresh()
-  inoremap <silent><expr> <C-k>
-        \ pumvisible() ? coc#_select_confirm() :
+  smap <silent><expr> <TAB>
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+        \ "\<TAB>"
+  imap <silent><expr> <S-TAB>
+        \ coc#pum#visible() ? coc#pum#prev(1) :
+        \ "\<C-h>"
+  imap <silent><expr> <CR>
+        \ coc#pum#visible() ? coc#pum#confirm() :
         \ "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  imap <silent><expr> <C-k>
+        \ coc#pum#visible() ? coc#_select_confirm() :
+        \ neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+        \ "\<C-k>"
+
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  xmap <C-k> <Plug>(neosnippet_expand_target)
+
+  imap <silent><expr> <c-@> coc#refresh()
   nmap <leader>rn <Plug>(coc-rename)            " \+r+n でリネーム処理
   xmap <leader>f  <Plug>(coc-format-selected)
   nmap <leader>f  <Plug>(coc-format-selected)
@@ -179,7 +197,7 @@ set scrolloff=20
 set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
-set completeopt=longest,menu,menuone
+set completeopt=menuone
 
 " 補完の際の大文字小文字の区別しない
 set infercase
