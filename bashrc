@@ -167,6 +167,9 @@ fi
 if [ -d $HOME/.rbenv ]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
+  if [ -e ~/.rbenv/completions/rbenv.zsh ]; then
+    . ~/.rbenv/completions/rbenv.zsh
+  fi
 fi
 
 # -- local env

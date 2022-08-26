@@ -89,10 +89,6 @@ zstyle ':vcs_info:*' use-simple true
 
 xhost +local:root > /dev/null 2>&1
 
-#show_command_in_title_bar() {
-#  print -Pn "\e]0;%n@%m: %~\a"
-#}
-#trap show_command_in_title_bar DEBUG
 preexec () {
   # TODO 調べる
   print -Pn "\e]0;\a"
@@ -101,7 +97,6 @@ precmd () {
   print -Pn "\e]0;%n@%m: %~\a"
   vcs_info
 }
-#  (develop=)[ykawa@tiger dotfiles]$ 
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 
 # -- coreutils for macos
@@ -113,12 +108,6 @@ fi
 if [ -e ~/dotfiles/dircolors ]; then
   eval "$(dircolors -b ~/dotfiles/dircolors)"
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-fi
-
-if [ -d $HOME/.rbenv ]; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
-  . ~/.rbenv/completions/rbenv.zsh
 fi
 
 # -- npm
@@ -171,6 +160,9 @@ fi
 if [ -d $HOME/.rbenv ]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
+  if [ -e ~/.rbenv/completions/rbenv.zsh ]; then
+    . ~/.rbenv/completions/rbenv.zsh
+  fi
 fi
 
 # -- local env
