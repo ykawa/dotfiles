@@ -89,16 +89,6 @@ zstyle ':vcs_info:*' use-simple true
 
 xhost +local:root > /dev/null 2>&1
 
-preexec () {
-  # TODO 調べる
-  print -Pn "\e]0;\a"
-}
-precmd () { 
-  print -Pn "\e]0;%n@%m: %~\a"
-  vcs_info
-}
-PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
-
 # -- coreutils for macos
 if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
   export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
@@ -177,11 +167,11 @@ eval "$(perl ~/dotfiles/organize_path.pl)"
 
 # -------------------------------------------
 if builtin command -v resize >/dev/null; then
-  rs () {
+  rs() {
     eval `resize`
   }
 else
-  rs () {
+  rs() {
     kill -s WINCH $$
   }
 fi
@@ -196,42 +186,42 @@ if [ -n "$STY" ]; then
   alias cd=scr_cd
 fi
 
-ffg () {
+ffg() {
   find ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-cffg () {
+cffg() {
   find -maxdepth 2 ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-effg () {
+effg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' -o -name '.tmp' \) -prune -o -type f -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-jffg () {
+jffg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'framework' -o -name '.tmp' \) -prune -o -type f -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-pffg () {
+pffg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
+  -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-rffg () {
+rffg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
+  -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-c()
-{ # usage: ls -la | c
+c() {
+  # usage: ls -la | c
   perl ~/dotfiles/colon.pl
 }
 
-ccol () {
+ccol() {
   cut -c1-${COLUMNS}
 }
 
-cls () {
+cls() {
   perl -e 'print "\n"x`tput lines`'
 }
 
@@ -253,12 +243,11 @@ armaggedon() {
   docker system prune -f -a
 }
 
-alprun()
-{
+alprun() {
   touch $HOME/ash_history .ash_history
   docker run --rm -it -v $HOME/ash_history:/work/.ash_history \
-    -v $(pwd):/work -w /work alpine:latest \
-    sh -c "addgroup -g `id -g` people;
+  -v $(pwd):/work -w /work alpine:latest \
+  sh -c "addgroup -g `id -g` people;
   adduser -D -G people -h /work -u `id -u` person;
   apk add --no-cache sudo;
   echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
@@ -267,12 +256,11 @@ alprun()
 }
 
 # for developing bullseye docker images helper.
-debrun()
-{
+debrun() {
   touch $HOME/bash_history .bash_history
   docker run --rm -it -v $HOME/bash_history:/work/.bash_history \
-    -v $(pwd):/work -w /work debian:latest \
-    sh -c "groupadd -g `id -g` people;
+  -v $(pwd):/work -w /work debian:latest \
+  sh -c "groupadd -g `id -g` people;
   useradd -u `id -u` -g people -s /bin/bash -d /work person;
   apt-get update; apt-get install -y --no-install-recommends sudo $@;
   echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
@@ -280,8 +268,7 @@ debrun()
   [ "$HOME" = $(pwd) ] || rm -f .bash_history
 }
 
-ex()
-{
+ex() {
   if [ -f $1 ] ; then
     case $1 in
       *.tar.bz2)   tar xjf $1       ;;
@@ -301,3 +288,53 @@ ex()
     echo "'$1' is not a valid file"
   fi
 }
+
+cd() {
+  if (( $+2 )); then
+    builtin cd "$@"
+    return 0
+  fi
+  
+  if [ -f "$1" ]; then
+    echo "${yellow}cd ${1:h}${NC}" >&2
+    builtin cd "${1:h}"
+  else
+    builtin cd "${@}"
+  fi
+}
+
+reload() {
+  exec "${SHELL}" "$@"
+}
+
+termtitle() {
+  case "$TERM" in
+    rxvt*|xterm*|nxterm|gnome|screen|screen-*|st|st-*)
+      local prompt_host="${(%):-%m}"
+      local prompt_user="${(%):-%n}"
+      local prompt_char="${(%):-%~}"
+      case "$1" in
+        precmd)
+          printf '\e]0;%s@%s: %s\a' "${prompt_user}" "${prompt_host}" "${prompt_char}"
+        ;;
+        preexec)
+          printf '\e]0;%s [%s@%s: %s]\a' "$2" "${prompt_user}" "${prompt_host}" "${prompt_char}"
+        ;;
+      esac
+    ;;
+  esac
+}
+
+precmd()
+{
+  termtitle precmd
+  vcs_info
+}
+
+preexec()
+{
+  termtitle preexec "${(V)1}"
+}
+
+PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
+
