@@ -140,7 +140,7 @@ module.exports = {
     // rendering (slower, but supports transparent backgrounds)
     webGLRenderer: true,
 
-    scrollback: 10000,
+    scrollback: 30000,
 
     // for advanced config flags please refer to https://hyper.is/#cfg
     hypercwd: {
