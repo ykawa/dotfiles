@@ -1,4 +1,3 @@
-bin/
 !.yarn/cache
 !.yarn/plugins
 !.yarn/releases
@@ -42,11 +41,20 @@ $RECYCLE.BIN/
 *Db.properties
 *Db.script
 *~
-._*
-.apdisk
 .AppleDB
 .AppleDesktop
 .AppleDouble
+.DS_*
+.DS_Store
+.DocumentRevisions-V100
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trash-*
+.Trashes
+.VolumeIcon.icns
+._*
+.apdisk
 .byebug_history
 .cache
 .cache/
@@ -55,9 +63,6 @@ $RECYCLE.BIN/
 .dat*
 .directory
 .dockerignore
-.DocumentRevisions-V100
-.DS_*
-.DS_Store
 .dynamodb/
 .env
 .eslintcache
@@ -91,7 +96,6 @@ $RECYCLE.BIN/
 .idea/sonarlint
 .idea_modules/
 .lock-wscript
-.LSOverride
 .next
 .nfs*
 .node_repl_history
@@ -113,14 +117,9 @@ $RECYCLE.BIN/
 .rvmrc
 .serverless/
 .settings/
-.Spotlight-V100
 .stylelintcache
 .svelte-kit
-.TemporaryItems
 .tern-port
-.Trash-*
-.Trashes
-.VolumeIcon.icns
 .vscode-test
 .vuepress/dist
 .webpack/
@@ -136,13 +135,13 @@ $RECYCLE.BIN/
 /.bundle/
 /.config
 /.yardoc/
+/InstalledFiles
 /_yardoc/
 /coverage/
 /db/*.sqlite3
 /db/*.sqlite3-[0-9]*
 /db/*.sqlite3-journal
 /doc/
-/InstalledFiles
 /lib/bundler/man/
 /log/*
 /logs
@@ -169,14 +168,24 @@ $RECYCLE.BIN/
 /tmp/*
 /vendor/assets/bower_components
 /vendor/bundle
-/web-app/plugins
 /web-app/WEB-INF/classes
+/web-app/plugins
 /yarn-error.log
+BACKUP/
+Icon
+Network Trash Folder
+Temporary Items
+Thumbs.db
+Thumbs.db:encryptable
+YKAWA*
+YKAWA/
+YKawa*
+Ykawa*
 [Dd]esktop.ini
 _Deparsed_XSubs.pm
 _ide_helper_models.php
 atlassian-ide-plugin.xml
-BACKUP/
+bin/
 bower.json
 bower_components
 build-iPhoneOS/
@@ -193,17 +202,16 @@ crashlytics-build.properties
 crashlytics.properties
 dist
 dist/
+docker-compose.override.yml
 docs/_book
 ehthumbs.db
 ehthumbs_vista.db
 fabric.properties
-Icon
 jspm_packages/
 lerna-debug.log*
 lib-cov
 logs
 modules.xml
-Network Trash Folder
 node_modules
 node_modules/
 npm-debug.log
@@ -219,11 +227,8 @@ sketch
 temp.*
 temp/
 temp_*.*
-Temporary Items
 test/
 thumb
-Thumbs.db
-Thumbs.db:encryptable
 tmp.*
 tmp/
 tmp?.*
@@ -240,8 +245,4 @@ yarn-debug.log*
 yarn-error.log
 yarn-error.log*
 ykawa*
-Ykawa*
-YKawa*
-YKAWA*
 ykawa/
-YKAWA/
