@@ -81,6 +81,11 @@ elif [ -f /etc/bash_completion ]; then
   . /etc/bash_completion
 fi
 
+# -- coreutils for macos
+if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
+  export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+fi
+
 [ type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 if command -v type dircolors >/dev/null 2>&1; then
@@ -186,11 +191,11 @@ eval "$(perl ~/dotfiles/organize_path.pl)"
 
 # -------------------------------------------
 if builtin command -v resize >/dev/null; then
-  rs () {
+  rs() {
     eval `resize`
   }
 else
-  rs () {
+  rs() {
     kill -s WINCH $$
   }
 fi
@@ -205,33 +210,40 @@ if [ -n "$STY" ]; then
   alias cd=scr_cd
 fi
 
-ffg () {
+ffg() {
   find ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-cffg () {
+cffg() {
   find -maxdepth 2 ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-effg () {
+effg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' -o -name '.tmp' \) -prune -o -type f -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-jffg () {
+jffg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'framework' -o -name '.tmp' \) -prune -o -type f -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-pffg () {
+pffg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
     -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
-ccol () {
+ccol() {
   cut -c1-${COLUMNS}
 }
 
-cls () {
+cls() {
   perl -e 'print "\n"x`tput lines`'
+}
+
+# stop everything Docker containers
+stopcontainers() {
+  docker ps -aq | xargs --no-run-if-empty docker stop
+  docker ps -aq | xargs --no-run-if-empty docker rm
+  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
 }
 
 # remove everything Docker containers
@@ -306,5 +318,9 @@ c()
 {
   # usage: ls -la | c
   perl ~/dotfiles/colon.pl
+}
+
+reload() {
+  exec "${SHELL}" "$@"
 }
 
