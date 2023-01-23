@@ -204,12 +204,12 @@ jffg() {
 
 pffg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-  -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
+    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 rffg() {
   find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-  -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
+    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
 c() {
@@ -223,6 +223,13 @@ ccol() {
 
 cls() {
   perl -e 'print "\n"x`tput lines`'
+}
+
+# stop everything Docker containers
+stopcontainers() {
+  docker ps -aq | xargs --no-run-if-empty docker stop
+  docker ps -aq | xargs --no-run-if-empty docker rm
+  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
 }
 
 # remove everything Docker containers
@@ -246,8 +253,8 @@ armaggedon() {
 alprun() {
   touch $HOME/ash_history .ash_history
   docker run --rm -it -v $HOME/ash_history:/work/.ash_history \
-  -v $(pwd):/work -w /work alpine:latest \
-  sh -c "addgroup -g `id -g` people;
+    -v $(pwd):/work -w /work alpine:latest \
+    sh -c "addgroup -g `id -g` people;
   adduser -D -G people -h /work -u `id -u` person;
   apk add --no-cache sudo;
   echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
@@ -259,8 +266,8 @@ alprun() {
 debrun() {
   touch $HOME/bash_history .bash_history
   docker run --rm -it -v $HOME/bash_history:/work/.bash_history \
-  -v $(pwd):/work -w /work debian:latest \
-  sh -c "groupadd -g `id -g` people;
+    -v $(pwd):/work -w /work debian:latest \
+    sh -c "groupadd -g `id -g` people;
   useradd -u `id -u` -g people -s /bin/bash -d /work person;
   apt-get update; apt-get install -y --no-install-recommends sudo $@;
   echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
@@ -294,7 +301,7 @@ cd() {
     builtin cd "$@"
     return 0
   fi
-  
+
   if [ -f "$1" ]; then
     echo "${yellow}cd ${1:h}${NC}" >&2
     builtin cd "${1:h}"
@@ -316,12 +323,12 @@ termtitle() {
       case "$1" in
         precmd)
           printf '\e]0;%s@%s: %s\a' "${prompt_user}" "${prompt_host}" "${prompt_char}"
-        ;;
+          ;;
         preexec)
           printf '\e]0;%s [%s@%s: %s]\a' "$2" "${prompt_user}" "${prompt_host}" "${prompt_char}"
-        ;;
+          ;;
       esac
-    ;;
+      ;;
   esac
 }
 
@@ -333,6 +340,7 @@ precmd()
 
 preexec()
 {
+  #printf '\e]0;%s [%s@%s: %s]\a' "${(V)1}" "${(%):-%n}" "${(%):-%m}" "${(%):-%~}"
   termtitle preexec "${(V)1}"
 }
 
