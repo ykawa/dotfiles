@@ -32,7 +32,8 @@ bindkey '^s' history-incremental-pattern-search-forward
 autoload -Uz select-word-style
 select-word-style default
 # zstyle ':zle:*' word-chars "_-./;@"
-zstyle ':zle:*' word-chars "/;@ "
+#zstyle ':zle:*' word-chars "/;@ "
+zstyle ':zle:*' word-chars ' /=;@:{}[]()<>,|.'
 zstyle ':zle:*' word-style unspecified
 
 setopt no_flow_control # Ctrl+sのロック, Ctrl+qのロック解除を無効にする
@@ -296,20 +297,6 @@ ex() {
   fi
 }
 
-cd() {
-  if (( $+2 )); then
-    builtin cd "$@"
-    return 0
-  fi
-
-  if [ -f "$1" ]; then
-    echo "${yellow}cd ${1:h}${NC}" >&2
-    builtin cd "${1:h}"
-  else
-    builtin cd "${@}"
-  fi
-}
-
 reload() {
   exec "${SHELL}" "$@"
 }
@@ -342,6 +329,12 @@ preexec()
 {
   #printf '\e]0;%s [%s@%s: %s]\a' "${(V)1}" "${(%):-%n}" "${(%):-%m}" "${(%):-%~}"
   termtitle preexec "${(V)1}"
+}
+
+PERIOD=600
+periodic()
+{
+  [ -d .git/ ] && git status -s
 }
 
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
