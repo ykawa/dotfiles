@@ -101,6 +101,8 @@ if [ -e ~/dotfiles/dircolors ]; then
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 fi
 
+export PATH="/opt/bin:$HOME/bin:$PATH"
+
 # -- npm
 if [ -d $HOME/.nodebrew/current/bin ]; then
   export PATH="$HOME/.nodebrew/current/bin:$PATH"
@@ -327,14 +329,13 @@ precmd()
 
 preexec()
 {
-  #printf '\e]0;%s [%s@%s: %s]\a' "${(V)1}" "${(%):-%n}" "${(%):-%m}" "${(%):-%~}"
   termtitle preexec "${(V)1}"
 }
 
 PERIOD=600
 periodic()
 {
-  [ -d .git/ ] && git status -s
+  [ -d .git/ -o -d ../.git -o -d ../../.git ] && git status -s
 }
 
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
