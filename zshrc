@@ -90,6 +90,8 @@ zstyle ':vcs_info:*' use-simple true
 
 xhost +local:root > /dev/null 2>&1
 
+export PATH="/opt/bin:$HOME/bin:$PATH"
+
 # -- coreutils for macos
 if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
   export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
@@ -100,8 +102,6 @@ if [ -e ~/dotfiles/dircolors ]; then
   eval "$(dircolors -b ~/dotfiles/dircolors)"
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 fi
-
-export PATH="/opt/bin:$HOME/bin:$PATH"
 
 # -- npm
 if [ -d $HOME/.nodebrew/current/bin ]; then
@@ -166,7 +166,7 @@ export PATH="$HOME/.vim/bin:$PATH"
 # -------------------------------------------
 # clean up and normalize the PATH.
 # -------------------------------------------
-eval "$(perl ~/dotfiles/organize_path.pl)"
+eval "$(LC_ALL=C perl ~/dotfiles/organize_path.pl)"
 
 # -------------------------------------------
 if builtin command -v resize >/dev/null; then
