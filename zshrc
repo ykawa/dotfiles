@@ -262,7 +262,7 @@ alprun() {
   apk add --no-cache sudo;
   echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
   su - person"
-  rm -f .ash_history
+  [ "$HOME" = $(pwd) ] || rm -f .ash_history
 }
 
 # for developing bullseye docker images helper.
