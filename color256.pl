@@ -1,4 +1,7 @@
+#!/bin/env perl
+# Check the color output of the terminal
 use strict;
+use warnings;
 
 foreach my $i ( 0 .. 255 ) {
     printf( "\e[48;5;${i}m\e[38;5;15m %03d", $i );

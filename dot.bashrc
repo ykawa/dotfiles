@@ -58,10 +58,9 @@ short_host_name() {
   fi
 }
 
-# wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
 PS1="[\u@$(short_host_name) \W]$ "
-if [ -e ~/.git-prompt.sh ]; then
-  source ~/.git-prompt.sh
+if [ -f ~/.bash/completion/git-prompt.sh ]; then
+  . ~/.bash/completion/git-prompt.sh
   GIT_PS1_SHOWDIRTYSTATE=
   GIT_PS1_SHOWUPSTREAM=1
   GIT_PS1_SHOWUNTRACKEDFILES=
@@ -72,13 +71,12 @@ else
 fi
 unset -f short_host_name
 
-# wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -O ~/.git-completion.bash
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
+if [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
 elif [ -f /usr/share/bash-completion/bash_completion ]; then
   . /usr/share/bash-completion/bash_completion
-elif [ -f /etc/bash_completion ]; then
-  . /etc/bash_completion
+elif [ -f ~/.bash/completion/git-completion.bash ]; then
+  . ~/.bash/completion/git-completion.bash
 fi
 
 # -- coreutils for macos
@@ -86,9 +84,9 @@ if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
   export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
-[ type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ builtin type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-if command -v type dircolors >/dev/null 2>&1; then
+if builtin type dircolors >/dev/null 2>&1; then
   if [ -e ~/dotfiles/dircolors ]; then
     eval "$(dircolors -b ~/dotfiles/dircolors)"
   fi
@@ -108,7 +106,7 @@ alias l='ls -CF'
 alias s='screen -DRR'
 alias open='xdg-open'
 
-if [ type stty >/dev/null 2>&1 ]; then
+if builtin type stty >/dev/null 2>&1; then
   stty werase undef
   stty stop undef
 fi
@@ -123,11 +121,9 @@ complete -cf sudo
 export PATH="/opt/bin:$HOME/bin:$PATH"
 
 # -- npm
-if [ -d $HOME/.nodebrew/current/bin ]; then
-  export PATH="$HOME/.nodebrew/current/bin:$PATH"
-fi
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
 
-if [ type npm >/dev/null 2>&1 ]; then
+if builtin type npm >/dev/null 2>&1; then
   source <(npm completion)
 fi
 
@@ -154,7 +150,7 @@ if [ ! -f $HOME/.globalrc ]; then
   if [ -x /usr/local/bin/gtags ]; then
     export GTAGSCONF=/usr/local/share/gtags/gtags.conf
   fi
-  if command type pygmentize >/dev/null; then
+  if builtin type pygmentize >/dev/null 2>&1; then
     export GTAGSLABEL=pygments
   fi
 fi
@@ -170,6 +166,7 @@ fi
 
 # -- ruby
 if [ -d $HOME/.rbenv ]; then
+  export CONFIGURE_OPTS="--disable-install-doc --disable-install-rdoc --disable-install-capi"
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
   if [ -e ~/.rbenv/completions/rbenv.zsh ]; then
@@ -187,10 +184,10 @@ export PATH="$HOME/.vim/bin:$PATH"
 # -------------------------------------------
 # clean up and normalize the PATH.
 # -------------------------------------------
-eval "$(perl ~/dotfiles/organize_path.pl)"
+eval "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
 
 # -------------------------------------------
-if builtin command -v resize >/dev/null; then
+if builtin type resize >/dev/null 2>&1; then
   rs() {
     eval `resize`
   }
@@ -236,6 +233,9 @@ ccol() {
 }
 
 cls() {
+  if builtin type banner >/dev/null 2>&1; then
+      banner --width=$(tput cols) $(date "+%Y-%m-%d-%H:%M")
+  fi
   perl -e 'print "\n"x`tput lines`'
 }
 

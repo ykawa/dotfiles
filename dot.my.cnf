@@ -1,8 +1,6 @@
 # grc をインストールしてください
 
 [mysql]
-host=localhost
-port=3306
 prompt='mysql [\\U \\d]>\\ '
 pager=grcat ~/.grcat 2>/dev/null | less -RSFXin
 

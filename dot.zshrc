@@ -5,7 +5,7 @@ autoload -Uz colors
 colors
 
 setopt globdots
-fpath=($HOME/dotfiles/zsh_completion $fpath)
+fpath=($fpath $HOME/.zsh/completion)
 autoload -Uz compinit
 compinit
 
@@ -31,12 +31,13 @@ bindkey '^s' history-incremental-pattern-search-forward
 # 区切り文字の設定
 autoload -Uz select-word-style
 select-word-style default
-# zstyle ':zle:*' word-chars "_-./;@"
 #zstyle ':zle:*' word-chars "/;@ "
-zstyle ':zle:*' word-chars ' /=;@:{}[]()<>,|.'
+#zstyle ':zle:*' word-chars "_-./;@"
+zstyle ':zle:*' word-chars " '\"/=;@:{}[]()<>,|."
 zstyle ':zle:*' word-style unspecified
 
-setopt no_flow_control # Ctrl+sのロック, Ctrl+qのロック解除を無効にする
+# Ctrl+sのロック, Ctrl+qのロック解除を無効にする
+setopt no_flow_control
 
 # 補完後、メニュー選択モードになり左右キーで移動が出来る
 zstyle ':completion:*:default' menu select=2
@@ -59,20 +60,20 @@ zstyle ":chpwd:*" recent-dirs-default true
 
 # 複数ファイルのmv 例　zmv *.txt *.txt.bk
 autoload -Uz zmv
-alias zmv='noglob zmv -W'
-alias ls='ls --group-directories-first --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias cgrep='grep --color=always'
-alias ll='ls -alF'
-alias la='ls -A'
 alias al='ls -al'
+alias cgrep='grep --color=always'
+alias dir='dir --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
 alias l='ls -CF'
-alias s='screen -DRR'
+alias la='ls -A'
+alias ll='ls -alF'
+alias ls='ls --group-directories-first --color=auto'
 alias open='xdg-open'
+alias s='screen -DRR'
+alias vdir='vdir --color=auto'
+alias zmv='noglob zmv -W'
 
 export VISUAL=vim
 export EDITOR="$VISUAL"
@@ -93,9 +94,7 @@ xhost +local:root > /dev/null 2>&1
 export PATH="/opt/bin:$HOME/bin:$PATH"
 
 # -- coreutils for macos
-if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
-  export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-fi
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 
 ## dircolors
 if [ -e ~/dotfiles/dircolors ]; then
@@ -104,9 +103,7 @@ if [ -e ~/dotfiles/dircolors ]; then
 fi
 
 # -- npm
-if [ -d $HOME/.nodebrew/current/bin ]; then
-  export PATH="$HOME/.nodebrew/current/bin:$PATH"
-fi
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
 
 if [ type npm >/dev/null 2>&1 ]; then
   source <(npm completion)
@@ -135,7 +132,7 @@ if [ ! -f $HOME/.globalrc ]; then
   if [ -x /usr/local/bin/gtags ]; then
     export GTAGSCONF=/usr/local/share/gtags/gtags.conf
   fi
-  if command type pygmentize >/dev/null; then
+  if builtin command -v type pygmentize >/dev/null; then
     export GTAGSLABEL=pygments
   fi
 fi
@@ -151,6 +148,7 @@ fi
 
 # -- ruby
 if [ -d $HOME/.rbenv ]; then
+  export CONFIGURE_OPTS="--disable-install-doc --disable-install-rdoc --disable-install-capi"
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
   if [ -e ~/.rbenv/completions/rbenv.zsh ]; then
@@ -166,7 +164,7 @@ export PATH="$HOME/.vim/bin:$PATH"
 # -------------------------------------------
 # clean up and normalize the PATH.
 # -------------------------------------------
-eval "$(LC_ALL=C perl ~/dotfiles/organize_path.pl)"
+eval "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
 
 # -------------------------------------------
 if builtin command -v resize >/dev/null; then
@@ -225,6 +223,9 @@ ccol() {
 }
 
 cls() {
+  if builtin type banner >/dev/null 2>&1; then
+      banner --width=$(tput cols) $(date "+%Y-%m-%d-%H:%M")
+  fi
   perl -e 'print "\n"x`tput lines`'
 }
 
