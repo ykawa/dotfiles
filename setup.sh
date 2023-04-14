@@ -21,6 +21,9 @@ check_lacking_commands git perl curl
 
 [ -z "$DEBUG_DOTFILES" ] || pushd $HOME
 
+# Add github.com to ~/.ssh/known_hosts
+ssh -T -o StrictHostKeyChecking=accept-new git@github.com
+
 if [ ! -d dotfiles ]; then
   # This trick is to ignore the configuration status of ssh.
   git clone https://github.com/ykawa/dotfiles.git dotfiles
