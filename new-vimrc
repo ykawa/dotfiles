@@ -1,0 +1,90 @@
+" .vimrcファイル
+" 全設定をデフォルト値に設定する
+set all&
+autocmd!
+
+" tiny と small はここで終了する
+if !1 | finish | endif
+
+" vim-plug 自動インストール(curl必須)
+" 詳しくは https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" プラグイン管理 (vim-plug)
+call plug#begin('~/.vim/plugged')
+
+" Language Server Protocol (LSP) を使用したプラグイン
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+
+" スニペット
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+call plug#end()
+
+" LSP 設定
+augroup lsp_settings
+  autocmd!
+  autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'bash-language-server',
+    \ 'cmd': {server_info->['bash-language-server', 'start']},
+    \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'package.json'))},
+    \ 'allowlist': ['sh'],
+    \ })
+
+  autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'dockerfile-language-server',
+    \ 'cmd': {server_info->['dockerfile-language-server-nodejs', '--stdio']},
+    \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'Dockerfile'))},
+    \ 'allowlist': ['dockerfile'],
+    \ })
+
+  autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'vscode-json-languageserver',
+    \ 'cmd': {server_info->['vscode-json-languageserver', '--stdio']},
+    \ 'allowlist': ['json'],
+    \ })
+
+  autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'yaml-language-server',
+    \ 'cmd': {server_info->['yaml-language-server', '--stdio']},
+    \ 'allowlist': ['yaml', 'yml'],
+    \ })
+
+  autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'markdown-language-server',
+    \ 'cmd': {server_info->['markdown-language-server', '--stdio']},
+    \ 'allowlist': ['markdown'],
+    \ })
+
+  autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'perl-language-server',
+    \ 'cmd': {server_info->['perl-language-server', '--stdio']},
+    \ 'allowlist': ['perl'],
+    \ })
+
+augroup END
+
+" UltiSnips 設定
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" その他の設定
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set autoindent
+syntax on
+filetype plugin indent on
+set number
+set relativenumber
+set mouse=a
+set laststatus=2
+set showcmd
+set hidden
+

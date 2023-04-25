@@ -17,12 +17,13 @@ check_lacking_commands()
   done
 }
 
-check_lacking_commands git perl curl
+check_lacking_commands ssh git perl curl
+unset check_lacking_commands
 
 [ -z "$DEBUG_DOTFILES" ] || pushd $HOME
 
 # Add github.com to ~/.ssh/known_hosts
-ssh -T -o StrictHostKeyChecking=accept-new git@github.com
+ssh -T -n -o StrictHostKeyChecking=accept-new git@github.com
 
 if [ ! -d dotfiles ]; then
   # This trick is to ignore the configuration status of ssh.
@@ -45,8 +46,6 @@ curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completi
 curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh         -o .zsh/completion/_git
 curl -L https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker             -o .zsh/completion/_docker
 curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/zsh/_docker-compose -o .zsh/completion/_docker-compose
-
-unset check_lacking_commands
 
 # plenv
 if [ ! -d .plenv ]; then
@@ -72,14 +71,15 @@ if [ ! -x .plenv/shims/cpanm ]; then
 fi
 
 # nodebrew
-if [ ! -x "$PWD/.nodebrew/current/bin/nodebrew" ]; then
+if [ ! -x .nodebrew/current/bin/nodebrew ]; then
   export NODEBREW_ROOT="$PWD/.nodebrew"
   curl -L https://raw.githubusercontent.com/hokaccha/nodebrew/master/nodebrew | perl - setup
 else
   export PATH="$PWD/.nodebrew/current/bin:$PATH"
   nodebrew selfupdate
 fi
-if [ ! -x "$PWD/.nodebrew/current/bin/node" ]; then
+# node
+if [ ! -x .nodebrew/current/bin/node ]; then
   export PATH="$PWD/.nodebrew/current/bin:$PATH"
   nodebrew install stable
   nodebrew use stable
