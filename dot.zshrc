@@ -23,6 +23,7 @@ setopt hist_save_no_dups
 setopt hist_verify
 setopt inc_append_history
 setopt share_history # history 共有
+setopt noautoremoveslash
 
 # Ctrl+rでヒストリーのインクリメンタルサーチ、Ctrl+sで逆順
 bindkey '^r' history-incremental-pattern-search-backward
@@ -340,4 +341,6 @@ periodic()
 }
 
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
+
+[ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
 

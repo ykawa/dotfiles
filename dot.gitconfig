@@ -10,7 +10,7 @@
 
 [alias]
   push-f = push --force-with-lease
-  plog = log --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(blue)%an%C(red)%d %C(reset)%s'
+  plog = log -20 --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(blue)%an%C(red)%d %C(reset)%s'
   ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 
 [http]
@@ -20,7 +20,7 @@
   default = simple
 
 [init]
-	defaultBranch = main
+  defaultBranch = main
 
 [pull]
-	ff = only
+  ff = only

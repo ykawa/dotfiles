@@ -7,6 +7,7 @@ echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/10-installer
 ```
 
 `/etc/sudoers.d/10-installer`
+
 ```diff
 - %wheel ALL=(ALL:ALL) ALL
 + %wheel ALL=(ALL:ALL) NOPASSWD: ALL
@@ -18,6 +19,12 @@ echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/10-installer
 sudo systemctl enable --now sshd.service
 ```
 
+## pacman-mirrors & update
+
+```sh
+sudo pacman-mirrors --fasttrack && yay -Syyuu --noconfirm
+```
+
 ## vim + zsh
 
 ```sh
@@ -25,7 +32,7 @@ yay -S --noconfirm vim zsh
 ```
 
 ```sh
-chsh -s /bin/zsh
+sudo chsh -s /bin/zsh $USER
 ```
 
 ## capslock to ctrl (on console)
@@ -46,6 +53,19 @@ sudo loadkeys /usr/local/share/kbd/keymaps/jp106.map
 
 ```sh
 sudo sed -i.bak -Ee 's|^KEYMAP=.*$|KEYMAP=/usr/local/share/kbd/keymaps/jp106.map|' /etc/vconsole.conf
+```
+
+## capslock to ctrl (vconsole)
+
+```sh
+sudo sed -i.bak -E -e 's/^XKBOPTIONS=.*$/XKBOPTIONS="ctrl:nocaps"/' /etc/default/keyboard
+```
+
+`/etc/default/keyboard`
+
+```diff
+- XKBOPTIONS=""
++ XKBOPTIONS="ctrl:nocaps"
 ```
 
 ## disable firewalld
@@ -100,6 +120,7 @@ sudo sed -i.bak -Ee 's/^#?HandleLidSwitch=.*$/HandleLidSwitch=lock/' /etc/system
 ```
 
 `/etc/systemd/logind.conf`
+
 ```diff
 [Login]
 - HandleLidSwitch=suspend
@@ -130,11 +151,7 @@ sudo vim /efi/loader/entries/(* device UUID with kernel version)-arch1-1.conf
 ### grub
 
 ```sh
-sudo vim /etc/default/grub
-```
-
-```sh
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo sed -i.bak -Ee 's/^GRUB_CMDLINE_LINUX=""$/GRUB_CMDLINE_LINUX="ipv6.disable=1"/' /etc/default/grub
 ```
 
 `/etc/default/grub`
@@ -142,6 +159,10 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```diff
 - GRUB_CMDLINE_LINUX=""
 + GRUB_CMDLINE_LINUX="ipv6.disable=1"
+```
+
+```sh
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ## configure sshd (ipv4, X11Forwarding)
@@ -204,11 +225,12 @@ yay -S docker docker-compose docker-buildx
 ```
 
 ```sh
-sudo systemctl enable --now docker.service
+sudo usermod -aG docker $USER
+newgrp docker
 ```
 
 ```sh
-sudo usermod -aG docker $USER
+sudo systemctl enable --now docker.service
 ```
 
 ### (Optional) If you are using a swap
@@ -219,6 +241,32 @@ sudo sed -i.bak -E -e 's/^#?LimitNOFILE=.*$/LimitNOFILE=1048576/' /lib/systemd/s
 
 ```sh
 sudo systemctl daemon-reload or sudo reboot (reboot is recommended.)
+```
+
+```sh
+docker run --init --rm -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=testdb mysql:5.7
+```
+
+## systemd
+
+```sh
+sudo sed -i.bak -Ee 's/^#?DefaultTimeoutStopSec=.*$/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf
+```
+
+`/etc/systemd/system.conf`
+
+```diff
+- #DefaultTimeoutStopSec=90s
++ DefaultTimeoutStopSec=15s
+```
+
+## agetty autologin
+
+```sh
+sudo mkdir -p /etc/systemd/system/getty@tty{1,2,3}.service.d
+echo -e "[Service]\nExecStart=\nExecStart=-/usr/bin/agetty --autologin $USER --noclear %I \$TERM" | sudo tee /etc/systemd/system/getty@tty1.service.d/override.conf
+echo -e "[Service]\nExecStart=\nExecStart=-/usr/bin/agetty --autologin $USER --noclear %I \$TERM" | sudo tee /etc/systemd/system/getty@tty2.service.d/override.conf
+echo -e "[Service]\nExecStart=\nExecStart=-/usr/bin/agetty --autologin $USER --noclear %I \$TERM" | sudo tee /etc/systemd/system/getty@tty3.service.d/override.conf
 ```
 
 ## vagrant with virtualbox
@@ -237,4 +285,57 @@ sudo modprobe vboxdrv or sudo reboot (reboot is recommended.)
 
 ```sh
 vagrant plugin install vagrant-vbguest vagrant-share vagrant-env
+```
+
+## onedrive
+
+```sh
+yay -S --noconfirm onedrive-abraunegg
+onedrive
+systemctl --user enable --now onedrive.service
+journalctl --user-unit=onedrive -f
+```
+
+## other
+
+```sh
+yay -Rs pidgin pidgin-libnotify vivaldi
+yay -S --noconfirm fwupd pv vim-airline-themes xclip zsh-completions
+yay -S --noconfirm hyper-bin adobe-source-han-mono-jp-fonts otf-source-han-code-jp
+yay -S --noconfirm google-chrome
+yay -S --noconfirm dropbox
+yay -S --noconfirm mozc-ut fcitx5 fcitx5-mozc-ut fcitx5-configtool
+yay -S --noconfirm jetbrains-toolbox visual-studio-code-bin
+yay -S --noconfirm slack-desktop zoom
+```
+
+## systemd.mount
+
+```sh
+sudo install -m 777 -o $USER -g $USER -d /nas/{$USER,shared}/
+```
+
+```sh
+echo "//nas.local/$USER /nas/$USER cifs username=$USER,password=XXXXXXX,uid=$USER,gid=$USER,noauto,x-systemd.automount,x-systemd.mount-timeout=10,x-systemd.idle-timeout=3min,_netdev 0 0" | sudo tee -a /etc/fstab
+```
+
+## .xinitrc
+
+### key repeat
+
+```sh
+echo "xset r rate 200 40" | tee -a ~/.xinitrc
+```
+
+## .profile
+
+### Suppress output to .xsession-errors.
+
+```sh
+echo 'export ERRFILE=/dev/null' | tee -a ~/.profile
+```
+
+`~/.profile`
+```diff
++ export ERRFILE=/dev/null
 ```
