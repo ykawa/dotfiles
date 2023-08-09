@@ -114,6 +114,8 @@ bind "\C-w":unix-filename-rubout
 
 export VISUAL=vim
 export EDITOR="$VISUAL"
+export LESSCHARSET=utf-8
+export LESS='-XR'
 
 xhost +local:root > /dev/null 2>&1
 complete -cf sudo

@@ -78,6 +78,8 @@ alias zmv='noglob zmv -W'
 
 export VISUAL=vim
 export EDITOR="$VISUAL"
+export LESSCHARSET=utf-8
+export LESS='-XR'
 
 # git設定
 autoload -Uz vcs_info
@@ -232,6 +234,7 @@ cls() {
 
 # stop everything Docker containers
 stopcontainers() {
+  docker ps -aq
   docker ps -aq | xargs --no-run-if-empty docker stop
   docker ps -aq | xargs --no-run-if-empty docker rm
   docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
@@ -239,10 +242,8 @@ stopcontainers() {
 
 # remove everything Docker containers
 removecontainers() {
-  docker stop $(docker ps -aq)
-  docker rm $(docker ps -aq)
+  stopcontainers
   docker system prune -f
-  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
 }
 
 # remove everything Docker
