@@ -78,6 +78,16 @@ sudo systemctl disable --now firewalld
 yay -Rs firewalld
 ```
 
+## ntp
+
+```sh
+yay -S ntp
+```
+
+```sh
+sudo systemctl enable --now ntpd.service
+```
+
 ## avahi
 
 ```sh
