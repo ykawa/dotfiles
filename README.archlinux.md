@@ -214,6 +214,19 @@ plenv global stable
 plenv install-cpanm
 ```
 
+### (Optional) If you do not use distribution cpan
+
+```sh
+rm -rf ~/perl5
+```
+
+### (Optional) If you need a development environment
+
+```sh
+# e.g.
+cpanm -n Perl::LanguageServer Carton Bundle::Camelcade App::PRT App::EditorTools App::perlimports
+```
+
 ### ruby
 
 ```sh
