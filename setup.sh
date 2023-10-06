@@ -97,6 +97,16 @@ else
   git -C .rbenv/plugins/ruby-build pull --all -vv --prune
 fi
 
+PERL_VERSION=5.36.0
+if [ -e dotfiles/perl_ver.pl ]; then
+  PERL_VERSION=$(curl -s "https://api.github.com/repos/Perl/perl5/tags" | perl dotfiles/perl_ver.pl)
+fi
+
+RUBY_VERSION=3.2.2
+if [ -e dotfiles/ruby_ver.pl ]; then
+  RUBY_VERSION=$(curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl dotfiles/ruby_ver.pl)
+fi
+
 cat <<EOF
 # ----------------------------------------------------------------------
 #  It is recommended to RELOAD.
@@ -105,7 +115,7 @@ cat <<EOF
 # ----------------------------------------------------------------------
 # example of setting up plenv.
 #
-#   plenv install 5.36.0 -Dusethreads -Dman1dir=none -Dman3dir=none --as stable
+#   plenv install ${PERL_VERSION} -Dusethreads -Dman1dir=none -Dman3dir=none --as stable
 #   plenv local stable
 #   plenv install-cpanm
 #
@@ -113,7 +123,7 @@ cat <<EOF
 # Libraries required for ruby-build are described at the following URLs.
 #
 #   https://github.com/rbenv/ruby-build/wiki
-#   rbenv install 3.1.3
+#   rbenv install ${RUBY_VERSION}
 #
 # ----------------------------------------------------------------------
 EOF
