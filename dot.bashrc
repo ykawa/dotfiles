@@ -115,7 +115,6 @@ bind "\C-w":unix-filename-rubout
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export LESSCHARSET=utf-8
-export LESS='-XR'
 
 xhost +local:root > /dev/null 2>&1
 complete -cf sudo
@@ -131,6 +130,7 @@ fi
 
 # -- plenv
 if [ -d $HOME/.plenv/bin ]; then
+  [ -d $HOME/perl5 ] && echo "WARNING: $HOME/perl5 exists in your environment."
   export PATH="$HOME/.plenv/bin:$PATH"
   eval "$(plenv init -)"
 elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then

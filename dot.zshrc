@@ -79,7 +79,6 @@ alias zmv='noglob zmv -W'
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export LESSCHARSET=utf-8
-export LESS='-XR'
 
 # git設定
 autoload -Uz vcs_info
@@ -114,6 +113,7 @@ fi
 
 # -- plenv
 if [ -d $HOME/.plenv/bin ]; then
+  [ -d $HOME/perl5 ] && echo "WARNING: $HOME/perl5 exists in your environment."
   export PATH="$HOME/.plenv/bin:$PATH"
   eval "$(plenv init -)"
 elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
@@ -227,7 +227,7 @@ ccol() {
 
 cls() {
   if builtin type banner >/dev/null 2>&1; then
-      banner --width=$(tput cols) $(date "+%Y-%m-%d-%H:%M")
+    banner --width=$(tput cols) $(date "+%Y-%m-%d-%H:%M")
   fi
   perl -e 'print "\n"x`tput lines`'
 }
@@ -259,8 +259,8 @@ armaggedon() {
 alprun() {
   touch $HOME/ash_history .ash_history
   docker run --rm -it -v $HOME/ash_history:/work/.ash_history \
-    -v $(pwd):/work -w /work alpine:latest \
-    sh -c "addgroup -g `id -g` people;
+  -v $(pwd):/work -w /work alpine:latest \
+  sh -c "addgroup -g `id -g` people;
   adduser -D -G people -h /work -u `id -u` person;
   apk add --no-cache sudo;
   echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
@@ -272,8 +272,8 @@ alprun() {
 debrun() {
   touch $HOME/bash_history .bash_history
   docker run --rm -it -v $HOME/bash_history:/work/.bash_history \
-    -v $(pwd):/work -w /work debian:latest \
-    sh -c "groupadd -g `id -g` people;
+  -v $(pwd):/work -w /work debian:latest \
+  sh -c "groupadd -g `id -g` people;
   useradd -u `id -u` -g people -s /bin/bash -d /work person;
   apt-get update; apt-get install -y --no-install-recommends sudo $@;
   echo '%people ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers;
@@ -338,7 +338,17 @@ preexec()
 PERIOD=600
 periodic()
 {
-  [ -d .git/ -o -d ../.git -o -d ../../.git ] && git status -s
+  if [ -d .git/ -o -d ../.git -o -d ../../.git ]; then
+    git status -s
+    local stashes="$(git stash list)"
+    if [ -n "${stashes}" ]; then
+      echo "----------------------------------------"
+      echo -e "\033[35m"
+      echo "${stashes}"
+      echo -e "\033[m"
+      echo "----------------------------------------"
+    fi
+  fi
 }
 
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
