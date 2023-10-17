@@ -332,6 +332,10 @@ yay -S --noconfirm jetbrains-toolbox visual-studio-code-bin
 yay -S --noconfirm slack-desktop zoom
 ```
 
+### (Optional) If you use JetBrains IDEs with fcitx5
+
+https://wiki.archlinux.jp/index.php/Fcitx5#JetBrains_IDE_.E3.81.A7_Fcitx5_.E3.81.AE.E4.BD.8D.E7.BD.AE.E3.81.8C.E3.81.8A.E3.81.8B.E3.81.97.E3.81.84
+
 ## systemd.mount
 
 ```sh

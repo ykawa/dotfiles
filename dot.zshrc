@@ -212,7 +212,7 @@ pffg() {
 }
 
 rffg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
+  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'out' \
     -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
 }
 
@@ -234,10 +234,12 @@ cls() {
 
 # stop everything Docker containers
 stopcontainers() {
-  docker ps -aq
-  docker ps -aq | xargs --no-run-if-empty docker stop
-  docker ps -aq | xargs --no-run-if-empty docker rm
+  set -x
+  docker ps -a
+  docker ps -a | perl -nle 'print((split)[-1]) if $.>1' | xargs --no-run-if-empty docker stop
+  docker ps -a | perl -nle 'print((split)[-1]) if $.>1' | xargs --no-run-if-empty docker rm
   docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
+  set +x
 }
 
 # remove everything Docker containers
