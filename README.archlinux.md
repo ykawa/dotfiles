@@ -28,7 +28,7 @@ sudo pacman-mirrors --fasttrack && yay -Syyuu --noconfirm
 ## vim + zsh
 
 ```sh
-yay -S --noconfirm vim zsh
+yay -S --noconfirm vim zsh zsh-completions vim-airline-themes
 ```
 
 ```sh
@@ -323,18 +323,30 @@ journalctl --user-unit=onedrive -f
 
 ```sh
 yay -Rs pidgin pidgin-libnotify vivaldi
-yay -S --noconfirm fwupd pv vim-airline-themes xclip zsh-completions
+yay -S --noconfirm fwupd pv xclip jq
 yay -S --noconfirm hyper-bin adobe-source-han-mono-jp-fonts otf-source-han-code-jp
 yay -S --noconfirm google-chrome
 yay -S --noconfirm dropbox
-yay -S --noconfirm mozc-ut fcitx5 fcitx5-mozc-ut fcitx5-configtool
 yay -S --noconfirm jetbrains-toolbox visual-studio-code-bin
 yay -S --noconfirm slack-desktop zoom
 ```
 
+## fcitx5 + mozc
+
 ### (Optional) If you use JetBrains IDEs with fcitx5
 
 https://wiki.archlinux.jp/index.php/Fcitx5#JetBrains_IDE_.E3.81.A7_Fcitx5_.E3.81.AE.E4.BD.8D.E7.BD.AE.E3.81.8C.E3.81.8A.E3.81.8B.E3.81.97.E3.81.84
+
+`Either of the following two`
+
+```sh
+# Adjust JAVA_HOME accordingly
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk/ yay -S --noconfirm fcitx5-mozc-ext-neologd fcitx5-im
+```
+
+```sh
+yay -S --noconfirm mozc-ut fcitx5-mozc-ut fcitx5-im
+```
 
 ## systemd.mount
 
