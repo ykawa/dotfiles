@@ -283,6 +283,25 @@ sudo sed -i.bak -Ee 's/^#?DefaultTimeoutStopSec=.*$/DefaultTimeoutStopSec=15s/' 
 + DefaultTimeoutStopSec=15s
 ```
 
+## PulseAudio
+
+### (Optional) If pulseaudio delay measures are required
+
+```sh
+sudo sed -i.bak -Ee 's/^; default-sample-rate =.*$/default-sample-rate = 44100/' \
+            -e 's/^; alternate-sample-rate =.*$/alternate-sample-rate = 44100/' \
+            /etc/pulse/daemon.conf
+```
+
+`/etc/pulse/daemon.conf `
+
+```diff
+- ; default-sample-rate = 44100
+- ; alternate-sample-rate = 48000
++ default-sample-rate = 44100
++ alternate-sample-rate = 44100
+```
+
 ## agetty autologin
 
 ```sh
