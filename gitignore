@@ -185,7 +185,7 @@ Ykawa*
 _Deparsed_XSubs.pm
 _ide_helper_models.php
 atlassian-ide-plugin.xml
-bin/
+/bin/
 bower.json
 bower_components
 build-iPhoneOS/
