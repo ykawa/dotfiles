@@ -203,11 +203,15 @@ exec $SHELL -l
 ### perl
 
 ```sh
-plenv install 5.36.0 -Dusethreads -Dman1dir=none -Dman3dir=none --as stable
+curl -s "https://api.github.com/repos/Perl/perl5/tags" | perl ~/dotfiles/perl_ver.pl
 ```
 
 ```sh
-plenv global stable
+plenv install 5.38.2 -Dusethreads -Dman1dir=none -Dman3dir=none --as stable
+```
+
+```sh
+plenv local stable
 ```
 
 ```sh
@@ -230,11 +234,15 @@ cpanm -n Perl::LanguageServer Carton Bundle::Camelcade App::PRT App::EditorTools
 ### ruby
 
 ```sh
+curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl ~/dotfiles/ruby_ver.pl
+```
+
+```sh
 yay -S base-devel rust libffi libyaml openssl zlib
 ```
 
 ```sh
-rbenv install 3.2.1
+rbenv install 3.3.0
 ```
 
 ```sh
@@ -342,8 +350,8 @@ journalctl --user-unit=onedrive -f
 
 ```sh
 yay -Rs pidgin pidgin-libnotify vivaldi
-yay -S --noconfirm fwupd pv xclip jq
-yay -S --noconfirm hyper-bin adobe-source-han-mono-jp-fonts otf-source-han-code-jp
+yay -S --noconfirm fwupd pv xclip jq grc
+yay -S --noconfirm hyper-bin otf-source-han-code-jp
 yay -S --noconfirm google-chrome
 yay -S --noconfirm dropbox
 yay -S --noconfirm jetbrains-toolbox visual-studio-code-bin

@@ -97,12 +97,12 @@ else
   git -C .rbenv/plugins/ruby-build pull --all -vv --prune
 fi
 
-PERL_VERSION=5.36.0
+PERL_VERSION=5.38.2
 if [ -e dotfiles/perl_ver.pl ]; then
   PERL_VERSION=$(curl -s "https://api.github.com/repos/Perl/perl5/tags" | perl dotfiles/perl_ver.pl)
 fi
 
-RUBY_VERSION=3.2.2
+RUBY_VERSION=3.3.0
 if [ -e dotfiles/ruby_ver.pl ]; then
   RUBY_VERSION=$(curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl dotfiles/ruby_ver.pl)
 fi
