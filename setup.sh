@@ -34,7 +34,7 @@ fi
 for df in dotfiles/dot.*; do
   link="${df##dotfiles/dot}"
   if [[ -e "${link}" || -L "${link}" ]]; then
-    mv -fv "${link}" "${link}~"
+    mv -fv "${link}" "${link}.bak"
   fi
   ln -s "${df}" "${link}"
 done
@@ -95,6 +95,29 @@ if [ ! -d .rbenv/plugins/ruby-build ]; then
   git clone https://github.com/rbenv/ruby-build.git .rbenv/plugins/ruby-build
 else
   git -C .rbenv/plugins/ruby-build pull --all -vv --prune
+fi
+if [ ! -d .rbenv/plugins/rbenv-default-gems ]; then
+  git clone https://github.com/rbenv/rbenv-default-gems.git .rbenv/plugins/rbenv-default-gems
+else
+  git -C .rbenv/plugins/rbenv-default-gems pull --all -vv --prune
+fi
+if [ ! -d .rbenv/plugins/rbenv-communal-gems ]; then
+  git clone https://github.com/tpope/rbenv-communal-gems.git .rbenv/plugins/rbenv-communal-gems
+else
+  git -C .rbenv/plugins/rbenv-communal-gems pull --all -vv --prune
+fi
+touch .rbenv/default-gems
+if ! grep -q '^pry$' .rbenv/default-gems; then
+  echo 'pry' >> .rbenv/default-gems
+fi
+if ! grep -q '^awesome_print$' .rbenv/default-gems; then
+  echo 'awesome_print' >> .rbenv/default-gems
+fi
+if ! grep -q '^rubocop$' .rbenv/default-gems; then
+  echo 'rubocop' >> .rbenv/default-gems
+fi
+if ! grep -q '^solargraph$' .rbenv/default-gems; then
+  echo 'solargraph' >> .rbenv/default-gems
 fi
 
 PERL_VERSION=5.38.2
