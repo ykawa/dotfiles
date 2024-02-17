@@ -158,6 +158,9 @@ if [ -d $HOME/.rbenv ]; then
     . ~/.rbenv/completions/rbenv.zsh
   fi
 fi
+if builtin type gem >/dev/null; then
+  export PATH="$PATH:$(gem environment user_gemhome)/bin"
+fi
 
 # -- local env
 export PATH="$HOME/bin:$PATH"
@@ -341,14 +344,22 @@ PERIOD=600
 periodic()
 {
   if [ -d .git/ -o -d ../.git -o -d ../../.git ]; then
-    git status -s
+    local statuses="$(git status -s)"
+    if [ -n "${statuses}" ]; then
+      echo "----------------------------------------"
+      echo -e "\033[31m"
+      echo "${statuses}"
+      echo -e "\033[m"
+      echo ""
+    fi
+
     local stashes="$(git stash list)"
     if [ -n "${stashes}" ]; then
       echo "----------------------------------------"
-      echo -e "\033[35m"
+      echo -e "\033[34m"
       echo "${stashes}"
       echo -e "\033[m"
-      echo "----------------------------------------"
+      echo ""
     fi
   fi
 }
@@ -356,4 +367,3 @@ periodic()
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 
 [ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
-

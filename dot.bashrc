@@ -175,6 +175,9 @@ if [ -d $HOME/.rbenv ]; then
     . ~/.rbenv/completions/rbenv.zsh
   fi
 fi
+if builtin type gem >/dev/null; then
+  export PATH="$PATH:$(gem environment user_gemhome)/bin"
+fi
 
 # -- local env
 export PATH="$HOME/bin:$PATH"
