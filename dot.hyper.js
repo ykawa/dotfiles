@@ -173,11 +173,11 @@ module.exports = {
   //   `project#1.0.1`
   plugins: [
     "hyper-material-theme",
-    "hyper-pane",
-    "hyper-search",
-    "hyper-tab-icons-plus",
+    // "hyper-pane",
+    // "hyper-search",
+    // "hyper-tab-icons-plus",
     "hypercwd",
-    "hyperterm-paste",
+    // "hyperterm-paste",
     "hyper-disable-new-version-notification"
   ],
 
