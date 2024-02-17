@@ -238,11 +238,16 @@ curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl ~/dotfiles/ruby_ver
 ```
 
 ```sh
-yay -S base-devel rust libffi libyaml openssl zlib
+yay -S base-devel rustup libffi libyaml openssl zlib
+rustup default stable
 ```
 
 ```sh
-rbenv install 3.3.0
+git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
+git clone https://github.com/tpope/rbenv-communal-gems.git $(rbenv root)/plugins/rbenv-communal-gems
+rbenv communize --all
+
+rbenv install 3.3.2
 ```
 
 ```sh
