@@ -1,11 +1,17 @@
 local wezterm = require 'wezterm'
+local mux = wezterm.mux
+
+wezterm.on("gui-startup", function()
+  local tab, pane, window = mux.spawn_window{}
+  window:gui_window():maximize()
+end)
 
 local config = {
   -- 基本設定
   use_ime = true,
   term = 'xterm-256color',
   font = wezterm.font { family = 'Source Han Code JP', weight = 'Regular', italic = false },
-  font_size = 14.0,
+  font_size = 12.0,
   line_height = 1.0,
   enable_scroll_bar = true,
   scrollback_lines = 100000,
@@ -16,12 +22,15 @@ local config = {
   cursor_blink_ease_in = 'Constant',
   cursor_blink_ease_out = 'Constant',
   animation_fps = 1,
-  window_background_opacity = 1.0,
+  audible_bell = 'Disabled',
+
+  window_background_opacity = 0.75,
   window_padding = { left = 2, right = 16, top = 0, bottom = 0 },
 
   -- カラースキーム設定
   -- color_scheme = 'OneHalfDark',
-  color_scheme = 'MaterialDark',
+  -- color_scheme = 'MaterialDark',
+  color_scheme = 'Dracula',
   -- color_scheme = 'Material Darker (base16)',
   colors = {
     tab_bar = {
@@ -40,7 +49,7 @@ local config = {
   -- ウィンドウフレーム設定
   window_frame = {
     font = wezterm.font { family = 'Meiryo', weight = 'Regular', italic = false },
-    font_size = 9.0,
+    font_size = 11.0,
   },
 
   -- インアクティブペインの外観
