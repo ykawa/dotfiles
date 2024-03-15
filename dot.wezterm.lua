@@ -11,7 +11,7 @@ local config = {
   use_ime = true,
   term = 'xterm-256color',
   font = wezterm.font { family = 'Source Han Code JP', weight = 'Regular', italic = false },
-  font_size = 12.0,
+  font_size = 11.0,
   line_height = 1.0,
   enable_scroll_bar = true,
   scrollback_lines = 100000,
@@ -30,8 +30,8 @@ local config = {
   -- カラースキーム設定
   -- color_scheme = 'OneHalfDark',
   -- color_scheme = 'MaterialDark',
-  color_scheme = 'Dracula',
   -- color_scheme = 'Material Darker (base16)',
+  color_scheme = 'Dracula',
   colors = {
     tab_bar = {
       inactive_tab_edge = '#00a0e4',
@@ -49,8 +49,11 @@ local config = {
   -- ウィンドウフレーム設定
   window_frame = {
     font = wezterm.font { family = 'Meiryo', weight = 'Regular', italic = false },
-    font_size = 11.0,
+    font_size = 10.0,
   },
+
+  -- タイトルバーを消す
+  window_decorations = 'None',
 
   -- インアクティブペインの外観
   inactive_pane_hsb = { saturation = 0.9, brightness = 0.8, },
