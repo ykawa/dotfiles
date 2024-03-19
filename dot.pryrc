@@ -38,10 +38,11 @@ Pry.config.prompt = Pry::Prompt.new(
   'yet another yield prompt.',
   [
     proc { |context, _, _, _|
-      prompt = ''
+      prompt = []
       prompt << Pry.config.prompt_name.to_s.yay_blue.to_s
       prompt << "(#{Pry.view_clip(context).to_s.yay_cyan})"
       prompt << '> '
+      prompt.join
     }
   ]
 )

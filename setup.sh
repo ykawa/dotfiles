@@ -91,6 +91,9 @@ if [ ! -d .rbenv ]; then
 else
   git -C .rbenv pull --all -vv --prune
 fi
+if [ ! -e .rbenv/default-gems ]; then
+  curl -L https://raw.githubusercontent.com/ykawa/dotfiles/develop/default-gems -o .rbenv/default-gems
+fi
 if [ ! -d .rbenv/plugins/ruby-build ]; then
   git clone https://github.com/rbenv/ruby-build.git .rbenv/plugins/ruby-build
 else
@@ -106,26 +109,14 @@ if [ ! -d .rbenv/plugins/rbenv-communal-gems ]; then
 else
   git -C .rbenv/plugins/rbenv-communal-gems pull --all -vv --prune
 fi
-touch .rbenv/default-gems
-if ! grep -q '^pry$' .rbenv/default-gems; then
-  echo 'pry' >> .rbenv/default-gems
-fi
-if ! grep -q '^awesome_print$' .rbenv/default-gems; then
-  echo 'awesome_print' >> .rbenv/default-gems
-fi
-if ! grep -q '^rubocop$' .rbenv/default-gems; then
-  echo 'rubocop' >> .rbenv/default-gems
-fi
-if ! grep -q '^solargraph$' .rbenv/default-gems; then
-  echo 'solargraph' >> .rbenv/default-gems
-fi
+
 
 PERL_VERSION=5.38.2
 if [ -e dotfiles/perl_ver.pl ]; then
   PERL_VERSION=$(curl -s "https://api.github.com/repos/Perl/perl5/tags" | perl dotfiles/perl_ver.pl)
 fi
 
-RUBY_VERSION=3.3.0
+RUBY_VERSION=3.2.3
 if [ -e dotfiles/ruby_ver.pl ]; then
   RUBY_VERSION=$(curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl dotfiles/ruby_ver.pl)
 fi
