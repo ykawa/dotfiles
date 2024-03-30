@@ -103,6 +103,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias al='ls -al'
 alias l='ls -CF'
+alias lu='ls -U1'
 alias s='screen -DRR'
 alias open='xdg-open'
 
