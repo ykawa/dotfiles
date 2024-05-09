@@ -410,3 +410,50 @@ echo 'export ERRFILE=/dev/null' | tee -a ~/.profile
 ```diff
 + export ERRFILE=/dev/null
 ```
+
+## genymotion
+
+```sh
+yay -S genymotion
+```
+
+### (Optional) If you need to install google play services
+
+* add virtual device 
+  * android should specify version 9 (pie)
+* start virtual device
+* click `open gapss` (It should be on the right-hand side of the window)
+  * Reboot when installation is complete
+* Download the Genymotion-ARM-Translation_for_9.0.zip from below and drag & drop it onto the virtual device to install
+  * https://github.com/m9rco/Genymotion_ARM_Translation/tree/master
+  * Reboot when installation is complete
+* You can install kindle, kobo and others
+
+### (Optional) If you need to increase the capacity of the virtual device
+
+* stop virtual device
+* execute the following command
+
+```sh
+/opt/genymotion/qemu/x86_64/bin/qemu-img info ~/.Genymobile/Genymotion/deployed/[your device]/data.qcow2
+/opt/genymotion/qemu/x86_64/bin/qemu-img resize ~/.Genymobile/Genymotion/deployed/[your device]/data.qcow2 64G
+```
+
+* start virtual device
+* execute the following command
+
+```sh
+/opt/genymotion/tools/adb shell
+```
+
+* The following works on android
+  * The prompt should be `vbox86p:/ #`
+
+```sh
+df -h (to find the device in `/data`, probably `/dev/block/vdb3`)
+resize2fs /dev/block/vdb3
+exit
+```
+
+* restart virtual device
+
