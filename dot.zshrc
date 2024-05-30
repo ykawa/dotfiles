@@ -108,7 +108,7 @@ fi
 # -- npm
 export PATH="$HOME/.nodebrew/current/bin:$PATH"
 
-if [ type npm >/dev/null 2>&1 ]; then
+if builtin type npm >/dev/null 2>&1; then
   source <(npm completion)
 fi
 
@@ -136,7 +136,7 @@ if [ ! -f $HOME/.globalrc ]; then
   if [ -x /usr/local/bin/gtags ]; then
     export GTAGSCONF=/usr/local/share/gtags/gtags.conf
   fi
-  if builtin command -v type pygmentize >/dev/null; then
+  if builtin command -v type pygmentize >/dev/null 2>&1; then
     export GTAGSLABEL=pygments
   fi
 fi
@@ -159,7 +159,7 @@ if [ -d $HOME/.rbenv ]; then
     . ~/.rbenv/completions/rbenv.zsh
   fi
 fi
-if builtin type gem >/dev/null; then
+if builtin type gem >/dev/null 2>&1; then
   export PATH="$PATH:$(gem environment user_gemhome)/bin"
 fi
 
@@ -174,7 +174,7 @@ export PATH="$HOME/.vim/bin:$PATH"
 eval "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
 
 # -------------------------------------------
-if builtin command -v resize >/dev/null; then
+if builtin command -v resize >/dev/null 2>&1; then
   rs() {
     eval `resize`
   }
