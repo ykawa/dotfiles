@@ -243,12 +243,11 @@ rustup default stable
 ```
 
 ```sh
-git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
-git clone https://github.com/tpope/rbenv-communal-gems.git $(rbenv root)/plugins/rbenv-communal-gems
 rbenv communize --all
-
 rbenv install 3.3.2
 ```
+
+### (Optional) If the system ruby is installed
 
 ```sh
 rbenv global system
