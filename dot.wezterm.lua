@@ -11,7 +11,7 @@ local config = {
   use_ime = true,
   term = 'xterm-256color',
   font = wezterm.font { family = 'Source Han Code JP', weight = 'Regular', italic = false },
-  font_size = 11.0,
+  font_size = 13.0,
   line_height = 1.0,
   enable_scroll_bar = true,
   scrollback_lines = 100000,
@@ -49,7 +49,7 @@ local config = {
   -- ウィンドウフレーム設定
   window_frame = {
     font = wezterm.font { family = 'Meiryo', weight = 'Regular', italic = false },
-    font_size = 10.0,
+    font_size = 11.0,
   },
 
   -- タイトルバーを消す
