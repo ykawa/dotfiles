@@ -18,7 +18,7 @@
   postBuffer = 1048576000
 
 [push]
-  default = simple
+	default = current
 
 [init]
   defaultBranch = main
