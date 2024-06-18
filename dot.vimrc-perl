@@ -1,0 +1,138 @@
+" 全設定をデフォルト値に設定する
+set all&
+autocmd!
+set nocompatible
+
+" tiny と small はここで終了する
+if !1 | finish | endif
+
+" vim-plug 自動インストール(curl必須)
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" プラグインが不足していると PlugInstall を実行する
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+call plug#begin('~/.vim/bundle')
+
+  " Perl関連プラグイン
+  Plug 'vim-perl/vim-perl'
+  Plug 'c9s/perlomni.vim'
+  Plug 'vim-scripts/Perl-POD-Pattern-Syntax'
+
+  " インデントのためのプラグイン
+  Plug 'Yggdroot/indentLine'
+  let g:indentLine_conceallevel = 0
+
+  " 自動補完
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = ['coc-perl']
+
+  " スニペット
+  Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/neosnippet-snippets'
+
+call plug#end()
+
+set encoding=utf-8
+scriptencoding utf-8
+
+filetype off
+
+set statusline+=%#warningmsg#
+set statusline+=%*
+
+set mouse-=a
+set ambiwidth=double
+set nobackup
+set noswapfile
+set autoread
+set hidden
+set showcmd
+
+set nostartofline
+set showmatch matchtime=1
+set nowritebackup
+
+set relativenumber
+set number
+set nowrap
+set virtualedit+=block
+set autoindent
+set noerrorbells
+set belloff=all
+set laststatus=2
+set display=lastline
+set cmdheight=2
+set wildmode=list:full
+
+set nolist
+set shiftround
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set softtabstop=4
+
+set ignorecase
+set smartcase
+set incsearch
+set wrapscan
+set hlsearch
+set shellslash
+
+set scrolloff=20
+set fileencoding=utf-8
+set fileformats=unix,dos,mac
+
+set completeopt=menuone
+
+set infercase
+set switchbuf=useopen
+
+inoremap jj <Esc>
+vnoremap v $h
+
+nnoremap j gj
+nnoremap k gk
+nnoremap <S-l> $
+nnoremap <S-h> ^
+nnoremap == gg=G''
+nnoremap n nzz
+nnoremap N Nzz
+
+nnoremap <silent><C-l><C-l> :<C-u>set nohlsearch!<CR><Esc>
+
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python'
+let g:powerline_pycmd = 'py3'
+
+nnoremap q <Nop>
+autocmd FileType help,qf,vim nnoremap <silent><buffer>q <C-w>c
+
+nnoremap <silent> ++ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> -- :exe "resize " . (winheight(0) * 2/3)<CR>
+
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+nnoremap Q  <Nop>
+
+nnoremap <silent><C-F5> :tabprev<CR>
+nnoremap <silent><C-F6> :tabnext<CR>
+
+nnoremap <Leader>r :source $MYVIMRC<CR>
+autocmd BufWritePost .vimrc source $MYVIMRC
+
+filetype plugin indent on
+syntax enable
+
+try
+  colorscheme dracula
+catch /^Vim\%((\a\+)\)\=:E185/
+  echo "カラースキーム 'dracula' が見つかりません"
+endtry
