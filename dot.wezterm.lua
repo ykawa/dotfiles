@@ -10,7 +10,11 @@ local config = {
   -- 基本設定
   use_ime = true,
   term = 'xterm-256color',
-  font = wezterm.font { family = 'Source Han Code JP', weight = 'Regular', italic = false },
+  font = wezterm.font_with_fallback{
+    { family = 'Source Han Code JP', weight = 'Regular', italic = false },
+    { family = 'Cica' },
+    { family = 'Cica', assume_emoji_presentation = true },
+  },
   font_size = 13.0,
   line_height = 1.0,
   enable_scroll_bar = true,

@@ -25,10 +25,16 @@ sudo systemctl enable --now sshd.service
 sudo pacman-mirrors --fasttrack && yay -Syyuu --noconfirm
 ```
 
-## vim + zsh
+## neovim
 
 ```sh
-yay -S --noconfirm vim zsh zsh-completions vim-airline-themes
+yay -S --noconfirm neovim neovim-drop-in
+```
+
+## zsh
+
+```sh
+yay -S --noconfirm zsh zsh-completions zsh-autosuggestions zsh-syntax-highlighting
 ```
 
 ```sh
@@ -52,7 +58,7 @@ sudo loadkeys /usr/local/share/kbd/keymaps/jp106.map
 ```
 
 ```sh
-sudo sed -i.bak -Ee 's|^KEYMAP=.*$|KEYMAP=/usr/local/share/kbd/keymaps/jp106.map|' /etc/vconsole.conf
+sudo sed -i.bak -E -e 's|^KEYMAP=.*$|KEYMAP=/usr/local/share/kbd/keymaps/jp106.map|' /etc/vconsole.conf
 ```
 
 ## capslock to ctrl (vconsole)
@@ -78,14 +84,29 @@ sudo systemctl disable --now firewalld
 yay -Rs firewalld
 ```
 
+## font
+
+```sh
+yay -S --noconfirm  \
+  adobe-source-code-pro-fonts \
+  adobe-source-han-sans-jp-fonts \
+  adobe-source-han-serif-otc-fonts \
+  ttf-cica \
+  ttf-font-awesome \
+  ttf-jetbrains-mono \
+  ttf-jetbrains-mono-nerd
+```
+
 ## ntp
 
 ```sh
-yay -S ntp
+sudo sed -i.bak -E -e 's/^#?NTP=.*$/NTP=ntp.nict.jp/' \
+  -e 's/^#?FallbackNTP=/FallbackNTP=ntp.jst.mfeed.ad.jp time.cloudflare.com time.aws.com/' \
+  /etc/systemd/timesyncd.conf
 ```
 
 ```sh
-sudo systemctl enable --now ntpd.service
+sudo timedatectl set-ntp true
 ```
 
 ## avahi
@@ -98,7 +119,7 @@ sudo systemctl status avahi-daemon.service
 ## mdns
 
 ```sh
-yay -Ss nss-mdns or yay -S nss-mdns
+yay -S nss-mdns
 ```
 
 ```sh
@@ -126,7 +147,7 @@ ls | perl -CIO -nle 'print unless /[a-z]/' | xargs rm -rv
 ## laptop when the lid is closed.
 
 ```sh
-sudo sed -i.bak -Ee 's/^#?HandleLidSwitch=.*$/HandleLidSwitch=lock/' /etc/systemd/logind.conf
+sudo sed -i.bak -E -e 's/^#?HandleLidSwitch=.*$/HandleLidSwitch=lock/' /etc/systemd/logind.conf
 ```
 
 `/etc/systemd/logind.conf`
@@ -161,7 +182,7 @@ sudo vim /efi/loader/entries/(* device UUID with kernel version)-arch1-1.conf
 ### grub
 
 ```sh
-sudo sed -i.bak -Ee 's/^GRUB_CMDLINE_LINUX=""$/GRUB_CMDLINE_LINUX="ipv6.disable=1"/' /etc/default/grub
+sudo sed -i.bak -E -e 's/^GRUB_CMDLINE_LINUX=""$/GRUB_CMDLINE_LINUX="ipv6.disable=1"/' /etc/default/grub
 ```
 
 `/etc/default/grub`
@@ -285,7 +306,7 @@ docker run --init --rm -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_USER=user -e MYSQL_P
 ## systemd
 
 ```sh
-sudo sed -i.bak -Ee 's/^#?DefaultTimeoutStopSec=.*$/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf
+sudo sed -i.bak -E -e 's/^#?DefaultTimeoutStopSec=.*$/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf
 ```
 
 `/etc/systemd/system.conf`
@@ -300,7 +321,7 @@ sudo sed -i.bak -Ee 's/^#?DefaultTimeoutStopSec=.*$/DefaultTimeoutStopSec=15s/' 
 ### (Optional) If pulseaudio delay measures are required
 
 ```sh
-sudo sed -i.bak -Ee 's/^; default-sample-rate =.*$/default-sample-rate = 44100/' \
+sudo sed -i.bak -E -e 's/^; default-sample-rate =.*$/default-sample-rate = 44100/' \
             -e 's/^; alternate-sample-rate =.*$/alternate-sample-rate = 44100/' \
             /etc/pulse/daemon.conf
 ```
@@ -455,4 +476,3 @@ exit
 ```
 
 * restart virtual device
-
