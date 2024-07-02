@@ -74,6 +74,7 @@ local config = {
     { key = '8', mods = 'ALT', action = wezterm.action { ActivateTab = 7 } },
     { key = '9', mods = 'ALT', action = wezterm.action { ActivateTab = 8 } },
     { key = '0', mods = 'ALT', action = wezterm.action { ActivateTab = 9 } },
+    { key = 'Enter', mods = 'ALT', action = wezterm.action.DisableDefaultAssignment },
     { key = 'Delete', mods = 'CTRL', action = wezterm.action.SendKey { key = 'd', mods = 'ALT', } },
     { key = 'Backspace', mods = 'CTRL', action = wezterm.action.SendKey { key = 'w', mods = 'CTRL', } },
     { key = 'LeftArrow', mods = 'CTRL', action = wezterm.action.SendKey { key = 'b', mods = 'ALT', } },
