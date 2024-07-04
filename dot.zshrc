@@ -1,3 +1,4 @@
+# vim: filetype=zsh autoindent smartindent expandtab tabstop=2 softtabstop=2 shiftwidth=2 shiftround
 
 export LANG=ja_JP.UTF-8
 
@@ -344,16 +345,13 @@ preexec()
 PERIOD=600
 periodic()
 {
-  if [ -d .git/ -o -d ../.git -o -d ../../.git ]; then
-    local statuses="$(git status -s)"
-    if [ -n "${statuses}" ]; then
-      echo "----------------------------------------"
-      echo -e "\033[31m"
-      echo "${statuses}"
-      echo -e "\033[m"
-      echo ""
-    fi
+  # gitコマンドがあるか確認する
+  if ! builtin command -v git >/dev/null 2>&1; then
+    return
+  fi
 
+  # gitリポジトリ内であるか確認する
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     local stashes="$(git stash list)"
     if [ -n "${stashes}" ]; then
       echo "----------------------------------------"

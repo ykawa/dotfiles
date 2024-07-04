@@ -6,7 +6,10 @@ require 'yaml'
 require 'pp'
 require 'rubygems'
 require 'irb/completion'
+begin
 require 'irb/ext/save-history'
+rescue LoadError
+end
 
 require 'map_by_method'
 require 'what_methods'
