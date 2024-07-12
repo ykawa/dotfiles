@@ -22,7 +22,8 @@
   postBuffer = 1048576000
 
 [push]
-  default = current
+  default = simple
+  autoSetupRemote = true
 
 [init]
   defaultBranch = main
