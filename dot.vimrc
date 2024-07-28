@@ -3,150 +3,88 @@ set all&
 autocmd!
 
 " tiny と small はここで終了する
+
 if !1 | finish | endif
 
-" vim-plug 自動インストール(curl必須)
-" 詳しくは https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+" Ruby設定（動的にrbenvのRubyパスを設定）
+let g:ruby_host_prog = substitute(system('rbenv which ruby'), '\n', '', '')
+
+" Perl設定（動的にplenvのPerlパスを設定）
+let g:perl_host_prog = substitute(system('plenv which perl'), '\n', '', '')
+
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" プラグインが不足していると PlugInstall を実行する
+" Run PlugInstall if there are missing plugins
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
-call plug#begin('~/.vim/bundle')
-
+call plug#begin('~/.vim/plugged')
   Plug 'dracula/vim', { 'as': 'dracula' }
-  Plug 'editorconfig/editorconfig-vim'
+
   Plug 'andymass/vim-matchup'
 
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
   Plug 'airblade/vim-gitgutter'
-  function! GitStatus()
-    let [a,m,r] = GitGutterGetHunkSummary()
-    return printf('+%d ~%d -%d', a, m, r)
-  endfunction
-  let g:gitgutter_highlight_lines = 0
-  if exists('GitGutterGetHunkSummary')
-    set statusline+=%{GitStatus()}
-  endif
-  set updatetime=400
+
+  Plug 'itchyny/lightline.vim'
 
   Plug 'Yggdroot/indentLine'
   let g:indentLine_conceallevel = 0
-
-  Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'Shougo/neosnippet.vim'
-  Plug 'Shougo/neosnippet-snippets'
-
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  " 必須
-  " coc-perl: cpanm -n Perl::LanguageServer
-  let g:coc_global_extensions = [
-        \ 'coc-clangd',
-        \ 'coc-docker',
-        \ 'coc-json',
-        \ 'coc-markdownlint',
-        \ 'coc-neosnippet',
-        \ 'coc-perl',
-        \ 'coc-sh',
-        \ 'coc-solargraph',
-        \ 'coc-vetur',
-        \ 'coc-yaml',
-  \ ]
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1] =~# '\s'
-  endfunction
-
-  imap <silent><expr> <TAB>
-        \ coc#pum#visible() ? coc#pum#next(1) :
-        \ neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-  smap <silent><expr> <TAB>
-        \ coc#pum#visible() ? coc#pum#next(1) :
-        \ neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-        \ "\<TAB>"
-  imap <silent><expr> <S-TAB>
-        \ coc#pum#visible() ? coc#pum#prev(1) :
-        \ "\<C-h>"
-  imap <silent><expr> <CR>
-        \ coc#pum#visible() ? coc#pum#confirm() :
-        \ "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-  imap <silent><expr> <C-k>
-        \ coc#pum#visible() ? coc#_select_confirm() :
-        \ neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-        \ "\<C-k>"
-
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k> <Plug>(neosnippet_expand_target)
-
-  imap <silent><expr> <c-@> coc#refresh()
-  nmap <leader>rn <Plug>(coc-rename)            " \+r+n でリネーム処理
-  xmap <leader>f  <Plug>(coc-format-selected)
-  nmap <leader>f  <Plug>(coc-format-selected)
-
-  Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-  Plug 'thinca/vim-quickrun'
-  let g:quickrun_no_default_key_mappings = 1
-  let g:quickrun_config = get(g:, 'quickrun_config', {})
-  let g:quickrun_config._ = {
-        \ 'runner'                          : 'vimproc',
-        \ 'runner/vimproc/updatetime'       : 60,
-        \ 'outputter/buffer/opener'         : '8split',
-        \ 'outputter/buffer/into'           : 0,
-        \ 'outputter/error/success'         : 'buffer',
-        \ 'outputter/error/error'           : 'quickfix',
-        \ 'outputter/buffer/close_on_empty' : 1,
-  \ }
-  set splitbelow  " quickrun の結果を画面の下方に表示する
-  nnoremap <silent> <F11> :cclose<CR>:write<CR>:QuickRun -mode n<CR>
-  nnoremap <silent> <F9>  :cclose<CR>:write<CR>:QuickRun -mode n<CR>
-  nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
-
-  Plug 'twitvim/twitvim'
-  let twitvim_enable_python = 1
-  let twitvim_browser_cmd = 'google-chrome-stable'
-  let twitvim_force_ssl = 1
-  let twitvim_count = 40
-  nmap [twitvim] <Nop>
-  map <S-t> [twitvim]
-  nnoremap [twitvim]T :<C-u>PosttoTwitter<CR>
-  nnoremap [twitvim]F :<C-u>FriendsTwitter<CR><C-w><C-w>
-  nnoremap [twitvim]U :<C-u>UserTwitter<CR><C-w><C-w>
-  nnoremap [twitvim]R :<C-u>MentionsTwitter<CR><C-w><C-w>
-  nnoremap [twitvim]D :<C-u>DMTwitter<CR>
-  nnoremap [twitvim]S :<C-u>DMSentTwitter<CR>
-  nnoremap [twitvim]N :<C-u>NextTwitter<CR>
-  nnoremap [twitvim]P :<C-u>PreviousTwitter<CR>
-  nnoremap [twitvim]<Leader> :<C-u>RefreshTwitter<CR><script>
-
-  Plug 'Clavelito/indent-sh.vim'
-  Plug 'Clavelito/indent-awk.vim'
-
-  Plug 'kana/vim-operator-user'
-  Plug 'rhysd/vim-clang-format'
-  autocmd FileType c,cpp,objc nnoremap == :<C-u>ClangFormat<CR>
-  autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
-
-  Plug 'ekalinin/Dockerfile.vim'
-
-  " perl
-  if executable('perltidy')
-    autocmd FileType perl nnoremap == <Esc>:%!perltidy -se<CR>
-  endif
-
-  Plug 'tpope/vim-rails'
-  Plug 'tpope/vim-endwise'
 call plug#end()
 
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
+set fileencodings=utf-8,euc-jp,cp932
+
+" coc.nvimで自動でインストールされる拡張機能
+let g:coc_global_extensions = [
+      \ 'coc-json',
+      \ 'coc-tsserver',
+      \ 'coc-python',
+      \ 'coc-html',
+      \ 'coc-css',
+      \ 'coc-solargraph'
+      \ ]
+
+" lightline.vimの設定
+let g:lightline = {
+      \ 'colorscheme': 'dracula',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+    \ }
+
+" vim-gitgutterの設定
+let g:gitgutter_highlight_lines = 0
+let g:gitgutter_enabled = 1
+let g:gitgutter_map_keys = 0  " デフォルトのキーマッピングを無効化
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+if exists('GitGutterGetHunkSummary')
+  set statusline+=%{GitStatus()}
+endif
+
+" キーバインド設定
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" 自動補完の設定
+inoremap <silent><expr> <C-Space> coc#refresh()
 
 filetype off
 
@@ -197,7 +135,12 @@ set scrolloff=20
 set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
-set completeopt=menuone
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+
+set wildmenu
+set wildmode=longest:list,full
+set complete=.,w,b,u,t,i
 
 " 補完の際の大文字小文字の区別しない
 set infercase
@@ -253,8 +196,9 @@ if _curfile == 'Makefile'
 endif
 
 filetype plugin indent on
-syntax enable
 try
   colorscheme dracula
+catch
+  " draculaが無い場合でもエラーにならないようにする
 endtry
-
+syntax enable
