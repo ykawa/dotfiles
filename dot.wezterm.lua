@@ -12,6 +12,7 @@ local config = {
   term = 'xterm-256color',
   font = wezterm.font_with_fallback{
     { family = 'Source Han Code JP', weight = 'Regular', italic = false },
+    { family = 'Fira Code', weight = 'Regular', italic = false },
     { family = 'Cica' },
     { family = 'Cica', assume_emoji_presentation = true },
   },

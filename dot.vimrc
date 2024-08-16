@@ -45,13 +45,16 @@ set fileencodings=utf-8,euc-jp,cp932
 
 " coc.nvimで自動でインストールされる拡張機能
 let g:coc_global_extensions = [
-      \ 'coc-json',
-      \ 'coc-tsserver',
-      \ 'coc-python',
-      \ 'coc-html',
+      \ 'coc-sh',
+      \ 'coc-snippets',
       \ 'coc-css',
-      \ 'coc-solargraph'
-      \ ]
+      \ 'coc-html',
+      \ 'coc-json',
+      \ 'coc-perl',
+      \ 'coc-solargraph',
+      \ 'coc-tsserver',
+      \ 'coc-yaml',
+    \ ]
 
 " lightline.vimの設定
 let g:lightline = {

@@ -25,10 +25,10 @@ sudo systemctl enable --now sshd.service
 sudo pacman-mirrors --fasttrack && yay -Syyuu --noconfirm
 ```
 
-## neovim
+## vim
 
 ```sh
-yay -S --noconfirm neovim neovim-drop-in
+yay -S --noconfirm vim
 ```
 
 ## zsh
@@ -91,6 +91,7 @@ yay -S --noconfirm  \
   adobe-source-code-pro-fonts \
   adobe-source-han-sans-jp-fonts \
   adobe-source-han-serif-otc-fonts \
+  otf-source-han-code-jp \
   ttf-cica \
   ttf-font-awesome \
   ttf-jetbrains-mono \
@@ -219,6 +220,12 @@ curl -L https://raw.githubusercontent.com/ykawa/dotfiles/develop/setup.sh | bash
 
 ```sh
 exec $SHELL -l
+```
+
+### (Optional) If you want to come vim setup
+
+```sh
+vim -es -u vimrc -i NONE -c "PlugInstall" -c "qa"
 ```
 
 ### perl
@@ -362,6 +369,38 @@ sudo modprobe vboxdrv or sudo reboot (reboot is recommended.)
 vagrant plugin install vagrant-vbguest vagrant-share vagrant-env
 ```
 
+## qemu with virt-manager
+
+```sh
+yay -S qemu-base libvirt virt-manager dnsmasq iptables-nft
+```
+
+```sh
+sudo usermod -aG libvirt $USER
+newgrp libvirt
+```
+
+```sh
+sudo systemctl enable libvirtd
+sudo systemctl start libvirtd
+```
+
+```sh
+sudo nmcli connection add type bridge con-name br0 ifname br0
+sudo nmcli connection add type ethernet con-name br0-port-1 ifname eno1 master br0
+sudo nmcli connection up br0
+sudo nmcli connection up br0-port-1
+```
+
+```sh
+sudo nmcli connection modify br0 ipv4.dns "94.140.14.14,94.140.15.15"
+sudo nmcli connection modify br0 ipv4.ignore-auto-dns yes
+sudo nmcli connection modify br0 ipv6.dns "2a10:50c0::ad1:ff,2a10:50c0::ad2:ff"
+sudo nmcli connection modify br0 ipv6.ignore-auto-dns yes
+sudo nmcli connection down br0
+sudo nmcli connection up br0
+```
+
 ## onedrive
 
 ```sh
@@ -373,14 +412,24 @@ journalctl --user-unit=onedrive -f
 
 ## other
 
+### (Optional) If you no need pidgin and vivaldi.
+
 ```sh
 yay -Rs pidgin pidgin-libnotify vivaldi
+```
+
+### (Optional) If you need to install the following applications
+
+```sh
 yay -S --noconfirm fwupd pv xclip jq grc
-yay -S --noconfirm hyper-bin otf-source-han-code-jp
+yay -S --noconfirm hyper-bin
+yay -S --noconfirm wezterm
 yay -S --noconfirm google-chrome
 yay -S --noconfirm dropbox
-yay -S --noconfirm jetbrains-toolbox visual-studio-code-bin
-yay -S --noconfirm slack-desktop zoom
+yay -S --noconfirm jetbrains-toolbox
+yay -S --noconfirm visual-studio-code-bin
+yay -S --noconfirm slack-desktop
+yay -S --noconfirm zoom
 ```
 
 ## fcitx5 + mozc
@@ -476,3 +525,53 @@ exit
 ```
 
 * restart virtual device
+
+## lsp
+
+" coc-awk: npm install -g "awk-language-server@>=0.5.2"
+" coc-bash: npm install -g "bash-language-server@>=1.0.0"
+" coc-css: npm install -g "vscode-css-languageserver-bin@>=1.0.1"
+" coc-html: npm install -g "vscode-html-languageserver-bin@>=1.0.1"
+" coc-json: npm install -g "vscode-json-languageserver@>=1.0.1"
+" coc-perl: npm install -g "perl-language-server@>=1.0.0"
+" coc-solargraph: gem install solargraph
+" coc-tsserver: npm install -g "typescript-language-server@>=1.0.0"
+" coc-yaml: npm install -g "yaml-language-server@>=1.0.0"
+
+### awk language server
+
+```sh
+npm install -g awk-language-server
+```
+
+### bash language server
+
+```sh
+npm install -g bash-language-server
+```
+
+### css language server
+
+```sh
+npm install -g vscode-css-languageserver-bin
+```
+
+### html language server
+
+```sh
+npm install -g vscode-html-languageserver-bin
+```
+
+### json language server
+
+```sh
+npm install -g vscode-json-languageserver
+```
+
+### perl language server
+
+
+```sh
+cpanm -n Perl::LanguageServer
+```
+
