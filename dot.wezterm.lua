@@ -8,7 +8,6 @@ end)
 
 local config = {
   -- 基本設定
-  use_ime = true,
   term = 'xterm-256color',
   font = wezterm.font_with_fallback{
     { family = 'Source Han Code JP', weight = 'Regular', italic = false },
@@ -29,13 +28,16 @@ local config = {
   animation_fps = 1,
   audible_bell = 'Disabled',
 
-  window_background_opacity = 0.75,
+  -- IME
+  use_ime = true,
+  xim_im_name = 'fcitx',
+  ime_preedit_rendering = 'Builtin',
+
+  -- ウィンドウ設定
+  window_background_opacity = 0.60,
   window_padding = { left = 2, right = 16, top = 0, bottom = 0 },
 
   -- カラースキーム設定
-  -- color_scheme = 'OneHalfDark',
-  -- color_scheme = 'MaterialDark',
-  -- color_scheme = 'Material Darker (base16)',
   color_scheme = 'Dracula',
   colors = {
     tab_bar = {
@@ -62,6 +64,10 @@ local config = {
 
   -- インアクティブペインの外観
   inactive_pane_hsb = { saturation = 0.9, brightness = 0.8, },
+
+  -- Disable updates
+  check_for_updates = false,
+  show_update_window = false,
 
   -- キーバインド設定
   keys = {
