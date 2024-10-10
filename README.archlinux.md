@@ -19,29 +19,65 @@ echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/10-installer
 sudo systemctl enable --now sshd.service
 ```
 
+## update archlinux-keyring
+
+```sh
+sudo pacman --noconfirm -S archlinux-keyring
+```
+
+## update packages
+
+```sh
+sudo pacman --noconfirm -Syu
+```
+
+## add yay
+
+```sh
+sudo pacman --noconfirm -S yay
+```
+
 ## pacman-mirrors & update
+
+```sh
+sudo pacman-mirrors -c Japan && yay -Syyuu --noconfirm
+```
+
+or
 
 ```sh
 sudo pacman-mirrors --fasttrack && yay -Syyuu --noconfirm
 ```
 
+## update all packages
+
+```sh
+yay -Yc --noconfirm && sudo rm -rf ~/.cache/yay/ ~/.cache/bazel/ && LANG=C yay -Syyuu --noconfirm
+```
+
+## base-devel
+
+```sh
+yay --noconfirm -S base-devel
+```
+
 ## vim
 
 ```sh
-yay -S --noconfirm vim
+yay --noconfirm -S vim python-pynvim
 ```
 
 ## zsh
 
 ```sh
-yay -S --noconfirm zsh zsh-completions zsh-autosuggestions zsh-syntax-highlighting
+yay --noconfirm -S zsh zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-theme-powerlevel10k
 ```
 
 ```sh
 sudo chsh -s /bin/zsh $USER
 ```
 
-## capslock to ctrl (on console)
+## capslock to ctrl (virtual console)
 
 ```sh
 sudo mkdir -p /usr/local/share/kbd/keymaps/
@@ -61,7 +97,7 @@ sudo loadkeys /usr/local/share/kbd/keymaps/jp106.map
 sudo sed -i.bak -E -e 's|^KEYMAP=.*$|KEYMAP=/usr/local/share/kbd/keymaps/jp106.map|' /etc/vconsole.conf
 ```
 
-## capslock to ctrl (vconsole)
+## capslock to ctrl (console)
 
 ```sh
 sudo sed -i.bak -E -e 's/^XKBOPTIONS=.*$/XKBOPTIONS="ctrl:nocaps"/' /etc/default/keyboard
@@ -81,13 +117,13 @@ sudo systemctl disable --now firewalld
 ```
 
 ```sh
-yay -Rs firewalld
+yay --noconfirm -Rs firewalld
 ```
 
-## font
+## fonts
 
 ```sh
-yay -S --noconfirm  \
+yay --noconfirm -S \
   adobe-source-code-pro-fonts \
   adobe-source-han-sans-jp-fonts \
   adobe-source-han-serif-otc-fonts \
@@ -95,19 +131,19 @@ yay -S --noconfirm  \
   ttf-cica \
   ttf-font-awesome \
   ttf-jetbrains-mono \
-  ttf-jetbrains-mono-nerd
+  ttf-jetbrains-mono-nerd \
+  ttf-ms-win11-auto-japanese
 ```
 
-## ntp
+## systemd-timesyncd
 
 ```sh
-sudo sed -i.bak -E -e 's/^#?NTP=.*$/NTP=ntp.nict.jp/' \
-  -e 's/^#?FallbackNTP=/FallbackNTP=ntp.jst.mfeed.ad.jp time.cloudflare.com time.aws.com/' \
-  /etc/systemd/timesyncd.conf
+sudo systemctl status systemd-timesyncd
 ```
 
 ```sh
 sudo timedatectl set-ntp true
+sudo systemctl enable --now systemd-timesyncd.service
 ```
 
 ## avahi
@@ -120,7 +156,7 @@ sudo systemctl status avahi-daemon.service
 ## mdns
 
 ```sh
-yay -S nss-mdns
+yay --noconfirm -S nss-mdns
 ```
 
 ```sh
@@ -142,10 +178,15 @@ LANG=C xdg-user-dirs-update --force
 
 ```sh
 ls | perl -CIO -nle 'print unless /[a-z]/' | xargs rm -rv
-# rm -rf 画像 テンプレート ダウンロード ドキュメント デスクトップ ビデオ 公開 音楽
 ```
 
-## laptop when the lid is closed.
+or
+
+```sh
+rm -rf 画像 テンプレート ダウンロード ドキュメント デスクトップ ビデオ 公開 音楽
+```
+
+## laptop when the lid is closed
 
 ```sh
 sudo sed -i.bak -E -e 's/^#?HandleLidSwitch=.*$/HandleLidSwitch=lock/' /etc/systemd/logind.conf
@@ -266,12 +307,18 @@ curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl ~/dotfiles/ruby_ver
 ```
 
 ```sh
-yay -S base-devel rustup libffi libyaml openssl zlib
+yay --noconfirm -S rustup libffi libyaml openssl zlib
+```
+
+```sh
 rustup default stable
 ```
 
 ```sh
 rbenv communize --all
+```
+
+```sh
 rbenv install 3.3.2
 ```
 
@@ -284,11 +331,14 @@ rbenv global system
 ## docker
 
 ```sh
-yay -S docker docker-compose docker-buildx
+yay --noconfirm -S docker docker-compose docker-buildx
 ```
 
 ```sh
 sudo usermod -aG docker $USER
+```
+
+```sh
 newgrp docker
 ```
 
@@ -333,7 +383,7 @@ sudo sed -i.bak -E -e 's/^; default-sample-rate =.*$/default-sample-rate = 44100
             /etc/pulse/daemon.conf
 ```
 
-`/etc/pulse/daemon.conf `
+`/etc/pulse/daemon.conf`
 
 ```diff
 - ; default-sample-rate = 44100
@@ -354,7 +404,7 @@ echo -e "[Service]\nExecStart=\nExecStart=-/usr/bin/agetty --autologin $USER --n
 ## vagrant with virtualbox
 
 ```sh
-yay -S vagrant virtualbox-host-modules-arch virtualbox-guest-iso virtualbox
+yay --noconfirm -S vagrant virtualbox-host-modules-arch virtualbox-guest-iso virtualbox
 ```
 
 ```sh
@@ -372,18 +422,28 @@ vagrant plugin install vagrant-vbguest vagrant-share vagrant-env
 ## qemu with virt-manager
 
 ```sh
-yay -S qemu-base libvirt virt-manager dnsmasq iptables-nft
+yay --noconfirm -S virt-manager qemu-desktop
 ```
 
 ```sh
 sudo usermod -aG libvirt $USER
+```
+
+```sh
 newgrp libvirt
 ```
 
 ```sh
-sudo systemctl enable libvirtd
-sudo systemctl start libvirtd
+sudo systemctl enable --now libvirtd
 ```
+
+```sh
+sudo systemctl status libvirtd
+```
+
+### add bridge
+
+`It is recommended that the following operations be performed on the NetworkManager Applet`
 
 ```sh
 sudo nmcli connection add type bridge con-name br0 ifname br0
@@ -404,9 +464,18 @@ sudo nmcli connection up br0
 ## onedrive
 
 ```sh
-yay -S --noconfirm onedrive-abraunegg
+yay --noconfirm -S onedrive-abraunegg
+```
+
+```sh
 onedrive
+```
+
+```sh
 systemctl --user enable --now onedrive.service
+```
+
+```sh
 journalctl --user-unit=onedrive -f
 ```
 
@@ -415,21 +484,30 @@ journalctl --user-unit=onedrive -f
 ### (Optional) If you no need pidgin and vivaldi.
 
 ```sh
-yay -Rs pidgin pidgin-libnotify vivaldi
+yay --noconfirm -Rs pidgin pidgin-libnotify vivaldi
 ```
 
 ### (Optional) If you need to install the following applications
 
 ```sh
-yay -S --noconfirm fwupd pv xclip jq grc
-yay -S --noconfirm hyper-bin
-yay -S --noconfirm wezterm
-yay -S --noconfirm google-chrome
-yay -S --noconfirm dropbox
-yay -S --noconfirm jetbrains-toolbox
-yay -S --noconfirm visual-studio-code-bin
-yay -S --noconfirm slack-desktop
-yay -S --noconfirm zoom
+yay --noconfirm -S \
+  copyq \
+  cursor-bin \
+  dropbox \
+  fwupd \
+  google-chrome \
+  grc \
+  hyper-bin \
+  jetbrains-toolbox \
+  jq \
+  nkf \
+  peco \
+  pv \
+  slack-desktop \
+  unarchiver \
+  wezterm \
+  xclip \
+  zoom
 ```
 
 ## fcitx5 + mozc
@@ -442,11 +520,11 @@ https://wiki.archlinux.jp/index.php/Fcitx5#JetBrains_IDE_.E3.81.A7_Fcitx5_.E3.81
 
 ```sh
 # Adjust JAVA_HOME accordingly
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk/ yay -S --noconfirm fcitx5-mozc-ext-neologd fcitx5-im
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk/ yay --noconfirm -S fcitx5-mozc-ext-neologd fcitx5-im
 ```
 
 ```sh
-yay -S --noconfirm mozc-ut fcitx5-mozc-ut fcitx5-im
+yay --noconfirm -S mozc-ut fcitx5-mozc-ut fcitx5-im
 ```
 
 ## systemd.mount
@@ -476,6 +554,7 @@ echo 'export ERRFILE=/dev/null' | tee -a ~/.profile
 ```
 
 `~/.profile`
+
 ```diff
 + export ERRFILE=/dev/null
 ```
@@ -483,12 +562,12 @@ echo 'export ERRFILE=/dev/null' | tee -a ~/.profile
 ## genymotion
 
 ```sh
-yay -S genymotion
+yay --noconfirm -S genymotion
 ```
 
-### (Optional) If you need to install google play services
+### (Optional) If you need to install google play services for android9 (pie)
 
-* add virtual device 
+* add virtual device
   * android should specify version 9 (pie)
 * start virtual device
 * click `open gapss` (It should be on the right-hand side of the window)
@@ -498,6 +577,21 @@ yay -S genymotion
   * Reboot when installation is complete
 * You can install kindle, kobo and others
 
+### (Optional) If you need to install google play services for android11 (api30)
+
+* add virtual device
+  * android should specify version 11
+* start virtual device
+* click `open gapss` (It should be on the right-hand side of the window)
+  * Reboot when installation is complete
+* https://github.com/niizam/Genymotion_A11_libhoudini
+  * Download libhoudini from releases page.
+  * Drag and drop system.zip to emulator
+  * Restart the emulator
+  * /opt/genymotion/tools/adb shell
+  * mount -o rw,remount /
+  * write /system/build.prop and /system/vendor/build.prop
+
 ### (Optional) If you need to increase the capacity of the virtual device
 
 * stop virtual device
@@ -505,6 +599,11 @@ yay -S genymotion
 
 ```sh
 /opt/genymotion/qemu/x86_64/bin/qemu-img info ~/.Genymobile/Genymotion/deployed/[your device]/data.qcow2
+```
+
+* example of increasing to 64GB
+
+```sh
 /opt/genymotion/qemu/x86_64/bin/qemu-img resize ~/.Genymobile/Genymotion/deployed/[your device]/data.qcow2 64G
 ```
 
@@ -527,16 +626,6 @@ exit
 * restart virtual device
 
 ## lsp
-
-" coc-awk: npm install -g "awk-language-server@>=0.5.2"
-" coc-bash: npm install -g "bash-language-server@>=1.0.0"
-" coc-css: npm install -g "vscode-css-languageserver-bin@>=1.0.1"
-" coc-html: npm install -g "vscode-html-languageserver-bin@>=1.0.1"
-" coc-json: npm install -g "vscode-json-languageserver@>=1.0.1"
-" coc-perl: npm install -g "perl-language-server@>=1.0.0"
-" coc-solargraph: gem install solargraph
-" coc-tsserver: npm install -g "typescript-language-server@>=1.0.0"
-" coc-yaml: npm install -g "yaml-language-server@>=1.0.0"
 
 ### awk language server
 
@@ -570,8 +659,18 @@ npm install -g vscode-json-languageserver
 
 ### perl language server
 
-
 ```sh
 cpanm -n Perl::LanguageServer
 ```
 
+### solargraph
+
+```sh
+gem install solargraph
+```
+
+### typescript-language-server
+
+```sh
+npm install -g typescript-language-server typescript
+```

@@ -110,15 +110,16 @@ else
   git -C .rbenv/plugins/rbenv-communal-gems pull --all -vv --prune
 fi
 
-
 PERL_VERSION=5.38.2
-if [ -e dotfiles/perl_ver.pl ]; then
-  PERL_VERSION=$(curl -s "https://api.github.com/repos/Perl/perl5/tags" | perl dotfiles/perl_ver.pl)
+if type jq >/dev/null 2>&1; then
+  # jqでPerlバージョン取得（マイナーバージョンが偶数で最新）
+  PERL_VERSION=$(curl -s "https://api.github.com/repos/Perl/perl5/tags" | jq -r '[.[] | select(.name | test("^v\\d+\\.\\d+\\.\\d+$")) | select(.name | sub("^v"; "") | split(".") | .[1] | tonumber % 2 == 0)][0].name | sub("^v"; "")')
 fi
 
 RUBY_VERSION=3.2.3
-if [ -e dotfiles/ruby_ver.pl ]; then
-  RUBY_VERSION=$(curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl dotfiles/ruby_ver.pl)
+if type jq >/dev/null 2>&1; then
+  # jqでRubyバージョン取得（v数字_数字_数字形式で最新）
+  RUBY_VERSION=$(curl -s "https://api.github.com/repos/ruby/ruby/tags" | jq -r '[.[] | select(.name | test("^v\\d+_\\d+_\\d+$"))][0].name | sub("^v"; "") | gsub("_"; ".")')
 fi
 
 cat <<EOF

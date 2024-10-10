@@ -4,7 +4,7 @@ irb
 map_by_method
 pry
 rubocop
-solargraph
+ruby-lsp
 what_methods
 wirble
 yard

@@ -12,4 +12,4 @@ for my $path ( split( /:/, $ENV{"PATH"} ) )
   next if !-d $path;
   push @$a, $path unless grep { $_ eq $path } @$a;
 }
-print "PATH=" . join( ':', @$a ) . "\n";
+print "\"PATH=" . join( ':', @$a ) . "\"\n";

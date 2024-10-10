@@ -86,15 +86,42 @@ fi
 
 [ builtin type lesspipe >/dev/null 2>&1 ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-if builtin type dircolors >/dev/null 2>&1; then
-  if [ -e ~/dotfiles/dircolors ]; then
-    eval "$(dircolors -b ~/dotfiles/dircolors)"
+# OS detection
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS specific settings
+  if builtin type gdircolors >/dev/null 2>&1; then
+    if [ -e ~/dotfiles/dircolors ]; then
+      eval "$(gdircolors -b ~/dotfiles/dircolors)"
+    fi
   fi
+
+  # macOS aliases (using GNU coreutils if available)
+  if builtin type gls >/dev/null 2>&1; then
+    alias ls='gls --group-directories-first --color=auto'
+    alias dir='gdir --color=auto'
+    alias vdir='gvdir --color=auto'
+  else
+    alias ls='ls -G'
+    alias dir='ls -G'
+    alias vdir='ls -lG'
+  fi
+  alias open='open'
+else
+  # Linux specific settings
+  if builtin type dircolors >/dev/null 2>&1; then
+    if [ -e ~/dotfiles/dircolors ]; then
+      eval "$(dircolors -b ~/dotfiles/dircolors)"
+    fi
+  fi
+
+  # Linux aliases
+  alias ls='ls --group-directories-first --color=auto'
+  alias dir='dir --color=auto'
+  alias vdir='vdir --color=auto'
+  alias open='xdg-open'
 fi
 
-alias ls='ls --group-directories-first --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
+# Common aliases
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
@@ -105,7 +132,6 @@ alias al='ls -al'
 alias l='ls -CF'
 alias lu='ls -U1'
 alias s='screen -DRR'
-alias open='xdg-open'
 
 if builtin type stty >/dev/null 2>&1; then
   stty werase undef
@@ -117,7 +143,10 @@ export VISUAL=vim
 export EDITOR="$VISUAL"
 export LESSCHARSET=utf-8
 
-xhost +local:root > /dev/null 2>&1
+# X11 forwarding (Linux only)
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  xhost +local:root > /dev/null 2>&1
+fi
 complete -cf sudo
 
 export PATH="/opt/bin:$HOME/bin:$PATH"
@@ -177,20 +206,24 @@ if [ -d $HOME/.rbenv ]; then
   fi
 fi
 if builtin type gem >/dev/null 2>&1; then
-  export PATH="$PATH:$(gem environment user_gemhome)/bin"
+  local user_gemhome="$(gem environment user_gemhome 2>/dev/null)"
+  if [ -n "$user_gemhome" ]; then
+    export PATH="$PATH:$user_gemhome/bin"
+  fi
 fi
 
 # -- local env
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.vim/bin:$PATH"
+export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:$PATH"
 
 [ -e $HOME/.bashrc_local ] && . $HOME/.bashrc_local
 
 # -------------------------------------------
 # clean up and normalize the PATH.
 # -------------------------------------------
-eval "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
+eval export "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
 
 # -------------------------------------------
 if builtin type resize >/dev/null 2>&1; then
@@ -256,14 +289,12 @@ stopcontainers() {
   docker ps -a
   docker ps -a | perl -nle 'print((split)[-1]) if $.>1' | xargs --no-run-if-empty docker stop
   docker ps -a | perl -nle 'print((split)[-1]) if $.>1' | xargs --no-run-if-empty docker rm
-  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
   set +x
 }
 
 # remove everything Docker containers
 removecontainers() {
-  docker stop $(docker ps -aq)
-  docker rm $(docker ps -aq)
+  stopcontainers
   docker system prune -f
   docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
 }
@@ -337,4 +368,3 @@ c()
 reload() {
   exec "${SHELL}" "$@"
 }
-

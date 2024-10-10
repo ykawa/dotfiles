@@ -25,17 +25,26 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 
 call plug#begin('~/.vim/plugged')
   Plug 'dracula/vim', { 'as': 'dracula' }
-
   Plug 'andymass/vim-matchup'
-
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
   Plug 'airblade/vim-gitgutter'
-
   Plug 'itchyny/lightline.vim'
-
   Plug 'Yggdroot/indentLine'
+
   let g:indentLine_conceallevel = 0
+
+  " neosnippet.vimの設定
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
+    let g:deoplete#enable_at_startup = 1
+
+  Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/neosnippet-snippets'
 call plug#end()
 
 set nocompatible
@@ -45,14 +54,10 @@ set fileencodings=utf-8,euc-jp,cp932
 
 " coc.nvimで自動でインストールされる拡張機能
 let g:coc_global_extensions = [
-      \ 'coc-sh',
-      \ 'coc-snippets',
-      \ 'coc-css',
-      \ 'coc-html',
       \ 'coc-json',
       \ 'coc-perl',
-      \ 'coc-solargraph',
-      \ 'coc-tsserver',
+      \ 'coc-sh',
+      \ 'coc-snippets',
       \ 'coc-yaml',
     \ ]
 
@@ -88,6 +93,27 @@ nmap <silent> gr <Plug>(coc-references)
 
 " 自動補完の設定
 inoremap <silent><expr> <C-Space> coc#refresh()
+
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
 
 filetype off
 
@@ -138,7 +164,10 @@ set scrolloff=20
 set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
-set completeopt=menuone,noinsert,noselect
+set completeopt=menu,menuone,noinsert,noselect
+inoremap <expr><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 set shortmess+=c
 
 set wildmenu

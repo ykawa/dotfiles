@@ -23,7 +23,7 @@ setopt hist_reduce_blanks
 setopt hist_save_no_dups
 setopt hist_verify
 setopt inc_append_history
-setopt share_history # history 共有
+setopt share_history
 setopt noautoremoveslash
 
 # Ctrl+rでヒストリーのインクリメンタルサーチ、Ctrl+sで逆順
@@ -62,20 +62,38 @@ zstyle ":chpwd:*" recent-dirs-default true
 
 # 複数ファイルのmv 例　zmv *.txt *.txt.bk
 autoload -Uz zmv
+# OS-specific aliases
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS aliases
+  if builtin command -v gls >/dev/null 2>&1; then
+    alias ls='gls --group-directories-first --color=auto'
+    alias dir='gdir --color=auto'
+    alias vdir='gvdir --color=auto'
+  else
+    alias ls='ls -G'
+    alias dir='ls -G'
+    alias vdir='ls -lG'
+  fi
+  alias open='open'
+else
+  # Linux aliases
+  alias ls='ls --group-directories-first --color=auto'
+  alias dir='dir --color=auto'
+  alias vdir='vdir --color=auto'
+  alias open='xdg-open'
+fi
+
+# Common aliases
 alias al='ls -al'
 alias cgrep='grep --color=always'
-alias dir='dir --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 alias l='ls -CF'
 alias la='ls -A'
 alias ll='ls -alF'
-alias ls='ls --group-directories-first --color=auto'
 alias lu='ls -U1'
-alias open='xdg-open'
 alias s='screen -DRR'
-alias vdir='vdir --color=auto'
 alias zmv='noglob zmv -W'
 
 export VISUAL=vim
@@ -93,17 +111,39 @@ zstyle ':vcs_info:*' actionformats '[%b|%a]'
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' use-simple true
 
-xhost +local:root > /dev/null 2>&1
+# X11 forwarding (Linux only)
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  xhost +local:root > /dev/null 2>&1
+fi
 
 export PATH="/opt/bin:$HOME/bin:$PATH"
 
-# -- coreutils for macos
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+# OS detection and specific settings
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # -- coreutils for macOS
+  if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
+    export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+  fi
+  if [ -d /opt/homebrew/opt/coreutils/libexec/gnubin ]; then
+    export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+  fi
 
-## dircolors
-if [ -e ~/dotfiles/dircolors ]; then
-  eval "$(dircolors -b ~/dotfiles/dircolors)"
-  zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+  ## dircolors for macOS
+  if [ -e ~/dotfiles/dircolors ]; then
+    if builtin command -v gdircolors >/dev/null 2>&1; then
+      eval "$(gdircolors -b ~/dotfiles/dircolors)"
+      zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+    fi
+  fi
+else
+  # Linux specific settings
+  ## dircolors for Linux
+  if [ -e ~/dotfiles/dircolors ]; then
+    if builtin command -v dircolors >/dev/null 2>&1; then
+      eval "$(dircolors -b ~/dotfiles/dircolors)"
+      zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+    fi
+  fi
 fi
 
 # -- npm
@@ -161,18 +201,22 @@ if [ -d $HOME/.rbenv ]; then
   fi
 fi
 if builtin type gem >/dev/null 2>&1; then
-  export PATH="$PATH:$(gem environment user_gemhome)/bin"
+  local user_gemhome="$(gem environment user_gemhome 2>/dev/null)"
+  if [ -n "$user_gemhome" ]; then
+    export PATH="$PATH:$user_gemhome/bin"
+  fi
 fi
 
 # -- local env
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.vim/bin:$PATH"
+export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:$PATH"
 
 # -------------------------------------------
 # clean up and normalize the PATH.
 # -------------------------------------------
-eval "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
+eval export "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
 
 # -------------------------------------------
 if builtin command -v resize >/dev/null 2>&1; then
@@ -243,7 +287,6 @@ stopcontainers() {
   docker ps -a
   docker ps -a | perl -nle 'print((split)[-1]) if $.>1' | xargs --no-run-if-empty docker stop
   docker ps -a | perl -nle 'print((split)[-1]) if $.>1' | xargs --no-run-if-empty docker rm
-  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
   set +x
 }
 
@@ -251,6 +294,7 @@ stopcontainers() {
 removecontainers() {
   stopcontainers
   docker system prune -f
+  docker volume ls -f dangling=true --format "{{ .Name }}" | grep -E '^[a-z0-9]{64}$' | xargs --no-run-if-empty docker volume rm
 }
 
 # remove everything Docker
@@ -366,3 +410,5 @@ periodic()
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 
 [ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
+
+alias claude="/home/ykawa/.claude/local/claude"
