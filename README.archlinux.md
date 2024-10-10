@@ -25,6 +25,12 @@ sudo systemctl enable --now sshd.service
 sudo pacman-mirrors --fasttrack && yay -Syyuu --noconfirm
 ```
 
+## base-devel
+
+```sh
+yay -S --noconfirm base-devel
+```
+
 ## vim
 
 ```sh
@@ -41,7 +47,7 @@ yay -S --noconfirm zsh zsh-completions zsh-autosuggestions zsh-syntax-highlighti
 sudo chsh -s /bin/zsh $USER
 ```
 
-## capslock to ctrl (on console)
+## capslock to ctrl (virtual console)
 
 ```sh
 sudo mkdir -p /usr/local/share/kbd/keymaps/
@@ -61,7 +67,7 @@ sudo loadkeys /usr/local/share/kbd/keymaps/jp106.map
 sudo sed -i.bak -E -e 's|^KEYMAP=.*$|KEYMAP=/usr/local/share/kbd/keymaps/jp106.map|' /etc/vconsole.conf
 ```
 
-## capslock to ctrl (vconsole)
+## capslock to ctrl (console)
 
 ```sh
 sudo sed -i.bak -E -e 's/^XKBOPTIONS=.*$/XKBOPTIONS="ctrl:nocaps"/' /etc/default/keyboard
@@ -266,7 +272,7 @@ curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl ~/dotfiles/ruby_ver
 ```
 
 ```sh
-yay -S base-devel rustup libffi libyaml openssl zlib
+yay -S rustup libffi libyaml openssl zlib
 rustup default stable
 ```
 
@@ -372,7 +378,7 @@ vagrant plugin install vagrant-vbguest vagrant-share vagrant-env
 ## qemu with virt-manager
 
 ```sh
-yay -S qemu-base libvirt virt-manager dnsmasq iptables-nft
+yay -S qemu-base libvirt virt-manager dnsmasq iptables-nft qemu-hw-display-virtio-vga qemu-hw-display-virtio-gpu
 ```
 
 ```sh

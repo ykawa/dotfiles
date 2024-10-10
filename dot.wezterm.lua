@@ -15,7 +15,7 @@ local config = {
     { family = 'Cica' },
     { family = 'Cica', assume_emoji_presentation = true },
   },
-  font_size = 13.0,
+  font_size = 12.0,
   line_height = 1.0,
   enable_scroll_bar = true,
   scrollback_lines = 100000,
