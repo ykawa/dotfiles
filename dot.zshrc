@@ -2,13 +2,37 @@
 
 export LANG=ja_JP.UTF-8
 
-autoload -Uz colors
-colors
+# Load Oh My Zsh if available
+if [ -d "$HOME/.oh-my-zsh" ]; then
+  # Path to your oh-my-zsh installation.
+  export ZSH="$HOME/.oh-my-zsh"
 
-setopt globdots
-fpath=($fpath $HOME/.zsh/completion)
-autoload -Uz compinit
-compinit
+  # Set theme
+  ZSH_THEME="robbyrussell"
+
+  # Plugins to load
+  plugins=(
+    git
+    docker
+    npm
+    ssh-agent
+    history-substring-search
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+  )
+
+  # Load Oh My Zsh
+  source $ZSH/oh-my-zsh.sh
+else
+  # Fallback to manual setup if Oh My Zsh is not available
+  autoload -Uz colors
+  colors
+
+  setopt globdots
+  fpath=($fpath $HOME/.zsh/completion)
+  autoload -Uz compinit
+  compinit
+fi
 
 bindkey -e
 HISTFILE=~/.zsh_history
@@ -146,25 +170,15 @@ else
   fi
 fi
 
-# -- npm
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
-
-if builtin type npm >/dev/null 2>&1; then
-  source <(npm completion)
+# -- mise
+if [ -f "$HOME/.local/bin/mise" ]; then
+  export PATH="$HOME/.local/bin:$PATH"
+  eval "$(mise activate zsh)"
 fi
 
-# -- plenv
-if [ -d $HOME/.plenv/bin ]; then
-  [ -d $HOME/perl5 ] && echo "WARNING: $HOME/perl5 exists in your environment."
-  export PATH="$HOME/.plenv/bin:$PATH"
-  eval "$(plenv init -)"
-elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
-  # cpanm --local-lib=~/perl5 local::lib
-  eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
-elif [ -d $HOME/perl5 ]; then
-  export PERL_CPANM_OPT="--local-lib=~/perl5"
-  export PATH="$HOME/perl5/bin:$PATH"
-  export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
+# -- npm completion (if npm is available)
+if builtin type npm >/dev/null 2>&1; then
+  source <(npm completion)
 fi
 
 # -- PYTHONSTARTUP
@@ -191,15 +205,7 @@ if [ -n "$GOROOT" ]; then
   export PATH="$GOROOT/bin:$PATH"
 fi
 
-# -- ruby
-if [ -d $HOME/.rbenv ]; then
-  export CONFIGURE_OPTS="--disable-install-doc --disable-install-rdoc --disable-install-capi"
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
-  if [ -e ~/.rbenv/completions/rbenv.zsh ]; then
-    . ~/.rbenv/completions/rbenv.zsh
-  fi
-fi
+# -- gem (if gem is available)
 if builtin type gem >/dev/null 2>&1; then
   local user_gemhome="$(gem environment user_gemhome 2>/dev/null)"
   if [ -n "$user_gemhome" ]; then

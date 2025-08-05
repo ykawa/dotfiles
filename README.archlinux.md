@@ -263,48 +263,46 @@ curl -L https://raw.githubusercontent.com/ykawa/dotfiles/develop/setup.sh | bash
 exec $SHELL -l
 ```
 
+### Shell Enhancement
+
+After installing dotfiles, both bash-it and oh-my-zsh will be available:
+
+- **Bash users**: bash-it with useful plugins, completions, and themes
+- **Zsh users**: oh-my-zsh with plugins like git, docker, autosuggestions, and syntax highlighting
+
 ### (Optional) If you want to come vim setup
 
 ```sh
 vim -es -u vimrc -i NONE -c "PlugInstall" -c "qa"
 ```
 
-### perl
+### mise (language runtime management)
 
 ```sh
-curl -s "https://api.github.com/repos/Perl/perl5/tags" | perl ~/dotfiles/perl_ver.pl
+mise install    # Install all tools defined in .tool-versions
+mise use        # Activate tools for current directory
 ```
+
+### (Optional) If you need to install specific versions
 
 ```sh
-plenv install 5.38.2 -Dusethreads -Dman1dir=none -Dman3dir=none --as stable
+# Check available versions
+mise list-all perl
+mise list-all ruby
+mise list-all node
+
+# Install specific version
+mise install perl@5.38.2
+mise install ruby@3.3.2
+mise install node@lts
+
+# Set local version for current directory
+mise use perl@5.38.2
+mise use ruby@3.3.2
+mise use node@lts
 ```
 
-```sh
-plenv local stable
-```
-
-```sh
-plenv install-cpanm
-```
-
-### (Optional) If you do not use distribution cpan
-
-```sh
-rm -rf ~/perl5
-```
-
-### (Optional) If you need a development environment
-
-```sh
-# e.g.
-cpanm -n Perl::LanguageServer Carton Bundle::Camelcade App::PRT App::EditorTools App::perlimports
-```
-
-### ruby
-
-```sh
-curl -s "https://api.github.com/repos/ruby/ruby/tags" | perl ~/dotfiles/ruby_ver.pl
-```
+### ruby build dependencies
 
 ```sh
 yay --noconfirm -S rustup libffi libyaml openssl zlib
@@ -314,18 +312,11 @@ yay --noconfirm -S rustup libffi libyaml openssl zlib
 rustup default stable
 ```
 
-```sh
-rbenv communize --all
-```
+### (Optional) If you need development environment for perl
 
 ```sh
-rbenv install 3.3.2
-```
-
-### (Optional) If the system ruby is installed
-
-```sh
-rbenv global system
+# e.g.
+cpanm -n Perl::LanguageServer Carton Bundle::Camelcade App::PRT App::EditorTools App::perlimports
 ```
 
 ## docker

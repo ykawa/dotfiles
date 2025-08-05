@@ -1,0 +1,20 @@
+# mise configuration file
+# https://mise.jdx.dev/configuration.html
+
+[tools]
+node = "lts"
+ruby = "latest"
+perl = "latest"
+
+# Auto-install gems when installing Ruby
+[tasks.install-default-gems]
+description = "Install default gems after Ruby installation"
+run = """
+if command -v gem >/dev/null 2>&1; then
+  gem install awesome_print duration irb map_by_method pry rubocop ruby-lsp what_methods wirble yard
+fi
+"""
+
+[plugins]
+# Auto-run gem installation after Ruby install
+ruby = { after_install = "mise run install-default-gems" }
