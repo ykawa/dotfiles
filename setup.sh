@@ -39,87 +39,66 @@ for df in dotfiles/dot.*; do
   ln -s "${df}" "${link}"
 done
 
-mkdir -p .{bash,zsh}/completion
-curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh              -o .bash/completion/git-prompt.sh
-curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash        -o .bash/completion/git-completion.bash
-curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose -o .bash/completion/docker-compose
-curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh         -o .zsh/completion/_git
-curl -L https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker             -o .zsh/completion/_docker
-curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/zsh/_docker-compose -o .zsh/completion/_docker-compose
-
-# plenv
-if [ ! -d .plenv ]; then
-  git clone https://github.com/tokuhirom/plenv.git .plenv
+# bash-it
+if [ ! -d .bash_it ]; then
+  git clone --depth=1 https://github.com/Bash-it/bash-it.git .bash_it
+  .bash_it/install.sh --silent --no-modify-config
 else
-  git -C .plenv pull --all -vv --prune
-fi
-if [ ! -d .plenv/plugins/perl-build ]; then
-  git clone https://github.com/tokuhirom/Perl-Build.git .plenv/plugins/perl-build
-else
-  git -C .plenv/plugins/perl-build pull --all -vv --prune
-fi
-if [ ! -d .plenv/plugins/plenv-contrib ]; then
-  git clone https://github.com/miyagawa/plenv-contrib.git .plenv/plugins/plenv-contrib
-else
-  git -C .plenv/plugins/plenv-contrib pull --all -vv --prune
-fi
-if [ ! -x .plenv/shims/cpanm ]; then
-  export PATH="$PWD/.plenv/bin:$PATH"
-  eval "$(plenv init -)"
-  plenv global system
-  plenv install-cpanm
+  git -C .bash_it pull --all -vv --prune
 fi
 
-# nodebrew
-if [ ! -x .nodebrew/current/bin/nodebrew ]; then
-  export NODEBREW_ROOT="$PWD/.nodebrew"
-  curl -L https://raw.githubusercontent.com/hokaccha/nodebrew/master/nodebrew | perl - setup
-else
-  export PATH="$PWD/.nodebrew/current/bin:$PATH"
-  nodebrew selfupdate
-fi
-# node
-if [ ! -x .nodebrew/current/bin/node ]; then
-  export PATH="$PWD/.nodebrew/current/bin:$PATH"
-  nodebrew install stable
-  nodebrew use stable
+# Enable bash-it plugins and completions
+if [ -f .bash_it/bash_it.sh ]; then
+  export BASH_IT="$PWD/.bash_it"
+  source "$BASH_IT/bash_it.sh"
+
+  # Enable useful plugins
+  bash-it enable plugin git ssh history npm docker
+
+  # Enable useful completions
+  bash-it enable completion git ssh npm docker
+
+  # Enable useful aliases
+  bash-it enable alias git docker
 fi
 
-# rbenv
-if [ ! -d .rbenv ]; then
-  git clone https://github.com/rbenv/rbenv.git .rbenv
+# oh-my-zsh
+if [ ! -d .oh-my-zsh ]; then
+  git clone https://github.com/ohmyzsh/ohmyzsh.git .oh-my-zsh
 else
-  git -C .rbenv pull --all -vv --prune
-fi
-if [ ! -e .rbenv/default-gems ]; then
-  curl -L https://raw.githubusercontent.com/ykawa/dotfiles/develop/default-gems -o .rbenv/default-gems
-fi
-if [ ! -d .rbenv/plugins/ruby-build ]; then
-  git clone https://github.com/rbenv/ruby-build.git .rbenv/plugins/ruby-build
-else
-  git -C .rbenv/plugins/ruby-build pull --all -vv --prune
-fi
-if [ ! -d .rbenv/plugins/rbenv-default-gems ]; then
-  git clone https://github.com/rbenv/rbenv-default-gems.git .rbenv/plugins/rbenv-default-gems
-else
-  git -C .rbenv/plugins/rbenv-default-gems pull --all -vv --prune
-fi
-if [ ! -d .rbenv/plugins/rbenv-communal-gems ]; then
-  git clone https://github.com/tpope/rbenv-communal-gems.git .rbenv/plugins/rbenv-communal-gems
-else
-  git -C .rbenv/plugins/rbenv-communal-gems pull --all -vv --prune
+  git -C .oh-my-zsh pull --all -vv --prune
 fi
 
-PERL_VERSION=5.38.2
-if type jq >/dev/null 2>&1; then
-  # jqでPerlバージョン取得（マイナーバージョンが偶数で最新）
-  PERL_VERSION=$(curl -s "https://api.github.com/repos/Perl/perl5/tags" | jq -r '[.[] | select(.name | test("^v\\d+\\.\\d+\\.\\d+$")) | select(.name | sub("^v"; "") | split(".") | .[1] | tonumber % 2 == 0)][0].name | sub("^v"; "")')
+# oh-my-zsh additional plugins
+if [ -d .oh-my-zsh ]; then
+  # zsh-autosuggestions
+  if [ ! -d .oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions .oh-my-zsh/custom/plugins/zsh-autosuggestions
+  else
+    git -C .oh-my-zsh/custom/plugins/zsh-autosuggestions pull --all -vv --prune
+  fi
+
+  # zsh-syntax-highlighting
+  if [ ! -d .oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git .oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  else
+    git -C .oh-my-zsh/custom/plugins/zsh-syntax-highlighting pull --all -vv --prune
+  fi
 fi
 
-RUBY_VERSION=3.2.3
-if type jq >/dev/null 2>&1; then
-  # jqでRubyバージョン取得（v数字_数字_数字形式で最新）
-  RUBY_VERSION=$(curl -s "https://api.github.com/repos/ruby/ruby/tags" | jq -r '[.[] | select(.name | test("^v\\d+_\\d+_\\d+$"))][0].name | sub("^v"; "") | gsub("_"; ".")')
+# mise
+if ! type mise >/dev/null 2>&1; then
+  curl https://mise.run | sh
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+# Set up .tool-versions file
+if [ ! -e .tool-versions ]; then
+  cat > .tool-versions << 'EOF'
+node lts
+ruby latest
+perl latest
+EOF
 fi
 
 cat <<EOF
@@ -128,17 +107,13 @@ cat <<EOF
 #   exec \$SHELL -l
 #
 # ----------------------------------------------------------------------
-# example of setting up plenv.
+# example of setting up mise.
 #
-#   plenv install ${PERL_VERSION} -Dusethreads -Dman1dir=none -Dman3dir=none --as stable
-#   plenv local stable
-#   plenv install-cpanm
+#   mise install    # Install all tools in .tool-versions
+#   mise use        # Activate tools for current directory
 #
 # ----------------------------------------------------------------------
-# Libraries required for ruby-build are described at the following URLs.
-#
-#   https://github.com/rbenv/ruby-build/wiki
-#   rbenv install ${RUBY_VERSION}
-#
+# For more information about mise, visit:
+#   https://mise.jdx.dev/
 # ----------------------------------------------------------------------
 EOF

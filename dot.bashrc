@@ -49,34 +49,78 @@ case "$TERM" in
   *) ;;
 esac
 
-short_host_name() {
-  local len=${#HOSTNAME}
-  if [ $len -gt 8 ]; then
-    echo "${HOSTNAME:0:4}${HOSTNAME:$len-4:4}"
-  else
-    echo "${HOSTNAME}"
-  fi
-}
+# Load bash-it
+if [ -f "$HOME/.bash_it/bash_it.sh" ]; then
+  # Lock and Load a custom theme file.
+  # Leave empty to disable theming.
+  export BASH_IT_THEME='bobby'
 
-PS1="[\u@$(short_host_name) \W]$ "
-if [ -f ~/.bash/completion/git-prompt.sh ]; then
-  . ~/.bash/completion/git-prompt.sh
-  GIT_PS1_SHOWDIRTYSTATE=
-  GIT_PS1_SHOWUPSTREAM=1
-  GIT_PS1_SHOWUNTRACKEDFILES=
-  GIT_PS1_SHOWSTASHSTATE=
-  export PS1='$(__git_ps1)'"${PS1:+$PS1}"
+  # (Advanced): Change this to the name of your remote repo if you
+  # cloned bash-it with a remote other than origin such as `bash-it`.
+  # export BASH_IT_REMOTE='bash-it'
+
+  # Your place for hosting Git repos. I use this for private repos.
+  export GIT_HOSTING='git@github.com'
+
+  # Don't check mail when opening terminal.
+  unset MAILCHECK
+
+  # Change this to your console based IRC client of choice.
+  export IRC_CLIENT='irssi'
+
+  # Set this to the command you use for todo.txt-cli
+  export TODO="t"
+
+  # Set this to false to turn off version control status checking within the prompt for all themes
+  export SCM_CHECK=true
+
+  # Set Xterm/screen/Tmux title with only a short hostname.
+  # Uncomment this (or set SHORT_HOSTNAME to something else),
+  # Will otherwise fall back on $HOSTNAME.
+  #export SHORT_HOSTNAME=$(hostname -s)
+
+  # Set Xterm/screen/Tmux title with only a short username.
+  # Uncomment this (or set SHORT_USER to something else),
+  # Will otherwise fall back on $USER.
+  #export SHORT_USER=${USER:0:8}
+
+  # Set Xterm/screen/Tmux title with shortened command and directory.
+  # Uncomment this to set.
+  #export SHORT_TERM_LINE=true
+
+  # Set vcprompt executable path for scm advance info in prompt (demula theme)
+  # https://github.com/djl/vcprompt
+  #export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
+
+  # (Advanced): Uncomment this to make Bash-it reload itself automatically
+  # after enabling or disabling aliases, plugins, and completions.
+  # export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=1
+
+  # Uncomment this to make Bash-it create alias reload.
+  # export BASH_IT_RELOAD_LEGACY=1
+
+  # Load Bash It
+  source "$HOME/.bash_it/bash_it.sh"
 else
-  export PS1="${PS1:+$PS1}"
-fi
-unset -f short_host_name
+  # Fallback to basic prompt if bash-it is not available
+  short_host_name() {
+    local len=${#HOSTNAME}
+    if [ $len -gt 8 ]; then
+      echo "${HOSTNAME:0:4}${HOSTNAME:$len-4:4}"
+    else
+      echo "${HOSTNAME}"
+    fi
+  }
 
-if [ -f /etc/bash_completion ]; then
-  . /etc/bash_completion
-elif [ -f /usr/share/bash-completion/bash_completion ]; then
-  . /usr/share/bash-completion/bash_completion
-elif [ -f ~/.bash/completion/git-completion.bash ]; then
-  . ~/.bash/completion/git-completion.bash
+  PS1="[\u@$(short_host_name) \W]$ "
+  unset -f short_host_name
+
+  # Load basic bash completion
+  if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  elif [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  fi
 fi
 
 # -- coreutils for macos
@@ -151,25 +195,15 @@ complete -cf sudo
 
 export PATH="/opt/bin:$HOME/bin:$PATH"
 
-# -- npm
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
-
-if builtin type npm >/dev/null 2>&1; then
-  source <(npm completion)
+# -- mise
+if [ -f "$HOME/.local/bin/mise" ]; then
+  export PATH="$HOME/.local/bin:$PATH"
+  eval "$(mise activate bash)"
 fi
 
-# -- plenv
-if [ -d $HOME/.plenv/bin ]; then
-  [ -d $HOME/perl5 ] && echo "WARNING: $HOME/perl5 exists in your environment."
-  export PATH="$HOME/.plenv/bin:$PATH"
-  eval "$(plenv init -)"
-elif [ -e $HOME/perl5/lib/perl5/local/lib.pm ]; then
-  # cpanm --local-lib=~/perl5 local::lib
-  eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
-elif [ -d $HOME/perl5 ]; then
-  export PATH="$HOME/perl5/bin:$PATH"
-  export PERL_CPANM_OPT="--local-lib=~/perl5"
-  export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
+# -- npm completion (if npm is available)
+if builtin type npm >/dev/null 2>&1; then
+  source <(npm completion)
 fi
 
 # -- PYTHONSTARTUP
@@ -196,17 +230,9 @@ if [ -n "$GOROOT" ]; then
   export PATH="$GOROOT/bin:$PATH"
 fi
 
-# -- ruby
-if [ -d $HOME/.rbenv ]; then
-  export CONFIGURE_OPTS="--disable-install-doc --disable-install-rdoc --disable-install-capi"
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
-  if [ -e ~/.rbenv/completions/rbenv.zsh ]; then
-    . ~/.rbenv/completions/rbenv.zsh
-  fi
-fi
+# -- gem (if gem is available)
 if builtin type gem >/dev/null 2>&1; then
-  local user_gemhome="$(gem environment user_gemhome 2>/dev/null)"
+  user_gemhome="$(gem environment user_gemhome 2>/dev/null)"
   if [ -n "$user_gemhome" ]; then
     export PATH="$PATH:$user_gemhome/bin"
   fi
