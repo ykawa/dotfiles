@@ -232,7 +232,7 @@ fi
 
 # -- gem (if gem is available)
 if builtin type gem >/dev/null 2>&1; then
-  local user_gemhome="$(gem environment user_gemhome 2>/dev/null)"
+  user_gemhome="$(gem environment user_gemhome 2>/dev/null)"
   if [ -n "$user_gemhome" ]; then
     export PATH="$PATH:$user_gemhome/bin"
   fi
