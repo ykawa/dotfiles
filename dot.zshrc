@@ -158,18 +158,18 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   fi
 
   ## dircolors for macOS
-  if [ -e ~/dotfiles/dircolors ]; then
+  if [ -e ~/.dircolors ]; then
     if builtin command -v gdircolors >/dev/null 2>&1; then
-      eval "$(gdircolors -b ~/dotfiles/dircolors)"
+      eval "$(gdircolors -b ~/.dircolors)"
       zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
     fi
   fi
 else
   # Linux specific settings
   ## dircolors for Linux
-  if [ -e ~/dotfiles/dircolors ]; then
+  if [ -e ~/.dircolors ]; then
     if builtin command -v dircolors >/dev/null 2>&1; then
-      eval "$(dircolors -b ~/dotfiles/dircolors)"
+      eval "$(dircolors -b ~/.dircolors)"
       zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
     fi
   fi
@@ -386,16 +386,29 @@ termtitle() {
   esac
 }
 
-precmd()
+# Custom precmd and preexec functions
+# These need to be defined after oh-my-zsh to override any conflicting functions
+custom_precmd()
 {
   termtitle precmd
   vcs_info
 }
 
-preexec()
+custom_preexec()
 {
   termtitle preexec "${(V)1}"
 }
+
+# Add our custom functions to the hook arrays (oh-my-zsh compatible)
+if [[ -n "${precmd_functions}" ]]; then
+  # oh-my-zsh is loaded, use hook arrays
+  precmd_functions+=(custom_precmd)
+  preexec_functions+=(custom_preexec)
+else
+  # Fallback to direct function definition
+  precmd() { custom_precmd "$@" }
+  preexec() { custom_preexec "$@" }
+fi
 
 PERIOD=600
 periodic()
