@@ -51,7 +51,6 @@ local config = {
   window_padding = { left = 2, right = 16, top = 0, bottom = 0 },
 
   -- カラースキーム設定
-  color_scheme = 'Dracula',
   colors = {
     tab_bar = {
       inactive_tab_edge = '#00a0e4',
@@ -74,7 +73,7 @@ local config = {
 
   -- OS別のウィンドウ設定
   window_decorations = (wezterm.target_triple == 'x86_64-apple-darwin' or wezterm.target_triple == 'aarch64-apple-darwin') and 'RESIZE' or 'None',
-  window_background_opacity = (wezterm.target_triple == 'x86_64-apple-darwin' or wezterm.target_triple == 'aarch64-apple-darwin') and 0.85 or 0.60,
+  window_background_opacity = (wezterm.target_triple == 'x86_64-apple-darwin' or wezterm.target_triple == 'aarch64-apple-darwin') and 0.85 or 0.85,
   macos_window_background_blur = 20,
   native_macos_fullscreen_mode = false,
 
@@ -108,5 +107,7 @@ local config = {
   -- 選択時の単語区切り設定
   selection_word_boundary = " '\"{}[](),",
 }
+
+config.color_scheme = 'Dracula'
 
 return config

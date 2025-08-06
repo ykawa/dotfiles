@@ -6,114 +6,278 @@ autocmd!
 
 if !1 | finish | endif
 
-" Ruby設定（動的にrbenvのRubyパスを設定）
-let g:ruby_host_prog = substitute(system('rbenv which ruby'), '\n', '', '')
+" Ruby設定（動的にmiseのRubyパスを設定）
+let g:ruby_host_prog = substitute(system('mise which ruby'), '\n', '', '')
 
-" Perl設定（動的にplenvのPerlパスを設定）
-let g:perl_host_prog = substitute(system('plenv which perl'), '\n', '', '')
-
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
-
-call plug#begin('~/.vim/plugged')
-  Plug 'dracula/vim', { 'as': 'dracula' }
-  Plug 'andymass/vim-matchup'
-  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-  Plug 'airblade/vim-gitgutter'
-  Plug 'itchyny/lightline.vim'
-  Plug 'Yggdroot/indentLine'
-
-  let g:indentLine_conceallevel = 0
-
-  " neosnippet.vimの設定
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-    let g:deoplete#enable_at_startup = 1
-
-  Plug 'Shougo/neosnippet.vim'
-  Plug 'Shougo/neosnippet-snippets'
-call plug#end()
+" Perl設定（動的にmiseのPerlパスを設定）
+let g:perl_host_prog = substitute(system('mise which perl'), '\n', '', '')
 
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
 set fileencodings=utf-8,euc-jp,cp932
 
-" coc.nvimで自動でインストールされる拡張機能
-let g:coc_global_extensions = [
-      \ 'coc-json',
-      \ 'coc-perl',
-      \ 'coc-sh',
-      \ 'coc-snippets',
-      \ 'coc-yaml',
-    \ ]
+" ========================================
+" vim標準機能による補完設定
+" ========================================
 
-" lightline.vimの設定
-let g:lightline = {
-      \ 'colorscheme': 'dracula',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-    \ }
+" オムニ補完を有効化
+set omnifunc=syntaxcomplete#Complete
 
-" vim-gitgutterの設定
-let g:gitgutter_highlight_lines = 0
-let g:gitgutter_enabled = 1
-let g:gitgutter_map_keys = 0  " デフォルトのキーマッピングを無効化
-function! GitStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
+" 自動補完の詳細設定
+set completeopt=menu,menuone,noinsert,noselect,preview
+set complete=.,w,b,u,t,i,k
+
+" 補完時の大文字小文字の区別しない
+set infercase
+
+" 補完ポップアップの色設定
+highlight Pmenu ctermbg=darkgray ctermfg=white
+highlight PmenuSel ctermbg=blue ctermfg=white
+highlight PmenuSbar ctermbg=gray
+highlight PmenuThumb ctermbg=white
+
+" ========================================
+" 言語別スニペット機能（プラグインなし）
+" ========================================
+
+" Perlスニペット関数
+function! InsertPerlSub()
+  let name = input('サブルーチン名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'sub ' . name . ' {',
+      \ '    my (' . input('引数: ') . ') = @_;',
+      \ '    ',
+      \ '    return;',
+      \ '}'
+    \ ])
+    normal! 3j$
+  endif
 endfunction
-if exists('GitGutterGetHunkSummary')
-  set statusline+=%{GitStatus()}
-endif
 
-" キーバインド設定
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+function! InsertPerlIf()
+  call append(line('.'), [
+    \ 'if (' . input('条件: ') . ') {',
+    \ '    ',
+    \ '}'
+  \ ])
+  normal! 2j$
+endfunction
 
-" 自動補完の設定
-inoremap <silent><expr> <C-Space> coc#refresh()
+function! InsertPerlFor()
+  call append(line('.'), [
+    \ 'for my $' . input('変数名: ') . ' (@' . input('配列名: ') . ') {',
+    \ '    ',
+    \ '}'
+  \ ])
+  normal! 2j$
+endfunction
 
-" Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
+function! InsertPerlPackage()
+  let name = input('パッケージ名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'package ' . name . ';',
+      \ '',
+      \ 'use strict;',
+      \ 'use warnings;',
+      \ '',
+      \ '',
+      \ '',
+      \ '1;'
+    \ ])
+    normal! 6j$
+  endif
+endfunction
 
-" SuperTab like snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" Perlスニペット用キーマッピング
+autocmd FileType perl inoremap <buffer> <Leader>sub <Esc>:call InsertPerlSub()<CR>
+autocmd FileType perl inoremap <buffer> <Leader>if <Esc>:call InsertPerlIf()<CR>
+autocmd FileType perl inoremap <buffer> <Leader>for <Esc>:call InsertPerlFor()<CR>
+autocmd FileType perl inoremap <buffer> <Leader>pkg <Esc>:call InsertPerlPackage()<CR>
 
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" Rubyスニペット関数
+function! InsertRubyDef()
+  let name = input('メソッド名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'def ' . name . '(' . input('引数: ') . ')',
+      \ '  ',
+      \ 'end'
+    \ ])
+    normal! 2j$
+  endif
+endfunction
 
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
+function! InsertRubyClass()
+  let name = input('クラス名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'class ' . name,
+      \ '  def initialize(' . input('引数: ') . ')',
+      \ '    ',
+      \ '  end',
+      \ '',
+      \ '  ',
+      \ 'end'
+    \ ])
+    normal! 6j$
+  endif
+endfunction
+
+function! InsertRubyIf()
+  call append(line('.'), [
+    \ 'if ' . input('条件: '),
+    \ '  ',
+    \ 'end'
+  \ ])
+  normal! 2j$
+endfunction
+
+function! InsertRubyEach()
+  call append(line('.'), [
+    \ input('配列名: ') . '.each do |' . input('変数名: ') . '|',
+    \ '  ',
+    \ 'end'
+  \ ])
+  normal! 2j$
+endfunction
+
+function! InsertRubyModule()
+  let name = input('モジュール名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'module ' . name,
+      \ '  ',
+      \ 'end'
+    \ ])
+    normal! 2j$
+  endif
+endfunction
+
+" Rubyスニペット用キーマッピング
+autocmd FileType ruby inoremap <buffer> <Leader>def <Esc>:call InsertRubyDef()<CR>
+autocmd FileType ruby inoremap <buffer> <Leader>class <Esc>:call InsertRubyClass()<CR>
+autocmd FileType ruby inoremap <buffer> <Leader>if <Esc>:call InsertRubyIf()<CR>
+autocmd FileType ruby inoremap <buffer> <Leader>each <Esc>:call InsertRubyEach()<CR>
+autocmd FileType ruby inoremap <buffer> <Leader>mod <Esc>:call InsertRubyModule()<CR>
+
+" TypeScriptスニペット関数
+function! InsertTsFunction()
+  let name = input('関数名: ')
+  if name != ''
+    let args = input('引数: ')
+    let returnType = input('戻り値の型: ')
+    call append(line('.'), [
+      \ 'function ' . name . '(' . args . ')' . (returnType != '' ? ': ' . returnType : '') . ' {',
+      \ '  ',
+      \ '}'
+    \ ])
+    normal! 2j$
+  endif
+endfunction
+
+function! InsertTsInterface()
+  let name = input('インターフェース名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'interface ' . name . ' {',
+      \ '  ',
+      \ '}'
+    \ ])
+    normal! 2j$
+  endif
+endfunction
+
+function! InsertTsClass()
+  let name = input('クラス名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'class ' . name . ' {',
+      \ '  constructor(' . input('引数: ') . ') {',
+      \ '    ',
+      \ '  }',
+      \ '',
+      \ '  ',
+      \ '}'
+    \ ])
+    normal! 6j$
+  endif
+endfunction
+
+function! InsertTsType()
+  let name = input('型名: ')
+  if name != ''
+    let definition = input('型定義: ')
+    call append(line('.'), [
+      \ 'type ' . name . ' = ' . definition . ';'
+    \ ])
+    normal! 1j$
+  endif
+endfunction
+
+function! InsertTsEnum()
+  let name = input('Enum名: ')
+  if name != ''
+    call append(line('.'), [
+      \ 'enum ' . name . ' {',
+      \ '  ',
+      \ '}'
+    \ ])
+    normal! 2j$
+  endif
+endfunction
+
+function! InsertTsAsync()
+  let name = input('async関数名: ')
+  if name != ''
+    let args = input('引数: ')
+    let returnType = input('戻り値の型: ')
+    call append(line('.'), [
+      \ 'async function ' . name . '(' . args . ')' . (returnType != '' ? ': Promise<' . returnType . '>' : '') . ' {',
+      \ '  ',
+      \ '}'
+    \ ])
+    normal! 2j$
+  endif
+endfunction
+
+" TypeScriptスニペット用キーマッピング
+autocmd FileType typescript inoremap <buffer> <Leader>func <Esc>:call InsertTsFunction()<CR>
+autocmd FileType typescript inoremap <buffer> <Leader>int <Esc>:call InsertTsInterface()<CR>
+autocmd FileType typescript inoremap <buffer> <Leader>class <Esc>:call InsertTsClass()<CR>
+autocmd FileType typescript inoremap <buffer> <Leader>type <Esc>:call InsertTsType()<CR>
+autocmd FileType typescript inoremap <buffer> <Leader>enum <Esc>:call InsertTsEnum()<CR>
+autocmd FileType typescript inoremap <buffer> <Leader>async <Esc>:call InsertTsAsync()<CR>
+
+" ========================================
+" ファイルタイプ別設定
+" ========================================
+
+" Perl設定
+autocmd FileType perl setlocal tabstop=4 shiftwidth=4 softtabstop=4
+autocmd FileType perl setlocal omnifunc=perlcomplete#Complete
+autocmd FileType perl setlocal commentstring=#\ %s
+
+" Ruby設定  
+autocmd FileType ruby setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd FileType ruby setlocal commentstring=#\ %s
+
+" TypeScript設定
+autocmd FileType typescript setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType typescript setlocal omnifunc=syntaxcomplete#Complete
+autocmd FileType typescript setlocal commentstring=//\ %s
+
+" JavaScript設定（TypeScript用設定を適用）
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript setlocal commentstring=//\ %s
+
+" 全言語共通の補完キーマッピング
+autocmd FileType perl,ruby,typescript,javascript inoremap <buffer> <C-x><C-o> <C-x><C-o>
+autocmd FileType perl,ruby,typescript,javascript inoremap <buffer> <C-Space> <C-x><C-o>
 
 filetype off
 
@@ -164,15 +328,10 @@ set scrolloff=20
 set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
-set completeopt=menu,menuone,noinsert,noselect
-inoremap <expr><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
 set shortmess+=c
 
 set wildmenu
 set wildmode=longest:list,full
-set complete=.,w,b,u,t,i
 
 " 補完の際の大文字小文字の区別しない
 set infercase
@@ -228,9 +387,6 @@ if _curfile == 'Makefile'
 endif
 
 filetype plugin indent on
-try
-  colorscheme dracula
-catch
-  " draculaが無い場合でもエラーにならないようにする
-endtry
+" ビルトインカラースキームを使用
+colorscheme desert
 syntax enable

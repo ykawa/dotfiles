@@ -2,34 +2,26 @@
 
 export LANG=ja_JP.UTF-8
 
-# Load Oh My Zsh if available (without theme to preserve custom prompt)
 if [ -d "$HOME/.oh-my-zsh" ]; then
-  # Path to your oh-my-zsh installation.
   export ZSH="$HOME/.oh-my-zsh"
 
-  # Disable theme to use custom prompt
   ZSH_THEME=""
 
-  # Plugins to load
   plugins=(
     git
     docker
     npm
-    ssh-agent
     history-substring-search
     zsh-autosuggestions
     zsh-syntax-highlighting
   )
 
-  # Load Oh My Zsh
   source $ZSH/oh-my-zsh.sh
 
-  # Load colors and completion manually since we disabled theme
   autoload -Uz colors
   colors
   setopt globdots
 else
-  # Fallback to manual setup if Oh My Zsh is not available
   autoload -Uz colors
   colors
 
@@ -189,16 +181,6 @@ fi
 # -- PYTHONSTARTUP
 if [ -z "$PYTHONSTARTUP" -a -s "$HOME/.pythonstartup" ]; then
   export PYTHONSTARTUP="$HOME/.pythonstartup"
-fi
-
-# -- GNU Global
-if [ ! -f $HOME/.globalrc ]; then
-  if [ -x /usr/local/bin/gtags ]; then
-    export GTAGSCONF=/usr/local/share/gtags/gtags.conf
-  fi
-  if builtin command -v type pygmentize >/dev/null 2>&1; then
-    export GTAGSLABEL=pygments
-  fi
 fi
 
 # -- GO

@@ -1,6 +1,0 @@
-# This file defines the tool versions for this project
-# mise will use these versions when in this directory
-
-node lts
-ruby latest
-perl latest
