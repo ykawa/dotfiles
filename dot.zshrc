@@ -2,13 +2,13 @@
 
 export LANG=ja_JP.UTF-8
 
-# Load Oh My Zsh if available
+# Load Oh My Zsh if available (without theme to preserve custom prompt)
 if [ -d "$HOME/.oh-my-zsh" ]; then
   # Path to your oh-my-zsh installation.
   export ZSH="$HOME/.oh-my-zsh"
 
-  # Set theme
-  ZSH_THEME="robbyrussell"
+  # Disable theme to use custom prompt
+  ZSH_THEME=""
 
   # Plugins to load
   plugins=(
@@ -23,6 +23,11 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
 
   # Load Oh My Zsh
   source $ZSH/oh-my-zsh.sh
+
+  # Load colors and completion manually since we disabled theme
+  autoload -Uz colors
+  colors
+  setopt globdots
 else
   # Fallback to manual setup if Oh My Zsh is not available
   autoload -Uz colors
