@@ -391,6 +391,26 @@ c()
   perl ~/dotfiles/colon.pl
 }
 
+hs()
+{
+  if [ $# -gt 0 ]; then
+    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco --query "$*" | tr -d '\n' | xclip -selection clipboard
+  else
+    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco | tr -d '\n' | xclip -selection clipboard
+  fi
+}
+
 reload() {
   exec "${SHELL}" "$@"
 }
+
+# Shift+↑/↓ で ScrollToPrompt が効くように、プロンプト直前に A マーカーを送る
+if [ -n "$WEZTERM_EXECUTABLE" ] 2>/dev/null; then
+  __wezterm_prompt_mark() { printf '\033]133;A\007'; }
+  if [ -z "${PROMPT_COMMAND}" ]; then
+    PROMPT_COMMAND="__wezterm_prompt_mark"
+  else
+    PROMPT_COMMAND="__wezterm_prompt_mark; ${PROMPT_COMMAND}"
+  fi
+fi
+

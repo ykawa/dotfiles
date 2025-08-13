@@ -101,6 +101,8 @@ local config = {
     { key = 'Backspace', mods = 'CTRL', action = wezterm.action.SendKey { key = 'w', mods = 'CTRL', } },
     { key = 'LeftArrow', mods = 'CTRL', action = wezterm.action.SendKey { key = 'b', mods = 'ALT', } },
     { key = 'RightArrow',mods = 'CTRL', action = wezterm.action.SendKey { key = 'f', mods = 'ALT', } },
+    { key = 'UpArrow',   mods = 'SHIFT', action = wezterm.action.ScrollToPrompt(-1) },
+    { key = 'DownArrow', mods = 'SHIFT', action = wezterm.action.ScrollToPrompt(1) },
     { key = ',', mods = 'CTRL', action = wezterm.action { SpawnCommandInNewWindow = { args = { 'cursor', os.getenv('HOME') .. '/.wezterm.lua' } } } },
   },
 
@@ -108,6 +110,7 @@ local config = {
   selection_word_boundary = " '\"{}[](),",
 }
 
+config.color_scheme = 'Darcula (base16)'
 config.color_scheme = 'Dracula'
 
 return config

@@ -121,6 +121,14 @@ export VISUAL=vim
 export EDITOR="$VISUAL"
 export LESSCHARSET=utf-8
 
+# Keep pager output on screen (stop clearing on exit)
+# -X: don't use terminal init/deinit (no alt screen); -R: show colors safely
+export LESS="-R -X"
+# Ensure commands that rely on $PAGER use less with the same behavior
+export PAGER=less
+# Ensure man pages also keep content after exit
+export MANPAGER='less -X'
+
 # git設定
 autoload -Uz vcs_info
 setopt prompt_subst
@@ -210,6 +218,15 @@ export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:$PATH"
 # clean up and normalize the PATH.
 # -------------------------------------------
 eval export "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
+
+# Shift+↑/↓ で ScrollToPrompt が効くように、プロンプト直前に A マーカーを送る
+if [ -n "$WEZTERM_EXECUTABLE" ] 2>/dev/null; then
+  wezterm_precmd() {
+    printf '\033]133;A\007'
+  }
+  autoload -Uz add-zsh-hook 2>/dev/null || true
+  add-zsh-hook precmd wezterm_precmd 2>/dev/null || true
+fi
 
 # -------------------------------------------
 if builtin command -v resize >/dev/null 2>&1; then
@@ -410,6 +427,15 @@ periodic()
       echo -e "\033[m"
       echo ""
     fi
+  fi
+}
+
+hs()
+{
+  if [ $# -gt 0 ]; then
+    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco --query "$*" | tr -d '\n' | xclip -selection clipboard
+  else
+    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco | tr -d '\n' | xclip -selection clipboard
   fi
 }
 
