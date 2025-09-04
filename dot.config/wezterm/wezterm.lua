@@ -22,6 +22,7 @@ end)
 local config = {
   -- 基本設定
   term = 'xterm-256color',
+  enable_wayland = false,
   font = wezterm.font_with_fallback{
     { family = 'Source Han Code JP R', weight = 'Regular', italic = false },
     { family = 'M+1Code Nerd Font', weight = 'Regular', italic = false },
@@ -67,7 +68,7 @@ local config = {
 
   -- ウィンドウフレーム設定
   window_frame = {
-    font = wezterm.font { family = 'Meiryo', weight = 'Regular', italic = false },
+    font = wezterm.font { family = 'Meiryo UI', weight = 'Regular', italic = false },
     font_size = 11.0,
   },
 
@@ -97,20 +98,24 @@ local config = {
     { key = '9', mods = 'ALT', action = wezterm.action { ActivateTab = 8 } },
     { key = '0', mods = 'ALT', action = wezterm.action { ActivateTab = 9 } },
     { key = 'Enter', mods = 'ALT', action = wezterm.action.DisableDefaultAssignment },
+    { key = "Enter", mods = "SHIFT", action = wezterm.action{ SendString="\x1b\r"} }, -- Shift+Enter for Claude Code
     { key = 'Delete', mods = 'CTRL', action = wezterm.action.SendKey { key = 'd', mods = 'ALT', } },
     { key = 'Backspace', mods = 'CTRL', action = wezterm.action.SendKey { key = 'w', mods = 'CTRL', } },
     { key = 'LeftArrow', mods = 'CTRL', action = wezterm.action.SendKey { key = 'b', mods = 'ALT', } },
     { key = 'RightArrow',mods = 'CTRL', action = wezterm.action.SendKey { key = 'f', mods = 'ALT', } },
     { key = 'UpArrow',   mods = 'SHIFT', action = wezterm.action.ScrollToPrompt(-1) },
     { key = 'DownArrow', mods = 'SHIFT', action = wezterm.action.ScrollToPrompt(1) },
-    { key = ',', mods = 'CTRL', action = wezterm.action { SpawnCommandInNewWindow = { args = { 'cursor', os.getenv('HOME') .. '/.wezterm.lua' } } } },
+    { key = ',', mods = 'CTRL', action = wezterm.action { SpawnCommandInNewWindow = { args = { 'cursor', os.getenv('HOME') .. '/.config/wezterm/wezterm.lua' } } } },
   },
 
   -- 選択時の単語区切り設定
   selection_word_boundary = " '\"{}[](),",
 }
 
-config.color_scheme = 'Darcula (base16)'
-config.color_scheme = 'Dracula'
+-- config.color_scheme = 'Molokai'
+-- config.color_scheme = 'Dracula'
+-- config.color_scheme = 'Dark Violet (base16)'
+-- config.color_scheme = 'Tokyo Night Moon'
+config.color_scheme = 'Tokyo Night'
 
 return config

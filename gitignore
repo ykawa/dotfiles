@@ -228,5 +228,12 @@ thumb
 CLAUDE.md
 .claude
 
+# gemini cli specific
 GEMINI.md
+
+# cursor specific
 .cursorrules
+
+# codex specific
+AGENTS.md
+

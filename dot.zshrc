@@ -7,12 +7,18 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
 
   ZSH_THEME=""
 
+  # zsh-completions configuration before sourcing oh-my-zsh
+  fpath=($fpath $HOME/.oh-my-zsh/custom/plugins/zsh-completions/src)
+  autoload -Uz compinit
+  compinit
+
   plugins=(
     git
     docker
     npm
     history-substring-search
     zsh-autosuggestions
+    zsh-completions
     zsh-syntax-highlighting
   )
 
@@ -439,8 +445,105 @@ hs()
   fi
 }
 
+gh-pr-rebase-onto-develop() {
+  # オプション:
+  #   -r <remote>   リモート名 (既定: origin)
+  #   -m <main>     mainブランチ名 (既定: main)
+  #   -d <develop>  developブランチ名 (既定: develop)
+  #   -b <name>     新規ブランチ名 (省略時は自動生成)
+  #   -k            マージコミットを保持してrebase (--rebase-merges)
+  #   -N            PRは作成しない (ブランチ作成＆pushのみ)
+  #
+  # 使い方:
+  #   gh-pr-rebase-onto-develop <PR番号|ブランチ名> [オプション...]
+  #
+  # 例:
+  #   gh-pr-rebase-onto-develop 123
+  #   gh-pr-rebase-onto-develop feature/foo -k -d develop -m main
+
+  local remote="origin" main="main" develop="develop" new_branch="" keep_merges=0 no_pr=0
+  while getopts "r:m:d:b:kN" opt; do
+    case "$opt" in
+      r) remote="$OPTARG" ;;
+      m) main="$OPTARG" ;;
+      d) develop="$OPTARG" ;;
+      b) new_branch="$OPTARG" ;;
+      k) keep_merges=1 ;;
+      N) no_pr=1 ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
+  local pr_or_branch="${1:-}"
+  if [[ -z "$pr_or_branch" ]]; then
+    echo "Usage: gh-pr-rebase-onto-develop <PR番号|ブランチ名> [-r remote] [-m main] [-d develop] [-b new_branch] [-k] [-N]" >&2
+    return 2
+  fi
+
+  # 必要コマンド確認
+  command -v git >/dev/null 2>&1 || { echo "git が見つかりません"; return 1; }
+  if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
+    command -v gh >/dev/null 2>&1 || { echo "gh (GitHub CLI) が見つかりません"; return 1; }
+  fi
+
+  # 作業ツリーがクリーンか確認
+  if ! git diff --quiet || ! git diff --staged --quiet; then
+    echo "作業ツリーに未コミットの変更があります。コミットまたはstashしてください。" >&2
+    return 1
+  fi
+
+  git fetch --all --prune || return 1
+
+  # 引数がPR番号なら head ブランチ名を取得、そうでなければそのまま使う
+  local head
+  if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
+    head="$(gh pr view "$pr_or_branch" --json headRefName -q .headRefName)" || return 1
+  else
+    head="$pr_or_branch"
+  fi
+
+  # new_branch が未指定なら自動生成
+  if [[ -z "$new_branch" ]]; then
+    if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
+      new_branch="${head}-onto-${develop}-from-pr-${pr_or_branch}"
+    else
+      new_branch="${head}-onto-${develop}"
+    fi
+  fi
+
+  # 参照が存在するか軽くチェック
+  git rev-parse --verify "${remote}/${main}" >/dev/null 2>&1 || { echo "リモート ${remote}/${main} が見つかりません"; return 1; }
+  git rev-parse --verify "${remote}/${develop}" >/dev/null 2>&1 || { echo "リモート ${remote}/${develop} が見つかりません"; return 1; }
+  git rev-parse --verify "${remote}/${head}" >/dev/null 2>&1 || { echo "リモート ${remote}/${head} が見つかりません"; return 1; }
+
+  # 元ブランチから作業ブランチを切る（ローカルに無くてもOK）
+  if ! git switch "$head" 2>/dev/null; then
+    git switch -c "$head" "${remote}/${head}" || return 1
+  fi
+  git switch -c "$new_branch" || return 1
+
+  echo "Rebasing commits in '${head}' that are not in '${remote}/${main}' onto '${remote}/${develop}' ..."
+  if [[ $keep_merges -eq 1 ]]; then
+    git rebase --rebase-merges --onto "${remote}/${develop}" "${remote}/${main}" || { echo "rebase失敗。必要なら 'git rebase --abort' を実行してください。"; return 1; }
+  else
+    git rebase --onto "${remote}/${develop}" "${remote}/${main}" || { echo "rebase失敗。必要なら 'git rebase --abort' を実行してください。"; return 1; }
+  fi
+
+  # push & PR作成
+  git push -u "${remote}" "${new_branch}" || return 1
+
+  if [[ $no_pr -eq 0 ]]; then
+    # 既定テンプレを使いたくない場合は --fill を外して --title/--body を指定してください
+    gh pr create --base "${develop}" --head "${new_branch}" --fill || return 1
+    echo "✅ develop向けPRを作成しました。"
+  else
+    echo "✅ ブランチ '${new_branch}' を push しました（PR未作成 -N）。"
+  fi
+}
+
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 
 [ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
 
-alias claude="/home/ykawa/.claude/local/claude"
+alias claude="$HOME/.claude/local/claude"
+

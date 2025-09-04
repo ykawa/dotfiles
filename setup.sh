@@ -22,6 +22,34 @@ unset check_lacking_commands
 
 [ -z "$DEBUG_DOTFILES" ] || pushd $HOME
 
+process_directory_recursive() {
+  local source_dir="$1"
+  local target_dir="$2"
+  
+  mkdir -p "${target_dir}"
+  
+  for item in "${source_dir}"/*; do
+    if [ -e "${item}" ]; then
+      local item_name=$(basename "${item}")
+      local target_item="${target_dir}/${item_name}"
+      
+      if [ -d "${item}" ]; then
+        if [[ -L "${target_item}" ]]; then
+          mv -fv "${target_item}" "${target_item}.bak"
+        fi
+        process_directory_recursive "${item}" "${target_item}"
+      else
+        if [[ -e "${target_item}" || -L "${target_item}" ]]; then
+          mv -fv "${target_item}" "${target_item}.bak"
+        fi
+        
+        ln -s "$(realpath "${item}")" "${target_item}"
+        echo "Created symlink: ${target_item} -> ${item}"
+      fi
+    fi
+  done
+}
+
 # Add github.com to ~/.ssh/known_hosts
 ssh -T -n -o StrictHostKeyChecking=accept-new git@github.com
 
@@ -33,10 +61,19 @@ fi
 
 for df in dotfiles/dot.*; do
   link="${df##dotfiles/dot}"
-  if [[ -e "${link}" || -L "${link}" ]]; then
-    mv -fv "${link}" "${link}.bak"
+  
+  if [ -d "${df}" ]; then
+    if [[ -L "${link}" ]]; then
+      mv -fv "${link}" "${link}.bak"
+    fi
+    
+    process_directory_recursive "${df}" "${link}"
+  else
+    if [[ -e "${link}" || -L "${link}" ]]; then
+      mv -fv "${link}" "${link}.bak"
+    fi
+    ln -s "${df}" "${link}"
   fi
-  ln -s "${df}" "${link}"
 done
 
 # bash-it
@@ -71,6 +108,13 @@ fi
 
 # oh-my-zsh additional plugins
 if [ -d .oh-my-zsh ]; then
+  # zsh-completions
+  if [ ! -d .oh-my-zsh/custom/plugins/zsh-completions ]; then
+    git clone https://github.com/zsh-users/zsh-completions .oh-my-zsh/custom/plugins/zsh-completions
+  else
+    git -C .oh-my-zsh/custom/plugins/zsh-completions pull --all -vv --prune
+  fi
+
   # zsh-autosuggestions
   if [ ! -d .oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions .oh-my-zsh/custom/plugins/zsh-autosuggestions

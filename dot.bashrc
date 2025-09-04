@@ -49,78 +49,24 @@ case "$TERM" in
   *) ;;
 esac
 
-# Load bash-it
-if [ -f "$HOME/.bash_it/bash_it.sh" ]; then
-  # Lock and Load a custom theme file.
-  # Leave empty to disable theming.
-  export BASH_IT_THEME='bobby'
-
-  # (Advanced): Change this to the name of your remote repo if you
-  # cloned bash-it with a remote other than origin such as `bash-it`.
-  # export BASH_IT_REMOTE='bash-it'
-
-  # Your place for hosting Git repos. I use this for private repos.
-  export GIT_HOSTING='git@github.com'
-
-  # Don't check mail when opening terminal.
-  unset MAILCHECK
-
-  # Change this to your console based IRC client of choice.
-  export IRC_CLIENT='irssi'
-
-  # Set this to the command you use for todo.txt-cli
-  export TODO="t"
-
-  # Set this to false to turn off version control status checking within the prompt for all themes
-  export SCM_CHECK=true
-
-  # Set Xterm/screen/Tmux title with only a short hostname.
-  # Uncomment this (or set SHORT_HOSTNAME to something else),
-  # Will otherwise fall back on $HOSTNAME.
-  #export SHORT_HOSTNAME=$(hostname -s)
-
-  # Set Xterm/screen/Tmux title with only a short username.
-  # Uncomment this (or set SHORT_USER to something else),
-  # Will otherwise fall back on $USER.
-  #export SHORT_USER=${USER:0:8}
-
-  # Set Xterm/screen/Tmux title with shortened command and directory.
-  # Uncomment this to set.
-  #export SHORT_TERM_LINE=true
-
-  # Set vcprompt executable path for scm advance info in prompt (demula theme)
-  # https://github.com/djl/vcprompt
-  #export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
-
-  # (Advanced): Uncomment this to make Bash-it reload itself automatically
-  # after enabling or disabling aliases, plugins, and completions.
-  # export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=1
-
-  # Uncomment this to make Bash-it create alias reload.
-  # export BASH_IT_RELOAD_LEGACY=1
-
-  # Load Bash It
-  source "$HOME/.bash_it/bash_it.sh"
-else
-  # Fallback to basic prompt if bash-it is not available
-  short_host_name() {
-    local len=${#HOSTNAME}
-    if [ $len -gt 8 ]; then
-      echo "${HOSTNAME:0:4}${HOSTNAME:$len-4:4}"
-    else
-      echo "${HOSTNAME}"
-    fi
-  }
-
-  PS1="[\u@$(short_host_name) \W]$ "
-  unset -f short_host_name
-
-  # Load basic bash completion
-  if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  elif [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
+# Fallback to basic prompt if bash-it is not available
+short_host_name() {
+  local len=${#HOSTNAME}
+  if [ $len -gt 8 ]; then
+    echo "${HOSTNAME:0:4}${HOSTNAME:$len-4:4}"
+  else
+    echo "${HOSTNAME}"
   fi
+}
+
+PS1="[\u@$(short_host_name) \W]$ "
+unset -f short_host_name
+
+# Load basic bash completion
+if [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+elif [ -f /usr/share/bash-completion/bash_completion ]; then
+  . /usr/share/bash-completion/bash_completion
 fi
 
 # -- coreutils for macos
@@ -403,6 +349,102 @@ hs()
 reload() {
   exec "${SHELL}" "$@"
 }
+
+gh-pr-rebase-onto-develop() {
+  # オプション:
+  #   -r <remote>   リモート名 (既定: origin)
+  #   -m <main>     mainブランチ名 (既定: main)
+  #   -d <develop>  developブランチ名 (既定: develop)
+  #   -b <name>     新規ブランチ名 (省略時は自動生成)
+  #   -k            マージコミットを保持してrebase (--rebase-merges)
+  #   -N            PRは作成しない (ブランチ作成＆pushのみ)
+  #
+  # 使い方:
+  #   gh-pr-rebase-onto-develop <PR番号|ブランチ名> [オプション...]
+  #
+  # 例:
+  #   gh-pr-rebase-onto-develop 123
+  #   gh-pr-rebase-onto-develop feature/foo -k -d develop -m main
+  local remote="origin" main="main" develop="develop" new_branch="" keep_merges=0 no_pr=0
+  while getopts "r:m:d:b:kN" opt; do
+    case "$opt" in
+      r) remote="$OPTARG" ;;
+      m) main="$OPTARG" ;;
+      d) develop="$OPTARG" ;;
+      b) new_branch="$OPTARG" ;;
+      k) keep_merges=1 ;;
+      N) no_pr=1 ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
+  local pr_or_branch="${1:-}"
+  if [[ -z "$pr_or_branch" ]]; then
+    echo "Usage: gh-pr-rebase-onto-develop <PR番号|ブランチ名> [-r remote] [-m main] [-d develop] [-b new_branch] [-k] [-N]" >&2
+    return 2
+  fi
+
+  # 必要コマンド確認
+  command -v git >/dev/null 2>&1 || { echo "git が見つかりません"; return 1; }
+  if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
+    command -v gh >/dev/null 2>&1 || { echo "gh (GitHub CLI) が見つかりません"; return 1; }
+  fi
+
+  # 作業ツリーがクリーンか確認
+  if ! git diff --quiet || ! git diff --staged --quiet; then
+    echo "作業ツリーに未コミットの変更があります。コミットまたはstashしてください。" >&2
+    return 1
+  fi
+
+  git fetch --all --prune || return 1
+
+  # 引数がPR番号なら head ブランチ名を取得、そうでなければそのまま使う
+  local head
+  if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
+    head="$(gh pr view "$pr_or_branch" --json headRefName -q .headRefName)" || return 1
+  else
+    head="$pr_or_branch"
+  fi
+
+  # new_branch が未指定なら自動生成
+  if [[ -z "$new_branch" ]]; then
+    if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
+      new_branch="${head}-onto-${develop}-from-pr-${pr_or_branch}"
+    else
+      new_branch="${head}-onto-${develop}"
+    fi
+  fi
+
+  # 参照が存在するか軽くチェック
+  git rev-parse --verify "${remote}/${main}" >/dev/null 2>&1 || { echo "リモート ${remote}/${main} が見つかりません"; return 1; }
+  git rev-parse --verify "${remote}/${develop}" >/dev/null 2>&1 || { echo "リモート ${remote}/${develop} が見つかりません"; return 1; }
+  git rev-parse --verify "${remote}/${head}" >/dev/null 2>&1 || { echo "リモート ${remote}/${head} が見つかりません"; return 1; }
+
+  # 元ブランチから作業ブランチを切る（ローカルに無くてもOK）
+  if ! git switch "$head" 2>/dev/null; then
+    git switch -c "$head" "${remote}/${head}" || return 1
+  fi
+  git switch -c "$new_branch" || return 1
+
+  echo "Rebasing commits in '${head}' that are not in '${remote}/${main}' onto '${remote}/${develop}' ..."
+  if [[ $keep_merges -eq 1 ]]; then
+    git rebase --rebase-merges --onto "${remote}/${develop}" "${remote}/${main}" || { echo "rebase失敗。必要なら 'git rebase --abort' を実行してください。"; return 1; }
+  else
+    git rebase --onto "${remote}/${develop}" "${remote}/${main}" || { echo "rebase失敗。必要なら 'git rebase --abort' を実行してください。"; return 1; }
+  fi
+
+  # push & PR作成
+  git push -u "${remote}" "${new_branch}" || return 1
+
+  if [[ $no_pr -eq 0 ]]; then
+    # 既定テンプレを使いたくない場合は --fill を外して --title/--body を指定してください
+    gh pr create --base "${develop}" --head "${new_branch}" --fill || return 1
+    echo "✅ develop向けPRを作成しました。"
+  else
+    echo "✅ ブランチ '${new_branch}' を push しました（PR未作成 -N）。"
+  fi
+}
+
 
 # Shift+↑/↓ で ScrollToPrompt が効くように、プロンプト直前に A マーカーを送る
 if [ -n "$WEZTERM_EXECUTABLE" ] 2>/dev/null; then

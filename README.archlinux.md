@@ -34,7 +34,7 @@ sudo pacman --noconfirm -Syu
 ## add yay
 
 ```sh
-sudo pacman --noconfirm -S yay
+sudo pacman --noconfirm --needed -S yay
 ```
 
 ## pacman-mirrors & update
@@ -58,23 +58,37 @@ yay -Yc --noconfirm && sudo rm -rf ~/.cache/yay/ ~/.cache/bazel/ && LANG=C yay -
 ## base-devel
 
 ```sh
-yay --noconfirm -S base-devel
+yay --noconfirm --needed -S base-devel
 ```
 
 ## vim
 
 ```sh
-yay --noconfirm -S vim python-pynvim
+yay --noconfirm --needed -S vim
+yay --noconfirm -Rns nano nano-syntax-highlighting
 ```
 
 ## zsh
 
 ```sh
-yay --noconfirm -S zsh zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-theme-powerlevel10k
+yay --noconfirm --needed -S zsh zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-theme-powerlevel10k
 ```
 
 ```sh
 sudo chsh -s /bin/zsh $USER
+```
+
+## capslock to ctrl (X11)
+
+```sh
+ls /etc/X11/xorg.conf.d/
+sudo tee /etc/X11/xorg.conf.d/00-keyboard.conf << 'EOF'
+Section "InputClass"
+    Identifier "system-keyboard"
+    MatchIsKeyboard "on"
+    Option "XkbOptions" "ctrl:nocaps"
+EndSection
+EOF
 ```
 
 ## capslock to ctrl (virtual console)
@@ -110,6 +124,36 @@ sudo sed -i.bak -E -e 's/^XKBOPTIONS=.*$/XKBOPTIONS="ctrl:nocaps"/' /etc/default
 + XKBOPTIONS="ctrl:nocaps"
 ```
 
+## capslock to ctrl (lower level)
+
+```bash
+sudo mkdir -p /etc/udev/hwdb.d/
+```
+
+`/etc/udev/hwdb.d/90-caps2ctrl.hwdb`
+```
+sudo tee /etc/udev/hwdb.d/90-caps2ctrl.hwdb << 'EOF'
+# Built-in (PS/2) keyboard
+evdev:atkbd:*
+ KEYBOARD_KEY_3a=leftctrl    # 0x3a = CapsLock
+
+# USB Keyboards in General
+evdev:input:b0003v*p*
+ KEYBOARD_KEY_70039=leftctrl  # 0x39(HID) = CapsLock
+
+# Bluetooth keyboard (if needed)
+evdev:input:b0005v*p*
+ KEYBOARD_KEY_70039=leftctrl
+
+EOF
+```
+
+```sh
+sudo systemd-hwdb update
+sudo udevadm trigger -s input
+sudo mkinitcpio -P
+```
+
 ## disable firewalld
 
 ```sh
@@ -117,18 +161,22 @@ sudo systemctl disable --now firewalld
 ```
 
 ```sh
-yay --noconfirm -Rs firewalld
+yay --noconfirm --needed -Rs firewalld
 ```
 
 ## fonts
 
 ```sh
-yay --noconfirm -S \
+yay --noconfirm --needed -S \
+  otf-source-han-code-jp \
+  ttf-cica
+```
+
+```sh
+yay --noconfirm --needed -S \
   adobe-source-code-pro-fonts \
   adobe-source-han-sans-jp-fonts \
   adobe-source-han-serif-otc-fonts \
-  otf-source-han-code-jp \
-  ttf-cica \
   ttf-font-awesome \
   ttf-jetbrains-mono \
   ttf-jetbrains-mono-nerd \
@@ -156,7 +204,7 @@ sudo systemctl status avahi-daemon.service
 ## mdns
 
 ```sh
-yay --noconfirm -S nss-mdns
+yay --noconfirm --needed -S nss-mdns
 ```
 
 ```sh
@@ -263,13 +311,6 @@ curl -L https://raw.githubusercontent.com/ykawa/dotfiles/develop/setup.sh | bash
 exec $SHELL -l
 ```
 
-### Shell Enhancement
-
-After installing dotfiles, both bash-it and oh-my-zsh will be available:
-
-- **Bash users**: bash-it with useful plugins, completions, and themes
-- **Zsh users**: oh-my-zsh with plugins like git, docker, autosuggestions, and syntax highlighting
-
 ### (Optional) If you want to come vim setup
 
 ```sh
@@ -305,7 +346,7 @@ mise use node@lts
 ### ruby build dependencies
 
 ```sh
-yay --noconfirm -S rustup libffi libyaml openssl zlib
+yay --noconfirm --needed -S rustup libffi libyaml openssl zlib
 ```
 
 ```sh
@@ -322,7 +363,7 @@ cpanm -n Perl::LanguageServer Carton Bundle::Camelcade App::PRT App::EditorTools
 ## docker
 
 ```sh
-yay --noconfirm -S docker docker-compose docker-buildx
+yay --noconfirm --needed -S docker docker-compose docker-buildx
 ```
 
 ```sh
@@ -395,7 +436,7 @@ echo -e "[Service]\nExecStart=\nExecStart=-/usr/bin/agetty --autologin $USER --n
 ## vagrant with virtualbox
 
 ```sh
-yay --noconfirm -S vagrant virtualbox-host-modules-arch virtualbox-guest-iso virtualbox
+yay --noconfirm --needed -S vagrant virtualbox-host-modules-arch virtualbox-guest-iso virtualbox
 ```
 
 ```sh
@@ -413,7 +454,7 @@ vagrant plugin install vagrant-vbguest vagrant-share vagrant-env
 ## qemu with virt-manager
 
 ```sh
-yay --noconfirm -S virt-manager qemu-desktop
+yay --noconfirm --needed -S virt-manager qemu-full cloud-utils guestfs-tools
 ```
 
 ```sh
@@ -452,10 +493,16 @@ sudo nmcli connection down br0
 sudo nmcli connection up br0
 ```
 
+## google-chrome
+
+```sh
+yay --noconfirm --needed -S google-chrome
+```
+
 ## onedrive
 
 ```sh
-yay --noconfirm -S onedrive-abraunegg
+yay --noconfirm --needed -S onedrive-abraunegg
 ```
 
 ```sh
@@ -475,18 +522,17 @@ journalctl --user-unit=onedrive -f
 ### (Optional) If you no need pidgin and vivaldi.
 
 ```sh
-yay --noconfirm -Rs pidgin pidgin-libnotify vivaldi
+yay --noconfirm -Rns pidgin pidgin-libnotify vivaldi
 ```
 
 ### (Optional) If you need to install the following applications
 
 ```sh
-yay --noconfirm -S \
+yay --noconfirm --needed -S \
   copyq \
   cursor-bin \
   dropbox \
   fwupd \
-  google-chrome \
   grc \
   hyper-bin \
   jetbrains-toolbox \
@@ -501,6 +547,41 @@ yay --noconfirm -S \
   zoom
 ```
 
+```sh
+yay -S --noconfirm --needed --needed \
+gnome-system-monitor \
+ulauncher \
+gnome-screenshot \
+python-requests python-beautifulsoup4 python-lxml python-pyperclip \
+wev \
+evince \
+xviewer \
+libreoffice-fresh \
+libreoffice-fresh-ja \
+alacritty \
+alacritty-theme \
+zellij
+```
+
+```sh
+yay -S --noconfirm --needed vlc vlc-plugins-all
+```
+
+```sh
+yay -S --noconfirm --needed brave-bin
+```
+
+```sh
+yay --noconfirm --needed -S \
+  cmake \
+  shellcheck \
+  lsof \
+  github-cli \
+  peek \
+  pinta \
+  openai-codex
+```
+
 ## fcitx5 + mozc
 
 ### (Optional) If you use JetBrains IDEs with fcitx5
@@ -511,11 +592,19 @@ https://wiki.archlinux.jp/index.php/Fcitx5#JetBrains_IDE_.E3.81.A7_Fcitx5_.E3.81
 
 ```sh
 # Adjust JAVA_HOME accordingly
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk/ yay --noconfirm -S fcitx5-mozc-ext-neologd fcitx5-im
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk/ yay --noconfirm --needed -S fcitx5-mozc-ext-neologd fcitx5-im
 ```
 
+or
+
 ```sh
-yay --noconfirm -S mozc-ut fcitx5-mozc-ut fcitx5-im
+yay --noconfirm --needed -S fcitx5-mozc-ut fcitx5-im
+```
+
+or
+
+```sh
+yay --noconfirm --needed -S mozc-ut fcitx5-im
 ```
 
 ## systemd.mount
@@ -533,7 +622,7 @@ echo "//nas.local/$USER /nas/$USER cifs username=$USER,password=XXXXXXX,uid=$USE
 ### key repeat
 
 ```sh
-echo "xset r rate 200 40" | tee -a ~/.xinitrc
+echo "xset r rate 150 50" | tee -a ~/.xinitrc
 ```
 
 ## .profile
@@ -553,7 +642,7 @@ echo 'export ERRFILE=/dev/null' | tee -a ~/.profile
 ## genymotion
 
 ```sh
-yay --noconfirm -S genymotion
+yay --noconfirm --needed -S genymotion
 ```
 
 ### (Optional) If you need to install google play services for android9 (pie)

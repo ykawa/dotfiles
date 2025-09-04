@@ -172,10 +172,10 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   plugins: [
-    "hyper-material-theme",
-    "hyper-pane",
-    "hyper-search",
-    "hyper-tab-icons-plus",
+    'hyper-material-theme',
+    'hyper-pane',
+    'hyper-search',
+    'hyper-tab-icons-plus'
     // "hypercwd",
     // "hyperterm-paste",
     // "hyper-disable-new-version-notification"
