@@ -31,12 +31,54 @@ if [ ! -d dotfiles ]; then
   git -C "dotfiles" remote set-url origin git@github.com:ykawa/dotfiles.git
 fi
 
+# ディレクトリ内の構造を再帰的にリンクする関数
+link_directory_contents() {
+  local src_dir="$1"
+  local dest_dir="$2"
+  
+  # ターゲットディレクトリを作成
+  mkdir -p "${dest_dir}"
+  
+  # ソースディレクトリ内の各アイテムを処理
+  for item in "${src_dir}"/*; do
+    if [ -e "${item}" ]; then
+      item_name="$(basename "${item}")"
+      target_path="${dest_dir}/${item_name}"
+      
+      # 既存のファイル/リンクがある場合はバックアップ
+      if [[ -e "${target_path}" || -L "${target_path}" ]]; then
+        mv -fv "${target_path}" "${target_path}.bak"
+      fi
+      
+      # ファイルの場合はシンボリックリンクを作成
+      if [ -f "${item}" ]; then
+        ln -s "$(realpath "${item}")" "${target_path}"
+      # サブディレクトリの場合は再帰的に処理
+      elif [ -d "${item}" ]; then
+        link_directory_contents "${item}" "${target_path}"
+      fi
+    fi
+  done
+}
+
 for df in dotfiles/dot.*; do
   link="${df##dotfiles/dot}"
-  if [[ -e "${link}" || -L "${link}" ]]; then
-    mv -fv "${link}" "${link}.bak"
+  
+  # ファイルの場合
+  if [ -f "${df}" ]; then
+    if [[ -e "${link}" || -L "${link}" ]]; then
+      mv -fv "${link}" "${link}.bak"
+    fi
+    ln -s "$(realpath "${df}")" "${link}"
+  # ディレクトリの場合
+  elif [ -d "${df}" ]; then
+    # dotを除いた名前でディレクトリ構造を作成し、中身をリンク
+    target_dir="${link}"
+    if [[ -e "${target_dir}" || -L "${target_dir}" ]]; then
+      mv -fv "${target_dir}" "${target_dir}.bak"
+    fi
+    link_directory_contents "${df}" "${target_dir}"
   fi
-  ln -s "${df}" "${link}"
 done
 
 # bash-it
