@@ -2,39 +2,29 @@
 
 export LANG=ja_JP.UTF-8
 
-if [ -d "$HOME/.oh-my-zsh" ]; then
-  export ZSH="$HOME/.oh-my-zsh"
+autoload -Uz colors
+colors
+setopt globdots
 
-  ZSH_THEME=""
+fpath=($fpath $HOME/.zsh/completion)
+if [ -d "$HOME/.zsh/zsh-completions/src" ]; then
+  fpath=($fpath $HOME/.zsh/zsh-completions/src)
+fi
+autoload -Uz compinit
+compinit
 
-  # zsh-completions configuration before sourcing oh-my-zsh
-  fpath=($fpath $HOME/.oh-my-zsh/custom/plugins/zsh-completions/src)
-  autoload -Uz compinit
-  compinit
+# zsh-autosuggestions
+if [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [ -f "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+  source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
 
-  plugins=(
-    git
-    docker
-    npm
-    history-substring-search
-    zsh-autosuggestions
-    zsh-completions
-    zsh-syntax-highlighting
-  )
-
-  source $ZSH/oh-my-zsh.sh
-
-  autoload -Uz colors
-  colors
-  setopt globdots
-else
-  autoload -Uz colors
-  colors
-
-  setopt globdots
-  fpath=($fpath $HOME/.zsh/completion)
-  autoload -Uz compinit
-  compinit
+# zsh-syntax-highlighting (should be sourced at the end)
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [ -f "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+  source "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
 bindkey -e
@@ -255,30 +245,59 @@ if [ -n "$STY" ]; then
   alias cd=scr_cd
 fi
 
+# いい感じにファイルを検索する
 ffg() {
-  find ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
+  # Usage: ffg [-e EXT]... [--] GREP_ARGS...
+  local -a exts
+  local OPTIND opt
+  while getopts "e:" opt; do
+    case "$opt" in
+      e) exts+=("${OPTARG}") ;;
+    esac
+  done
+  shift $((OPTIND-1))
 
-cffg() {
-  find -maxdepth 2 ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
+  local ext_regex=""
+  if [ ${#exts[@]} -gt 0 ]; then
+    local sep=""
+    ext_regex='\.('
+    local e
+    for e in "${exts[@]}"; do
+      e="${e#.}"
+      ext_regex="${ext_regex}${sep}${e}"
+      sep='|'
+    done
+    ext_regex="${ext_regex})$"
+  fi
 
-effg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' -o -name '.tmp' \) -prune -o -type f -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
-
-jffg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'framework' -o -name '.tmp' \) -prune -o -type f -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
-
-pffg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
-
-rffg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'out' \
-    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
+  if [ -d .git ]; then
+    if [ -n "$ext_regex" ]; then
+      git ls-files -z | perl -0ne "print if /$ext_regex/s" | xargs -0 grep --binary-files=without-match "$@"
+    else
+      git ls-files -z | xargs -0 grep --binary-files=without-match "$@"
+    fi
+  else
+    local -a find_args
+    find_args=(
+      -type d \( -name node_modules -o -name .git -o -name public -o -name storage -o -name docs -o -name libraries -o -name vendor -o -name .tmp -o -name out -o -name framework \) -prune -o -type f
+    )
+    if [ ${#exts[@]} -gt 0 ]; then
+      find_args+=( '(' )
+      local idx=0
+      local e
+      for e in "${exts[@]}"; do
+        e="${e#.}"
+        find_args+=( -name "*.${e}" )
+        idx=$((idx+1))
+        if [ $idx -lt ${#exts[@]} ]; then
+          find_args+=( -o )
+        fi
+      done
+      find_args+=( ')' )
+    fi
+    find_args+=( -print0 )
+    find "${find_args[@]}" | xargs -0 grep --binary-files=without-match "$@"
+  fi
 }
 
 c() {
@@ -544,6 +563,3 @@ gh-pr-rebase-onto-develop() {
 PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 
 [ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
-
-alias claude="$HOME/.claude/local/claude"
-

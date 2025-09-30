@@ -65,9 +65,21 @@ unset -f short_host_name
 # Load basic bash completion
 if [ -f /etc/bash_completion ]; then
   . /etc/bash_completion
-elif [ -f /usr/share/bash-completion/bash_completion ]; then
+fi
+if [ -f /usr/share/bash-completion/bash_completion ]; then
   . /usr/share/bash-completion/bash_completion
 fi
+
+# --- fzf: キーバインド＆補完 ---
+if [ -f /usr/share/fzf/key-bindings.bash ]; then
+  . /usr/share/fzf/key-bindings.bash
+fi
+if [ -f /usr/share/fzf/completion.bash ]; then
+  . /usr/share/fzf/completion.bash
+fi
+
+eval "$(dircolors -b 2>/dev/null || true)"
+eval "$(direnv hook bash)"
 
 # -- coreutils for macos
 if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
@@ -218,30 +230,59 @@ if [ -n "$STY" ]; then
   alias cd=scr_cd
 fi
 
+# いい感じにファイルを検索する
 ffg() {
-  find ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
+  # Usage: ffg [-e EXT]... [--] GREP_ARGS...
+  local -a exts
+  local OPTIND opt
+  while getopts "e:" opt; do
+    case "$opt" in
+      e) exts+=("${OPTARG}") ;;
+    esac
+  done
+  shift $((OPTIND-1))
 
-cffg() {
-  find -maxdepth 2 ! -type d -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
+  local ext_regex=""
+  if [ ${#exts[@]} -gt 0 ]; then
+    local sep=""
+    ext_regex='\.('
+    local e
+    for e in "${exts[@]}"; do
+      e="${e#.}"
+      ext_regex="${ext_regex}${sep}${e}"
+      sep='|'
+    done
+    ext_regex="${ext_regex})$"
+  fi
 
-effg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'storage' -o -name 'docs' -o -name '.tmp' \) -prune -o -type f -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
-
-jffg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'framework' -o -name '.tmp' \) -prune -o -type f -name '*.java' -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
-
-pffg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' \
-    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.php' -print0 | xargs -0 grep --binary-files=without-match "$@"
-}
-
-rffg() {
-  find -type d \( -name 'node_modules' -o -name '.git' -o -name 'public' -o -name 'out' \
-    -o -name 'storage' -o -name 'docs' -o -name 'libraries' -o -name 'vendor' -o -name '.tmp' \) -prune -o -type f -name '*.rb' -print0 | xargs -0 grep --binary-files=without-match "$@"
+  if [ -d .git ]; then
+    if [ -n "$ext_regex" ]; then
+      git ls-files -z | perl -0ne "print if /$ext_regex/s" | xargs -0 grep --binary-files=without-match "$@"
+    else
+      git ls-files -z | xargs -0 grep --binary-files=without-match "$@"
+    fi
+  else
+    local -a find_args
+    find_args=(
+      -type d \( -name node_modules -o -name .git -o -name public -o -name storage -o -name docs -o -name libraries -o -name vendor -o -name .tmp -o -name out -o -name framework \) -prune -o -type f
+    )
+    if [ ${#exts[@]} -gt 0 ]; then
+      find_args+=( '(' )
+      local idx=0
+      local e
+      for e in "${exts[@]}"; do
+        e="${e#.}"
+        find_args+=( -name "*.${e}" )
+        idx=$((idx+1))
+        if [ $idx -lt ${#exts[@]} ]; then
+          find_args+=( -o )
+        fi
+      done
+      find_args+=( ')' )
+    fi
+    find_args+=( -print0 )
+    find "${find_args[@]}" | xargs -0 grep --binary-files=without-match "$@"
+  fi
 }
 
 ccol() {
@@ -445,7 +486,6 @@ gh-pr-rebase-onto-develop() {
   fi
 }
 
-
 # Shift+↑/↓ で ScrollToPrompt が効くように、プロンプト直前に A マーカーを送る
 if [ -n "$WEZTERM_EXECUTABLE" ] 2>/dev/null; then
   __wezterm_prompt_mark() { printf '\033]133;A\007'; }
@@ -455,4 +495,3 @@ if [ -n "$WEZTERM_EXECUTABLE" ] 2>/dev/null; then
     PROMPT_COMMAND="__wezterm_prompt_mark; ${PROMPT_COMMAND}"
   fi
 fi
-

@@ -99,37 +99,6 @@ if [ -f .bash_it/bash_it.sh ]; then
   bash-it enable alias git docker
 fi
 
-# oh-my-zsh
-if [ ! -d .oh-my-zsh ]; then
-  git clone https://github.com/ohmyzsh/ohmyzsh.git .oh-my-zsh
-else
-  git -C .oh-my-zsh pull --all -vv --prune
-fi
-
-# oh-my-zsh additional plugins
-if [ -d .oh-my-zsh ]; then
-  # zsh-completions
-  if [ ! -d .oh-my-zsh/custom/plugins/zsh-completions ]; then
-    git clone https://github.com/zsh-users/zsh-completions .oh-my-zsh/custom/plugins/zsh-completions
-  else
-    git -C .oh-my-zsh/custom/plugins/zsh-completions pull --all -vv --prune
-  fi
-
-  # zsh-autosuggestions
-  if [ ! -d .oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions .oh-my-zsh/custom/plugins/zsh-autosuggestions
-  else
-    git -C .oh-my-zsh/custom/plugins/zsh-autosuggestions pull --all -vv --prune
-  fi
-
-  # zsh-syntax-highlighting
-  if [ ! -d .oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git .oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-  else
-    git -C .oh-my-zsh/custom/plugins/zsh-syntax-highlighting pull --all -vv --prune
-  fi
-fi
-
 # mise
 if ! type mise >/dev/null 2>&1; then
   curl https://mise.run | sh
@@ -140,8 +109,6 @@ fi
 if [ ! -e .tool-versions ]; then
   cat > .tool-versions << 'EOF'
 node lts
-ruby latest
-perl latest
 EOF
 fi
 
@@ -154,7 +121,6 @@ cat <<EOF
 # example of setting up mise.
 #
 #   mise install    # Install all tools in .tool-versions
-#   mise use        # Activate tools for current directory
 #
 # ----------------------------------------------------------------------
 # For more information about mise, visit:

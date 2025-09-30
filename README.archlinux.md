@@ -529,7 +529,6 @@ yay --noconfirm -Rns pidgin pidgin-libnotify vivaldi
 
 ```sh
 yay --noconfirm --needed -S \
-  copyq \
   cursor-bin \
   dropbox \
   fwupd \
@@ -543,24 +542,34 @@ yay --noconfirm --needed -S \
   slack-desktop \
   unarchiver \
   wezterm \
-  xclip \
   zoom
 ```
 
 ```sh
-yay -S --noconfirm --needed --needed \
-gnome-system-monitor \
-ulauncher \
-gnome-screenshot \
-python-requests python-beautifulsoup4 python-lxml python-pyperclip \
-wev \
-evince \
-xviewer \
-libreoffice-fresh \
-libreoffice-fresh-ja \
-alacritty \
-alacritty-theme \
-zellij
+yay --noconfirm --needed -S \
+  copyq \
+  xclip \
+  xev
+```
+
+```sh
+yay --noconfirm --needed -S \
+  wev
+```
+
+
+```sh
+yay -S --noconfirm --needed \
+  alacritty \
+  evince \
+  gnome-screenshot \
+  gnome-system-monitor \
+  libreoffice-fresh \
+  libreoffice-fresh-ja \
+  python-requests python-beautifulsoup4 python-lxml python-pyperclip \
+  ulauncher \
+  xviewer \
+  zellij
 ```
 
 ```sh

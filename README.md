@@ -10,4 +10,5 @@ curl -L https://raw.githubusercontent.com/ykawa/dotfiles/develop/setup.sh | bash
 
 ### archlinux and derived distributions
 
+[README.cahyos.md](README.cahyos.md)
 [README.archlinux.md](README.archlinux.md)

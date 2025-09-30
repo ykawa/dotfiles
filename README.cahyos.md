@@ -13,15 +13,36 @@ echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/10-installer
 + %wheel ALL=(ALL:ALL) NOPASSWD: ALL
 ```
 
+## avahi
+
+```sh
+sudo systemctl status avahi-daemon.service
+```
+
+```sh
+sudo systemctl enable --now avahi-daemon.service
+```
+
 ## sshd
 
 ```sh
 sudo systemctl enable --now sshd.service
 ```
 
+## disable ufw
+
+```sh
+sudo systemctl disable --now ufw
+```
+
+```sh
+paru --noconfirm -Rns ufw
+```
+
 ## update archlinux-keyring and cachyos-keyring
 
 ```sh
+sudo pacman --noconfirm -Syyuu
 sudo pacman --noconfirm -S archlinux-keyring cachyos-keyring
 ```
 
@@ -34,7 +55,7 @@ paru --noconfirm -Syu
 ## update all packages
 
 ```sh
-paru -Yc --noconfirm && sudo rm -rf ~/.cache/bazel/ && LANG=C paru -Syyuu --noconfirm
+paru -Syyuu --noconfirm
 ```
 
 ## vim
@@ -84,16 +105,6 @@ sudo udevadm trigger -s input
 sudo mkinitcpio -P
 ```
 
-## disable ufw
-
-```sh
-sudo systemctl disable --now ufw
-```
-
-```sh
-paru --noconfirm --needed -Rns ufw
-```
-
 ## fonts
 
 ```sh
@@ -113,16 +124,6 @@ sudo systemctl status systemd-timesyncd
 ```sh
 sudo timedatectl set-ntp true
 sudo systemctl enable --now systemd-timesyncd.service
-```
-
-## avahi
-
-```sh
-sudo systemctl status avahi-daemon.service
-```
-
-```sh
-sudo systemctl enable --now avahi-daemon.service
 ```
 
 ## mdns
@@ -186,20 +187,9 @@ curl -L https://raw.githubusercontent.com/ykawa/dotfiles/develop/setup.sh | bash
 exec $SHELL -l
 ```
 
-### ruby build dependencies
-
-```sh
-paru --noconfirm --needed -S rustup libffi libyaml openssl
-```
-
-```sh
-rustup default stable
-```
-
 ### mise (language runtime management)
 
 ```sh
-mise trust
 mise install
 mise use
 ```
