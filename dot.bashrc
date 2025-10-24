@@ -79,7 +79,6 @@ if [ -f /usr/share/fzf/completion.bash ]; then
 fi
 
 eval "$(dircolors -b 2>/dev/null || true)"
-eval "$(direnv hook bash)"
 
 # -- coreutils for macos
 if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then

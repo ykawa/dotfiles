@@ -328,36 +328,13 @@ mise use        # Activate tools for current directory
 
 ```sh
 # Check available versions
-mise list-all perl
-mise list-all ruby
 mise list-all node
 
 # Install specific version
-mise install perl@5.38.2
-mise install ruby@3.3.2
 mise install node@lts
 
 # Set local version for current directory
-mise use perl@5.38.2
-mise use ruby@3.3.2
 mise use node@lts
-```
-
-### ruby build dependencies
-
-```sh
-yay --noconfirm --needed -S rustup libffi libyaml openssl zlib
-```
-
-```sh
-rustup default stable
-```
-
-### (Optional) If you need development environment for perl
-
-```sh
-# e.g.
-cpanm -n Perl::LanguageServer Carton Bundle::Camelcade App::PRT App::EditorTools App::perlimports
 ```
 
 ## docker

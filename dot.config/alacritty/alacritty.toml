@@ -3,29 +3,29 @@
 [general]
 live_config_reload = true
 import = [
-  "~/.config/alacritty/themes/themes/tokyo_night.toml"
+  "~/dotffiles/tokyo-night.toml"
 ]
 
 [terminal]
-shell = { program = "/bin/bash", args = ["-lc", "zellij || true; exec /bin/bash -l"] }
+shell = { program = "zellij", args = [] }
 
 # 端末タイプ
-[env]
-TERM = "xterm-256color"
+# [env]
+# TERM = "xterm-256color"
 
 [window]
 decorations = "None"
 opacity = 0.8
 padding = { x = 0, y = 0 }
-dimensions = { columns = 1000, lines = 500 }
+dimensions = { columns = 0, lines = 0 }
 dynamic_title = true
 # startup_mode = "Windowed" | "Maximized" | "Fullscreen" | "SimpleFullscreen"
-startup_mode = "SimpleFullscreen"
+startup_mode = "Maximized"
 # decorations_theme_variant = "Dark" | "Light" | "None"
 decorations_theme_variant = "None"
 
 [scrolling]
-history = 100000
+history = 0
 
 [font]
 size = 11.75
@@ -54,10 +54,15 @@ shape = "Block"
 [colors]
 cursor = { text = "#003784", cursor = "#00a0e4" }
 
+[colors.selection]
+# text = "#1a1b26"
+# background = "#a9b1d6"
+text = "#000000"
+background = "#ffffff"
+
 [selection]
 # 単語選択の区切り
 semantic_escape_chars = " '\"{}[](),"
-
 # コピペ
 save_to_clipboard = true
 
@@ -114,62 +119,62 @@ key = "V"
 mods = "Control|Shift"
 action = "Paste"
 
-# Alt+1 → zellij タブ1
-[[keyboard.bindings]]
-key = "Key1"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "1"] }
-
-# Alt+2 → タブ2
-[[keyboard.bindings]]
-key = "Key2"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "2"] }
-
-# Alt+3 → タブ3
-[[keyboard.bindings]]
-key = "Key3"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "3"] }
-
-# Alt+4 → タブ4
-[[keyboard.bindings]]
-key = "Key4"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "4"] }
-
-# Alt+5 → タブ5
-[[keyboard.bindings]]
-key = "Key5"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "5"] }
-
-# Alt+6 → タブ6
-[[keyboard.bindings]]
-key = "Key6"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "6"] }
-
-# Alt+7 → タブ7
-[[keyboard.bindings]]
-key = "Key7"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "7"] }
-
-# Alt+8 → タブ8
-[[keyboard.bindings]]
-key = "Key8"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "8"] }
-
-# Alt+9 → タブ9
-[[keyboard.bindings]]
-key = "Key9"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "9"] }
-
-# Alt+0 → タブ10
-[[keyboard.bindings]]
-key = "Key0"
-mods = "Alt"
-command = { program = "zellij", args = ["action", "go-to-tab", "10"] }
+## # Alt+1 → zellij タブ1
+## [[keyboard.bindings]]
+## key = "Key1"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "1"] }
+## 
+## # Alt+2 → タブ2
+## [[keyboard.bindings]]
+## key = "Key2"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "2"] }
+## 
+## # Alt+3 → タブ3
+## [[keyboard.bindings]]
+## key = "Key3"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "3"] }
+## 
+## # Alt+4 → タブ4
+## [[keyboard.bindings]]
+## key = "Key4"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "4"] }
+## 
+## # Alt+5 → タブ5
+## [[keyboard.bindings]]
+## key = "Key5"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "5"] }
+## 
+## # Alt+6 → タブ6
+## [[keyboard.bindings]]
+## key = "Key6"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "6"] }
+## 
+## # Alt+7 → タブ7
+## [[keyboard.bindings]]
+## key = "Key7"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "7"] }
+## 
+## # Alt+8 → タブ8
+## [[keyboard.bindings]]
+## key = "Key8"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "8"] }
+## 
+## # Alt+9 → タブ9
+## [[keyboard.bindings]]
+## key = "Key9"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "9"] }
+## 
+## # Alt+0 → タブ10
+## [[keyboard.bindings]]
+## key = "Key0"
+## mods = "Alt"
+## command = { program = "zellij", args = ["action", "go-to-tab", "10"] }

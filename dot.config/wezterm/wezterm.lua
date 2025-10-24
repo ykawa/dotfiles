@@ -64,6 +64,8 @@ local config = {
     cursor_bg = '#00a0e4',
     cursor_fg = '#003784',
     cursor_border = '#003784',
+    selection_fg = '#1a1b26',
+    selection_bg = '#a9b1d6',
   },
 
   -- ウィンドウフレーム設定
