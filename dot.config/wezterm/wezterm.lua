@@ -25,6 +25,7 @@ local config = {
   enable_wayland = false,
   font = wezterm.font_with_fallback{
     { family = 'Source Han Code JP R', weight = 'Regular', italic = false },
+    { family = 'CommitMono', weight = 'Regular', italic = false },
     { family = 'M+1Code Nerd Font', weight = 'Regular', italic = false },
     { family = 'Fira Code', weight = 'Regular', italic = false },
     { family = 'Cica' },

@@ -14,7 +14,12 @@ setopt globdots
 # Completion System
 # =============================================================================
 
-fpath=($fpath $HOME/.zsh/completion)
+if [ -f /usr/share/zsh/plugins/zsh-completions/zsh-completions.zsh ]; then
+  fpath=($fpath /usr/share/zsh/plugins/zsh-completions/src)
+fi
+if [ -d "$HOME/.zsh/completion" ]; then
+  fpath=($fpath $HOME/.zsh/completion)
+fi
 if [ -d "$HOME/.zsh/zsh-completions/src" ]; then
   fpath=($fpath $HOME/.zsh/zsh-completions/src)
 fi
