@@ -22,7 +22,7 @@ end)
 local config = {
   -- 基本設定
   term = 'xterm-256color',
-  enable_wayland = false,
+  enable_wayland = true,
   font = wezterm.font_with_fallback{
     { family = 'Source Han Code JP R', weight = 'Regular', italic = false },
     { family = 'CommitMono', weight = 'Regular', italic = false },
@@ -86,7 +86,6 @@ local config = {
 
   -- Disable updates
   check_for_updates = false,
-  show_update_window = false,
 
   -- キーバインド設定
   keys = {

@@ -498,13 +498,22 @@ termtitle() {
   esac
 }
 
+# Clipboard copy: Wayland -> wl-copy, otherwise xclip (X11 etc.)
+clipcopy() {
+  if [ -n "${WAYLAND_DISPLAY:-}" ] && command -v wl-copy >/dev/null 2>&1; then
+    wl-copy
+  else
+    xclip -selection clipboard
+  fi
+}
+
 # Search shell history with peco
 # Usage: hs [query]
 hs() {
   if [ $# -gt 0 ]; then
-    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco --query "$*" | tr -d '\n' | xclip -selection clipboard
+    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco --query "$*" | tr -d '\n' | clipcopy
   else
-    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco | tr -d '\n' | xclip -selection clipboard
+    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco | tr -d '\n' | clipcopy
   fi
 }
 

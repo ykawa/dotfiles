@@ -327,6 +327,7 @@ paru --noconfirm --needed -S \
     slack-desktop \
     unarchiver \
     wezterm \
+    wl-clipboard \
     xclip \
     zoom
 ```

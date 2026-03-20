@@ -525,6 +525,7 @@ yay --noconfirm --needed -S \
 ```sh
 yay --noconfirm --needed -S \
   copyq \
+  wl-clipboard \
   xclip \
   xev
 ```
