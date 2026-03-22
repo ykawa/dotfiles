@@ -5,12 +5,11 @@ set -e
 echo "=== NetworkManager ブリッジネットワーク設定スクリプト ==="
 echo ""
 
-# 既存のbr0接続を削除
+# br0が既に存在すれば何もしない
 echo "[1/5] 既存のbr0接続をチェック..."
 if nmcli connection show br0 &>/dev/null; then
-    echo "  既存のbr0を削除します..."
-    nmcli connection delete br0
-    echo "  削除完了"
+    echo "  br0は既に存在します。設定をスキップします。"
+    exit 0
 else
     echo "  既存のbr0は見つかりませんでした"
 fi
@@ -23,40 +22,24 @@ for conn in $(nmcli -t -f NAME connection show | grep "^bridge-slave-"); do
     nmcli connection delete "$conn"
 done
 
-# アクティブな物理インターフェイスを検出（有線を優先）
+# アクティブな有線インターフェイスを検出
 echo ""
-echo "[3/5] アクティブなネットワークインターフェイスを検出..."
+echo "[3/5] アクティブな有線インターフェイスを検出..."
 
 # 有線インターフェイスを検索（アクティブなものを優先）
-WIRED_IF=$(nmcli -t -f DEVICE,TYPE,STATE device | grep "ethernet:connected" | head -n1 | cut -d: -f1)
+PRIMARY_IF=$(nmcli -t -f DEVICE,TYPE,STATE device | grep "ethernet:connected" | head -n1 | cut -d: -f1)
 
-if [ -z "$WIRED_IF" ]; then
+if [ -z "$PRIMARY_IF" ]; then
     # アクティブな有線がない場合、存在する有線を検索
-    WIRED_IF=$(nmcli -t -f DEVICE,TYPE device | grep "ethernet" | head -n1 | cut -d: -f1)
+    PRIMARY_IF=$(nmcli -t -f DEVICE,TYPE device | grep "ethernet" | head -n1 | cut -d: -f1)
 fi
 
-# WiFiインターフェイスを検索（アクティブなものを優先）
-WIFI_IF=$(nmcli -t -f DEVICE,TYPE,STATE device | grep "wifi:connected" | head -n1 | cut -d: -f1)
-
-if [ -z "$WIFI_IF" ]; then
-    # アクティブなWiFiがない場合、存在するWiFiを検索
-    WIFI_IF=$(nmcli -t -f DEVICE,TYPE device | grep "wifi" | head -n1 | cut -d: -f1)
-fi
-
-# 使用するインターフェイスを決定（有線を優先）
-PRIMARY_IF=""
-if [ -n "$WIRED_IF" ]; then
-    PRIMARY_IF="$WIRED_IF"
-    PRIMARY_TYPE="ethernet"
-    echo "  検出: 有線インターフェイス $WIRED_IF を使用します"
-elif [ -n "$WIFI_IF" ]; then
-    PRIMARY_IF="$WIFI_IF"
-    PRIMARY_TYPE="wifi"
-    echo "  検出: WiFiインターフェイス $WIFI_IF を使用します"
-else
-    echo "  エラー: 有線またはWiFiインターフェイスが見つかりません"
+if [ -z "$PRIMARY_IF" ]; then
+    echo "  エラー: 有線インターフェイスが見つかりません"
     exit 1
 fi
+
+echo "  検出: 有線インターフェイス $PRIMARY_IF を使用します"
 
 # ブリッジ接続を作成
 echo ""
@@ -75,18 +58,10 @@ echo "  ブリッジbr0を作成しました"
 echo ""
 echo "  物理インターフェイス $PRIMARY_IF をブリッジに接続..."
 
-if [ "$PRIMARY_TYPE" = "ethernet" ]; then
-    nmcli connection add type ethernet slave-type bridge \
-        con-name bridge-slave-$PRIMARY_IF \
-        ifname $PRIMARY_IF \
-        master br0
-else
-    # WiFiの場合
-    nmcli connection add type wifi slave-type bridge \
-        con-name bridge-slave-$PRIMARY_IF \
-        ifname $PRIMARY_IF \
-        master br0
-fi
+nmcli connection add type ethernet slave-type bridge \
+    con-name bridge-slave-$PRIMARY_IF \
+    ifname $PRIMARY_IF \
+    master br0
 
 echo "  スレーブ接続を作成しました"
 
