@@ -173,6 +173,15 @@ alias lu='ls -U1'
 alias s='screen -DRR'
 alias zmv='noglob zmv -W'
 
+# lsd overrides (if available)
+if builtin command -v lsd >/dev/null 2>&1; then
+  alias ls='lsd --group-dirs first'
+  alias ll='lsd -al --group-dirs first'
+  alias la='lsd -A --group-dirs first'
+  alias al='lsd -al --group-dirs first'
+  alias l='lsd --group-dirs first'
+fi
+
 # =============================================================================
 # Environment Variables
 # =============================================================================
@@ -510,11 +519,7 @@ clipcopy() {
 # Search shell history with peco
 # Usage: hs [query]
 hs() {
-  if [ $# -gt 0 ]; then
-    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco --query "$*" | tr -d '\n' | clipcopy
-  else
-    cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco | tr -d '\n' | clipcopy
-  fi
+  cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco --query "$*" | tr -d '\n' | clipcopy
 }
 
 # Rebase PR onto develop branch
@@ -663,3 +668,4 @@ PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
 # =============================================================================
 
 [ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
+eval "$(starship init zsh)"

@@ -14,17 +14,9 @@ else
     echo "  既存のbr0は見つかりませんでした"
 fi
 
-# 既存のブリッジスレーブ接続を削除
-echo ""
-echo "[2/5] 既存のブリッジスレーブ接続を削除..."
-for conn in $(nmcli -t -f NAME connection show | grep "^bridge-slave-"); do
-    echo "  削除: $conn"
-    nmcli connection delete "$conn"
-done
-
 # アクティブな有線インターフェイスを検出
 echo ""
-echo "[3/5] アクティブな有線インターフェイスを検出..."
+echo "[2/5] アクティブな有線インターフェイスを検出..."
 
 # 有線インターフェイスを検索（アクティブなものを優先）
 PRIMARY_IF=$(nmcli -t -f DEVICE,TYPE,STATE device | grep "ethernet:connected" | head -n1 | cut -d: -f1)
@@ -40,6 +32,14 @@ if [ -z "$PRIMARY_IF" ]; then
 fi
 
 echo "  検出: 有線インターフェイス $PRIMARY_IF を使用します"
+
+# 既存のブリッジスレーブ接続を削除
+echo ""
+echo "[3/5] 既存のブリッジスレーブ接続を削除..."
+for conn in $(nmcli -t -f NAME connection show | grep "^bridge-slave-"); do
+    echo "  削除: $conn"
+    nmcli connection delete "$conn"
+done
 
 # ブリッジ接続を作成
 echo ""

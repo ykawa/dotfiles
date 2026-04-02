@@ -134,6 +134,15 @@ alias l='ls -CF'
 alias lu='ls -U1'
 alias s='screen -DRR'
 
+# lsd overrides (if available)
+if builtin command -v lsd >/dev/null 2>&1; then
+  alias ls='lsd --group-dirs first'
+  alias ll='lsd -al --group-dirs first'
+  alias la='lsd -A --group-dirs first'
+  alias al='lsd -al --group-dirs first'
+  alias l='lsd --group-dirs first'
+fi
+
 if builtin type stty >/dev/null 2>&1; then
   stty werase undef
   stty stop undef
@@ -155,7 +164,16 @@ export PATH="/opt/bin:$HOME/bin:$PATH"
 # -- mise
 if [ -f "$HOME/.local/bin/mise" ]; then
   export PATH="$HOME/.local/bin:$PATH"
+  export MISE_CEILING_PATHS=/sio:/nas
+  export MISE_HOOK_ENV_CHPWD_ONLY=1
+  export MISE_HOOK_ENV_CACHE_TTL=60s
+
   eval "$(mise activate bash)"
+
+  export PATH="$HOME/.local/bin:$PATH"
+  export MISE_CEILING_PATHS=/sio:/nas
+  export MISE_HOOK_ENV_CHPWD_ONLY=1
+  export MISE_HOOK_ENV_CACHE_TTL=60s
 fi
 
 # -- npm completion (if npm is available)

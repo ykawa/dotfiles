@@ -1,12 +1,10 @@
 [core]
   excludesfile = ~/dotfiles/gitignore
   quotepath = false
+	pager = delta
 
 [commit]
   template = ~/dotfiles/gitmessage
-
-[merge]
-  tool = vimdiff
 
 [alias]
   push-f = push --force-with-lease
@@ -33,3 +31,30 @@
 [pull]
   ff = only
   rebase = true
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	dark = true
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+
+[diff]
+	tool = difftastic
+  external = difft
+
+[difftool]
+  prompt = false
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+  difftool = true
+
+[merge]
+  tool = vimdiff
+	conflictStyle = zdiff3
+
