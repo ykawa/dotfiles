@@ -159,33 +159,24 @@ else
   alias vdir='vdir --color=auto'
   alias open='xdg-open'
 fi
-
-# Common aliases
-alias al='ls -al'
-alias cgrep='grep --color=always'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias grep='grep --color=auto'
-alias l='ls -CF'
-alias la='ls -A'
-alias ll='ls -alF'
-alias lu='ls -U1'
-alias s='screen -DRR'
-alias zmv='noglob zmv -W'
-
 # lsd overrides (if available)
 if builtin command -v lsd >/dev/null 2>&1; then
   alias ls='lsd --group-dirs first'
   alias ll='lsd -al --group-dirs first'
   alias la='lsd -A --group-dirs first'
   alias al='lsd -al --group-dirs first'
-  alias l='lsd --group-dirs first'
+  alias l='lsd --group-dirs first --icon=never'
 fi
+
+# Common aliases
+alias grep='grep --color=auto'
+alias lu='ls -U1'
+alias s='screen -DRR'
+alias zmv='noglob zmv -W'
 
 # =============================================================================
 # Environment Variables
 # =============================================================================
-
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export LESSCHARSET=utf-8
@@ -281,7 +272,9 @@ fi
 
 # X11 forwarding (Linux only)
 if [[ $IS_LINUX -eq 1 ]]; then
-  xhost +local:root > /dev/null 2>&1
+  if builtin type xhost >/dev/null 2>&1; then
+    xhost +local:root > /dev/null 2>&1
+  fi
 fi
 
 # =============================================================================
@@ -661,11 +654,12 @@ periodic() {
 }
 
 # Set prompt
-PROMPT='${vcs_info_msg_0_}[%n@%m %1~]$ '
+PROMPT='${vcs_info_msg_0_}
+[%n@%m %1~]$ '
 
 # =============================================================================
 # Local Configuration
 # =============================================================================
 
 [ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
-eval "$(starship init zsh)"
+

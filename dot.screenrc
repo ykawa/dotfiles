@@ -32,4 +32,3 @@ bind -c resize ^k eval 'command -c resize' 'resize -v -1'
 
 bindkey -k k5 prev
 bindkey -k k6 next
-

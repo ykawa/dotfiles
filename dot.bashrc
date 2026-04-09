@@ -124,14 +124,6 @@ fi
 
 # Common aliases
 alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias cgrep='grep --color=always'
-alias ll='ls -alF'
-alias la='ls -A'
-alias al='ls -al'
-alias l='ls -CF'
-alias lu='ls -U1'
 alias s='screen -DRR'
 
 # lsd overrides (if available)
@@ -140,7 +132,7 @@ if builtin command -v lsd >/dev/null 2>&1; then
   alias ll='lsd -al --group-dirs first'
   alias la='lsd -A --group-dirs first'
   alias al='lsd -al --group-dirs first'
-  alias l='lsd --group-dirs first'
+  alias l='lsd --group-dirs first --icon=never'
 fi
 
 if builtin type stty >/dev/null 2>&1; then
@@ -520,3 +512,4 @@ if [ -n "$WEZTERM_EXECUTABLE" ] 2>/dev/null; then
     PROMPT_COMMAND="__wezterm_prompt_mark; ${PROMPT_COMMAND}"
   fi
 fi
+

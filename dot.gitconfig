@@ -57,4 +57,3 @@
 [merge]
   tool = vimdiff
 	conflictStyle = zdiff3
-
