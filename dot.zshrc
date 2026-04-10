@@ -515,98 +515,6 @@ hs() {
   cat ~/.zsh_history* ~/.bash_history* | col -bfx | sed -re 's/^: [^;]+//g' -e 's/^;//g' | sort | uniq | peco --query "$*" | tr -d '\n' | clipcopy
 }
 
-# Rebase PR onto develop branch
-# Usage: gh-pr-rebase-onto-develop <PR_NUMBER|BRANCH> [options]
-# Options:
-#   -r <remote>   Remote name (default: origin)
-#   -m <main>     Main branch name (default: main)
-#   -d <develop>  Develop branch name (default: develop)
-#   -b <name>     New branch name (auto-generated if omitted)
-#   -k            Keep merge commits (--rebase-merges)
-#   -N            Don't create PR (only create branch and push)
-# Example:
-#   gh-pr-rebase-onto-develop 123
-#   gh-pr-rebase-onto-develop feature/foo -k -d develop -m main
-gh-pr-rebase-onto-develop() {
-  local remote="origin" main="main" develop="develop" new_branch="" keep_merges=0 no_pr=0
-  while getopts "r:m:d:b:kN" opt; do
-    case "$opt" in
-      r) remote="$OPTARG" ;;
-      m) main="$OPTARG" ;;
-      d) develop="$OPTARG" ;;
-      b) new_branch="$OPTARG" ;;
-      k) keep_merges=1 ;;
-      N) no_pr=1 ;;
-    esac
-  done
-  shift $((OPTIND-1))
-
-  local pr_or_branch="${1:-}"
-  if [[ -z "$pr_or_branch" ]]; then
-    echo "Usage: gh-pr-rebase-onto-develop <PR番号|ブランチ名> [-r remote] [-m main] [-d develop] [-b new_branch] [-k] [-N]" >&2
-    return 2
-  fi
-
-  # Check required commands
-  command -v git >/dev/null 2>&1 || { echo "git が見つかりません"; return 1; }
-  if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
-    command -v gh >/dev/null 2>&1 || { echo "gh (GitHub CLI) が見つかりません"; return 1; }
-  fi
-
-  # Check if working tree is clean
-  if ! git diff --quiet || ! git diff --staged --quiet; then
-    echo "作業ツリーに未コミットの変更があります。コミットまたはstashしてください。" >&2
-    return 1
-  fi
-
-  git fetch --all --prune || return 1
-
-  # Get head branch name from PR number or use argument as-is
-  local head
-  if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
-    head="$(gh pr view "$pr_or_branch" --json headRefName -q .headRefName)" || return 1
-  else
-    head="$pr_or_branch"
-  fi
-
-  # Auto-generate new branch name if not specified
-  if [[ -z "$new_branch" ]]; then
-    if [[ "$pr_or_branch" =~ ^[0-9]+$ ]]; then
-      new_branch="${head}-onto-${develop}-from-pr-${pr_or_branch}"
-    else
-      new_branch="${head}-onto-${develop}"
-    fi
-  fi
-
-  # Verify remote references exist
-  git rev-parse --verify "${remote}/${main}" >/dev/null 2>&1 || { echo "リモート ${remote}/${main} が見つかりません"; return 1; }
-  git rev-parse --verify "${remote}/${develop}" >/dev/null 2>&1 || { echo "リモート ${remote}/${develop} が見つかりません"; return 1; }
-  git rev-parse --verify "${remote}/${head}" >/dev/null 2>&1 || { echo "リモート ${remote}/${head} が見つかりません"; return 1; }
-
-  # Switch to source branch (create if doesn't exist locally)
-  if ! git switch "$head" 2>/dev/null; then
-    git switch -c "$head" "${remote}/${head}" || return 1
-  fi
-  git switch -c "$new_branch" || return 1
-
-  echo "Rebasing commits in '${head}' that are not in '${remote}/${main}' onto '${remote}/${develop}' ..."
-  if [[ $keep_merges -eq 1 ]]; then
-    git rebase --rebase-merges --onto "${remote}/${develop}" "${remote}/${main}" || { echo "rebase失敗。必要なら 'git rebase --abort' を実行してください。"; return 1; }
-  else
-    git rebase --onto "${remote}/${develop}" "${remote}/${main}" || { echo "rebase失敗。必要なら 'git rebase --abort' を実行してください。"; return 1; }
-  fi
-
-  # Push and create PR
-  git push -u "${remote}" "${new_branch}" || return 1
-
-  if [[ $no_pr -eq 0 ]]; then
-    gh pr create --base "${develop}" --head "${new_branch}" --fill || return 1
-    echo "✅ develop向けPRを作成しました。"
-  else
-    echo "✅ ブランチ '${new_branch}' を push しました（PR未作成 -N）。"
-  fi
-}
-
 # =============================================================================
 # Prompt and Hooks
 # =============================================================================
@@ -654,8 +562,7 @@ periodic() {
 }
 
 # Set prompt
-PROMPT='${vcs_info_msg_0_}
-[%n@%m %1~]$ '
+PROMPT='[%1~]${vcs_info_msg_0_}'$'\n[%n@%m]$ '
 
 # =============================================================================
 # Local Configuration
