@@ -205,11 +205,6 @@ if builtin type gem >/dev/null 2>&1; then
   fi
 fi
 
-# -- Starship Configuration
-if builtin command -v starship >/dev/null 2>&1; then
-  eval "$(starship init bash)"
-fi
-
 # -- local env
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
@@ -357,6 +352,11 @@ hs()
 reload() {
   exec "${SHELL}" "$@"
 }
+
+# -- Starship Configuration
+if builtin command -v starship >/dev/null 2>&1; then
+  eval "$(starship init bash)"
+fi
 
 # Shift+↑/↓ で ScrollToPrompt が効くように、プロンプト直前に A マーカーを送る
 if [ -n "$WEZTERM_EXECUTABLE" ] 2>/dev/null; then
