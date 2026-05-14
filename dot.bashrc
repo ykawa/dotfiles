@@ -205,6 +205,11 @@ if builtin type gem >/dev/null 2>&1; then
   fi
 fi
 
+# -- Starship Configuration
+if builtin command -v starship >/dev/null 2>&1; then
+  eval "$(starship init bash)"
+fi
+
 # -- local env
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
@@ -238,61 +243,6 @@ if [ -n "$STY" ]; then
   }
   alias cd=scr_cd
 fi
-
-# いい感じにファイルを検索する
-ffg() {
-  # Usage: ffg [-e EXT]... [--] GREP_ARGS...
-  local -a exts
-  local OPTIND opt
-  while getopts "e:" opt; do
-    case "$opt" in
-      e) exts+=("${OPTARG}") ;;
-    esac
-  done
-  shift $((OPTIND-1))
-
-  local ext_regex=""
-  if [ ${#exts[@]} -gt 0 ]; then
-    local sep=""
-    ext_regex='\.('
-    local e
-    for e in "${exts[@]}"; do
-      e="${e#.}"
-      ext_regex="${ext_regex}${sep}${e}"
-      sep='|'
-    done
-    ext_regex="${ext_regex})$"
-  fi
-
-  if [ -d .git ]; then
-    if [ -n "$ext_regex" ]; then
-      git ls-files -z | perl -0ne "print if /$ext_regex/s" | xargs -0 grep --binary-files=without-match "$@"
-    else
-      git ls-files -z | xargs -0 grep --binary-files=without-match "$@"
-    fi
-  else
-    local -a find_args
-    find_args=(
-      -type d \( -name node_modules -o -name .git -o -name public -o -name storage -o -name docs -o -name libraries -o -name vendor -o -name .tmp -o -name out -o -name framework \) -prune -o -type f
-    )
-    if [ ${#exts[@]} -gt 0 ]; then
-      find_args+=( '(' )
-      local idx=0
-      local e
-      for e in "${exts[@]}"; do
-        e="${e#.}"
-        find_args+=( -name "*.${e}" )
-        idx=$((idx+1))
-        if [ $idx -lt ${#exts[@]} ]; then
-          find_args+=( -o )
-        fi
-      done
-      find_args+=( ')' )
-    fi
-    find_args+=( -print0 )
-    find "${find_args[@]}" | xargs -0 grep --binary-files=without-match "$@"
-  fi
-}
 
 ccol() {
   cut -c1-${COLUMNS}
