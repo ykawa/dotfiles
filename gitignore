@@ -1,3 +1,5 @@
+docs/
+
 # Keep files
 !.yarn/cache
 !.yarn/plugins

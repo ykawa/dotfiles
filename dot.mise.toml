@@ -9,7 +9,6 @@ task_run_auto_install    = false
 idiomatic_version_file_enable_tools = []  # 空リストで全て無効化
 status.missing_tools     = "never"
 disable_hints            = ["all"]
-trusted_config_paths     = ["~/.mise.toml"]
 
 # ---- ネットワーク問い合わせ系 ----
 use_versions_host        = false
