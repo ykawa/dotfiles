@@ -428,7 +428,7 @@ reload() {
 # Set terminal title
 termtitle() {
   case "$TERM" in
-    rxvt*|xterm*|nxterm|gnome|screen|screen-*|st|st-*)
+    rxvt*|xterm*|nxterm|gnome|screen|screen-*|st|st-*|alacritty*|tmux*|foot*|kitty*|wezterm*)
       local prompt_host="${(%):-%m}"
       local prompt_user="${(%):-%n}"
       local prompt_char="${(%):-%~}"
