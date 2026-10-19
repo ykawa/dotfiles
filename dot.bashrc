@@ -141,7 +141,7 @@ if builtin type stty >/dev/null 2>&1; then
 fi
 bind "\C-w":unix-filename-rubout
 
-export VISUAL=vim
+export VISUAL=nvim
 export EDITOR="$VISUAL"
 export LESSCHARSET=utf-8
 

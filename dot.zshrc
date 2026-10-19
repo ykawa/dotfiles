@@ -177,7 +177,7 @@ alias zmv='noglob zmv -W'
 # =============================================================================
 # Environment Variables
 # =============================================================================
-export VISUAL=vim
+export VISUAL=nvim
 export EDITOR="$VISUAL"
 export LESSCHARSET=utf-8
 
@@ -336,6 +336,11 @@ c() {
 # Cut to terminal width
 ccol() {
   cut -c1-${COLUMNS}
+}
+
+# Open nvim in the current directory, or the given files (Omarchy `n`)
+n() {
+  if [ "$#" -eq 0 ]; then command nvim . ; else command nvim "$@"; fi
 }
 
 # Clear screen with banner
@@ -515,6 +520,9 @@ PROMPT='[%1~]${vcs_info_msg_0_}'$'\n[%n@%m]$ '
 if builtin command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
+
+# AI agent aliases and tmux dev layouts
+[ -e $HOME/dotfiles/dot.zshrc_ai ] && . $HOME/dotfiles/dot.zshrc_ai
 
 # =============================================================================
 # Local Configuration
