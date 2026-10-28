@@ -101,6 +101,11 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^p" history-beginning-search-backward-end
 bindkey "^b" history-beginning-search-forward-end
 
+# Ctrl+x Ctrl+e to edit the current command line in $VISUAL/$EDITOR
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^x^e' edit-command-line
+
 # =============================================================================
 # Word Style Configuration
 # =============================================================================
@@ -231,7 +236,12 @@ fi
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.vim/bin:$PATH"
+
+# Jetbrains IDE
 export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:$PATH"
+
+# Turso
+export PATH="$PATH:$HOME/.turso"
 
 # Clean up and normalize the PATH
 eval export "$( LC_ALL=C perl -CIO ~/dotfiles/organize_path.pl )"
@@ -529,3 +539,4 @@ fi
 # =============================================================================
 
 [ -e $HOME/.zshrc_local ] && . $HOME/.zshrc_local
+

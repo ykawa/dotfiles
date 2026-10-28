@@ -6,7 +6,7 @@ exec_auto_install        = false
 task_run_auto_install    = false
 
 # ---- バージョンファイル & 警告系 ----
-idiomatic_version_file_enable_tools = []  # 空リストで全て無効化
+idiomatic_version_file_enable_tools = ["ruby", "node"]
 status.missing_tools     = "never"
 disable_hints            = ["all"]
 
