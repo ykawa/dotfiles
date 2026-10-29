@@ -1,7 +1,7 @@
 [core]
   excludesfile = ~/dotfiles/gitignore
   quotepath = false
-	pager = delta
+  pager = delta
 
 [commit]
   template = ~/dotfiles/gitmessage
@@ -33,16 +33,16 @@
   rebase = true
 
 [interactive]
-	diffFilter = delta --color-only
+  diffFilter = delta --color-only
 
 [delta]
-	dark = true
-	navigate = true
-	side-by-side = true
-	line-numbers = true
+  dark = true
+  navigate = true
+  side-by-side = true
+  line-numbers = true
 
 [diff]
-	tool = difftastic
+  tool = difftastic
   external = difft
 
 [difftool]
@@ -56,4 +56,4 @@
 
 [merge]
   tool = vimdiff
-	conflictStyle = zdiff3
+  conflictStyle = zdiff3
